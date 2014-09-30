@@ -22,9 +22,7 @@ class Handler:
         print("on_button_disconnect_clicked")
     
     # Content handlers
-    def on_movie_list_updated(self, *args):
-        print("on_movie_list_updated")
-        print(args)
+
 
 class View(threading.Thread):
     def __init__(self):
