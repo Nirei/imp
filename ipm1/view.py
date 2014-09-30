@@ -8,11 +8,11 @@ class View(threading.Thread):
         self._builder.add_from_file("interfaz1.glade")
         self._builder.connect_signals(self)
         
-        # window = self._builder.get_object("main-window")
-        # window.show_all()
+        window = self._builder.get_object("main-window")
+        window.show_all()
         
-        login = self._builder.get_object("login-dialog")
-        login.show_all()
+        #login = self._builder.get_object("login-dialog")
+        #login.show_all()
         
     def run(self):
         Gtk.main()
@@ -31,6 +31,7 @@ class View(threading.Thread):
     def on_dialog_login_button_clicked(self, widget):
         print("user: " + self._builder.get_object("user-entry").get_text())
         print("pass: " + self._builder.get_object("passwd-entry").get_text())
+        #controller.login(self, user, passwd)
 
     # Windows handlers
     def on_main_window_remove(self, *args):
