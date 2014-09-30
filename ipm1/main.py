@@ -3,9 +3,9 @@ from view import *
 
 # model = Model()
 # controller = Controller(model)
-view = View()
+controller = Controller()
 
-view.start()
-view.get_movie_list().append(["Matrix"])
-view.get_movie_list().append(["La jungla de cristal"])
-view.get_movie_list().append(["King Kong"])
+controller.start()
+controller.get_movie_list().append(["Matrix"])
+controller.get_movie_list().append(["La jungla de cristal"])
+controller.get_movie_list().append(["King Kong"])

@@ -1,7 +1,7 @@
 import threading
 from gi.repository import Gtk
 
-class View(threading.Thread):
+class Controller(threading.Thread):
     def __init__(self):
         super().__init__()
         self._builder = Gtk.Builder()
