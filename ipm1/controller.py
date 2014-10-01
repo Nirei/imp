@@ -62,16 +62,16 @@ class Controller(threading.Thread):
     # Menu handlers
     
     # Toolbar handlers
-    def on_button_add_clicked(self, widget):
+    def on_add_movie(self, widget):
         print("on_button_add_clicked")
     
-    def on_button_modify_clicked(self, widget):
+    def on_modify_movie(self, widget):
         print("on_button_modify_clicked")
     
-    def on_button_delete_clicked(self, widget):
+    def on_delete_movie(self, widget):
         print("on_button_delete_clicked")
     
-    def on_button_disconnect_clicked(self, widget):
+    def on_logout(self, widget):
         print("on_button_disconnect_clicked")
     
     # Content handlers
