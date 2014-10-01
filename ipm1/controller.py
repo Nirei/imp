@@ -1,5 +1,5 @@
 import threading
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 from model import *
 
 class Controller(threading.Thread):
@@ -83,10 +83,10 @@ class Controller(threading.Thread):
     
     def login_answer(self, *answer):
         if answer[0]:
-            self._show_login_dialog(false)
-            self._show_main_window(true)
+            GObject.idle_add(self._show_login_dialog, false)
+            GObject.idle_add(self._show_main_window, true)
         else:
-            self._show_error(answer[1])
+            GObject.idle_add(self._show_error, answer[1])
     
     def request_done():
         pass
