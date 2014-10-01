@@ -4,6 +4,32 @@ from model import *
 
 class Controller(threading.Thread):
 
+    # UI MANAGEMENT PRIVATE METHODS #
+
+    def _show_window(self, window, boolean):
+        window = self._builder.get_object(window)
+        if boolean:
+            window.show()
+        else:
+            window.hide()
+        
+    def _show_main_window(self, boolean):
+        self._show_window("main-window", boolean)
+
+    def _show_login_dialog(self, boolean):
+        self._show_window("login-dialog", boolean)
+    
+    def _show_error(self, message):
+        # Solo una instancia activa del mensaje de error en cada momento... Concurrencia?
+        # synchronized method de java?
+        dialog = self._builder.get_object("error-dialog")
+        # Ugly hack to edit dialog message
+        dialog.get_children()[0].get_children()[0].get_children()[1].get_children()[1].set_text(message)
+        dialog.run()
+        
+        dialog.destroy()
+
+
     def __init__(self, model):
         super(Controller, self).__init__()
         self._model = model
@@ -11,19 +37,10 @@ class Controller(threading.Thread):
         self._builder.add_from_file("interfaz1.glade")
         self._builder.connect_signals(self)
         
-        window = self._builder.get_object("main-window")
-        window.show_all()
-        
-        #login = self._builder.get_object("login-dialog")
-        #login.show_all()
-        
+        self._show_login_dialog(True)
+    
     def run(self):
         Gtk.main()
-    
-    def get_movie_list(self):
-        return self._builder.get_object("movie-list")
-        
-    # def show_error_dialog(self, *args):
     
     ###### HANDLERS!! ######
     
@@ -32,12 +49,14 @@ class Controller(threading.Thread):
         Gtk.main_quit(*args)
     
     def on_dialog_login_button_clicked(self, widget):
-        print("user: " + self._builder.get_object("user-entry").get_text())
-        print("pass: " + self._builder.get_object("passwd-entry").get_text())
-        #model.login(self, user, passwd)
+        user = self._builder.get_object("user-entry").get_text()
+        passwd = self._builder.get_object("passwd-entry").get_text()
+        print("user: " + user)
+        print("pass: " + passwd)
+        self._model.login(self, user, passwd)
 
     # Windows handlers
-    def on_main_window_remove(self, *args):
+    def on_exit(self, *args):
         Gtk.main_quit(*args)
     
     # Menu handlers
@@ -59,5 +78,15 @@ class Controller(threading.Thread):
     def on_selection_changed(self, tso):
         (a,b) = tso.get_selected()
         print(a[b][0])
-        
-
+    
+    ###### CALLBACKS!! ######
+    
+    def login_answer(self, *answer):
+        if answer[0]:
+            self._show_login_dialog(false)
+            self._show_main_window(true)
+        else:
+            self._show_error(answer[1])
+    
+    def request_done():
+        pass
