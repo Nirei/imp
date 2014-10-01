@@ -1,9 +1,9 @@
-#!/usr/bin/python3
-from view import *
+#!/usr/bin/python
+from model import *
+from controller import *
 
-# model = Model()
-# controller = Controller(model)
-controller = Controller()
+model = Model('localhost:5000')
+controller = Controller(model)
 
 controller.start()
 controller.get_movie_list().append(["Matrix"])

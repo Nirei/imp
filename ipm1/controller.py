@@ -1,9 +1,12 @@
 import threading
 from gi.repository import Gtk
+from model import *
 
 class Controller(threading.Thread):
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, model):
+        super(Controller, self).__init__()
+        self._model = model
         self._builder = Gtk.Builder()
         self._builder.add_from_file("interfaz1.glade")
         self._builder.connect_signals(self)
@@ -31,7 +34,7 @@ class Controller(threading.Thread):
     def on_dialog_login_button_clicked(self, widget):
         print("user: " + self._builder.get_object("user-entry").get_text())
         print("pass: " + self._builder.get_object("passwd-entry").get_text())
-        #controller.login(self, user, passwd)
+        #model.login(self, user, passwd)
 
     # Windows handlers
     def on_main_window_remove(self, *args):
