@@ -27,14 +27,14 @@ class Controller(threading.Thread):
         dialog.get_children()[0].get_children()[0].get_children()[1].get_children()[1].set_text(message)
         dialog.run()
         
-        dialog.destroy()
+        dialog.hide()
 
 
     def __init__(self, model):
         super(Controller, self).__init__()
         self._model = model
         self._builder = Gtk.Builder()
-        self._builder.add_from_file("interfaz1.glade")
+        self._builder.add_from_file('gui.glade')
         self._builder.connect_signals(self)
         
         self._show_login_dialog(True)
@@ -51,9 +51,13 @@ class Controller(threading.Thread):
     def on_dialog_login_button_clicked(self, widget):
         user = self._builder.get_object("user-entry").get_text()
         passwd = self._builder.get_object("passwd-entry").get_text()
-        print("user: " + user)
-        print("pass: " + passwd)
-        self._model.login(self, user, passwd)
+
+        if user == '':
+            self._show_error('No ha introducido un nombre de usuario')
+        elif passwd == '':
+            self._show_error('No ha introducido una contrase_a')
+        else:
+            self._model.login(self, user, passwd)
 
     # Windows handlers
     def on_exit(self, *args):
@@ -80,11 +84,13 @@ class Controller(threading.Thread):
         print(a[b][0])
     
     ###### CALLBACKS!! ######
+    # Estas funciones son para llamar desde fuera, de modo que si realizan
+    # cambios en la interfaz deben hacerlo a traves de GObject.idle_add()
     
     def login_answer(self, *answer):
         if answer[0]:
-            GObject.idle_add(self._show_login_dialog, false)
-            GObject.idle_add(self._show_main_window, true)
+            GObject.idle_add(self._show_login_dialog, False)
+            GObject.idle_add(self._show_main_window, True)
         else:
             GObject.idle_add(self._show_error, answer[1])
     

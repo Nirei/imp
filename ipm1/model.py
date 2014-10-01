@@ -26,8 +26,19 @@ class Model:
     ### REQUEST FUNCTIONS ###
         
     def _login_request(self, args):
-        print(args)
-        args[0].login_answer(False, "dummy method")
+        url = self._server_url + '/login'
+        payload = 'username=' + args[1] + '&passwd=' + args[2]
+        
+        r = requests.post(url, payload)
+        
+        if r.status_code == requests.codes.ok and r.json()['result'] == 'success':
+            self._id_cookie = r.cookies['rack.session']
+            args[0].login_answer(True)
+        else:
+            print(r)
+            print(r.url)
+            print(r.text)
+            args[0].login_answer(False, r.json()['reason'])
     
     ### MODEL FUNCTIONS ###
     
@@ -36,18 +47,18 @@ class Model:
         rt = RequestThread(self._login_request, controller, user, passwd)
         rt.start()
     
-    def logout(self, view):
-        return false, "dummy method"
+    def logout(self):
+        self._id_cookie = None
     
     # Feature: movie list
     def get_list(self, *args):
-        return false, "dummy method"
+        pass
     
     def add_movie(self, *args):
-        return false, "dummy method"
+        pass
     
     def del_movie(self, *args):
-        return false, "dummy method"
+        pass
     
     def modify_movie(self, *args):
-        return false, "dummy method"
+        pass
