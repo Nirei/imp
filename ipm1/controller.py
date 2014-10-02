@@ -31,9 +31,9 @@ class Controller(threading.Thread):
         
         dialog.hide()
     
-    def _update_movie_list():
+    def _update_movie_list(self):
         self._movie_list.clear()
-        self._label_page.set_text(str(self._page_number))
+        self._label_page[0].set_text(str(self._page_number))
         for movie in self._movie_page:
             self._movie_list.append(movie['title'])
 
@@ -76,11 +76,9 @@ class Controller(threading.Thread):
 
     # Windows handlers
     def on_exit(self, *args):
+        if self._model.is_logged_in():
+            self._model.logout(self)
         Gtk.main_quit(*args)
-
-    def on_exit_without_logout(self, *args):
-	    print("Por implementar")
-	    self.on_exit(args)	
     
     # Menu handlers
     
@@ -111,6 +109,7 @@ class Controller(threading.Thread):
         if args[0]:
             GObject.idle_add(self._show_login_dialog, False)
             GObject.idle_add(self._show_main_window, True)
+            self._model.get_list(self, 1)
 	# Failure
         else:
             GObject.idle_add(self._show_error, args[1])
@@ -124,7 +123,7 @@ class Controller(threading.Thread):
         else:
             GObject.idle_add(self._show_error, args[1])
 
-    def page_request_answer(number, page):
+    def page_request_answer(self, number, page):
         self._page_number = number
         self._movie_page = page
         

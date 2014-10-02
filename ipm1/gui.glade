@@ -192,7 +192,7 @@
     <property name="title" translatable="yes">IPM1 - Películas</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
-    <signal name="remove" handler="on_exit_without_logout" swapped="no"/>
+    <signal name="remove" handler="on_exit" swapped="no"/>
     <child>
       <object class="GtkBox" id="body">
         <property name="visible">True</property>
