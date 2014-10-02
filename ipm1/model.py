@@ -25,8 +25,8 @@ class Model:
 
     def __init__(self, server_url):
         self._server_url = server_url
-	    self._login = ''
-	    self._id_cookie = ''
+        self._login = ''
+        self._cookie_jar = None
             
     ### REQUEST FUNCTIONS ###
             
@@ -35,39 +35,38 @@ class Model:
         payload = 'username=' + args[1] + '&passwd=' + args[2]
 
 	    #We are trying to connect with a user we have already logged, do nothing
-	    if args[1] == self._login:
-	        args[0].login_answer(False, 'El usuario ya está conectado')
-	    else:
+        if args[1] == self._login:
+            args[0].login_answer(False, 'El usuario ya está conectado')
+        else:
             try:
-	            r = requests.post(url, payload)
-
+                r = requests.post(url, payload)
+                
 	            # Server answered and we are logged
                 if r.status_code == requests.codes.ok and r.json()['result'] == 'success':
-                    self._id_cookie = r.cookies['rack.session']
-	                self._login = args[1]
+                    self._cookie_jar = r.cookies
+                    self._login = args[1]
 	                # We have to delete the TextEntry used!
-	                args[0]._builder.get_object("user-entry").set_text('')
-	                args[0]._builder.get_object("passwd-entry").set_text('')
+                    args[0]._builder.get_object("user-entry").set_text('')
+                    args[0]._builder.get_object("passwd-entry").set_text('')
                     args[0].login_answer(True, '')
 	            # Server answered but the user or their passwd are incorrect
                 elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
                     args[0].login_answer(False, 'La contraseña o usuario son incorrectas')
 	            # Server refused to answer us (404, not responding...)
-	            elif r.status_code != requests.codes.ok:
+                else:
 	                args[0].login_answer(False, 'El servidor no se encuentra disponible')
             
-	        except: # There was an exception like connection refused
+            except: # There was an exception like connection refused
 	            e = sys.exc_info()[1]
 	            args[0].login_answer(False, 'Error del servidor:\n' + str(e))
 
     def _logout_request(self, args):
-	    #We have to logout explicitly from the server
-	    url = self._server_url + '/logout'
-	    cookies = dict(cookies_are=self._id_cookie)
-
-	    try:
-	        r = requests.get(url, cookies=cookies)
-
+        #We have to logout explicitly from the server
+        url = self._server_url + '/logout'
+        
+        try:
+            r = requests.get(url, cookies=self._cookie_jar)
+            
 	        # Server answered and we are logged out
             if r.status_code == requests.codes.ok and r.json()['result'] == 'success':
                 self._id_cookie = ''
@@ -77,15 +76,31 @@ class Model:
             elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
                 args[0].logout_answer(False, 'No se pudo desconectar de la base de datos')
 	        # Server refused to answer us (404, not responding...)
-	        elif r.status_code != requests.codes.ok:
+            else:
 	            args[0].logout_answer(False, 'El servidor no se encuentra disponible')
-
-	    except: # There was an exception like connection refused
+            
+        except: # There was an exception like connection refused
+	        e = sys.exc_info()[1]
+	        args[0].login_answer(False, 'Error del servidor:\n' + str(e))
+	        
+	def _page_request(self, args):
+	    url = self._server_url + '/movies/page/' + args[1]
+	    
+        try:
+            r = requests.get(url, cookies=self._cookie_jar)
+	    
+            if r.status_code == requests.codes.ok and r.json()['result'] == 'succcess':
+	            page = r.json()['data']
+	            args[0].page_request_answer(args[1], page)
+            elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+	            pass
+            else:
+                pass
+        except:
 	        e = sys.exc_info()[1]
 	        args[0].login_answer(False, 'Error del servidor:\n' + str(e))
 	
-    
-    ### MODEL FUNCTIONS ###
+	### MODEL FUNCTIONS ###
     
     # Feature: access control
     def login(self, controller, user, passwd):
@@ -94,7 +109,7 @@ class Model:
     
     def logout(self, controller):
         rt = RequestThread(self._logout_request, controller)
-	    rt.start()
+        rt.start()
     
     # Feature: movie list
     def get_list(self, page):

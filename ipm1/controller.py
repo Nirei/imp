@@ -24,13 +24,20 @@ class Controller(threading.Thread):
     def _show_error(self, message):
         # Solo una instancia activa del mensaje de error en cada momento... Concurrencia?
         # synchronized method de java?
-        dialog = self._builder.get_object("error-dialog")
+        dialog = self._builder.get_object('error-dialog')
         # Ugly hack to edit dialog message
         dialog.get_children()[0].get_children()[0].get_children()[1].get_children()[1].set_text(message)
         dialog.run()
         
         dialog.hide()
+    
+    def _update_movie_list():
+        self._movie_list.clear()
+        self._label_page.set_text(str(self._page_number))
+        for movie in self._movie_page:
+            self._movie_list.append(movie['title'])
 
+    ### CONSTRUCTOR & INHERITED METHODS ###
 
     def __init__(self, model):
         super(Controller, self).__init__()
@@ -38,6 +45,11 @@ class Controller(threading.Thread):
         self._builder = Gtk.Builder()
         self._builder.add_from_file('gui.glade')
         self._builder.connect_signals(self)
+        
+        self._movie_page = None
+        self._page_number = -1
+        self._movie_list = self._builder.get_object('movie-list')
+        self._label_page = self._builder.get_object('label-page')
         
         self._show_login_dialog(True)
     
@@ -52,8 +64,8 @@ class Controller(threading.Thread):
         Gtk.main_quit(*args)
     
     def on_dialog_login_button_clicked(self, widget):
-        user = self._builder.get_object("user-entry").get_text()
-        passwd = self._builder.get_object("passwd-entry").get_text()
+        user = self._builder.get_object('user-entry').get_text()
+        passwd = self._builder.get_object('passwd-entry').get_text()
 
         if user == '':
             self._show_error('No ha introducido un nombre de usuario')
@@ -67,8 +79,8 @@ class Controller(threading.Thread):
         Gtk.main_quit(*args)
 
     def on_exit_without_logout(self, *args):
-	print("Por implementar")
-	self.on_exit(args)	
+	    print("Por implementar")
+	    self.on_exit(args)	
     
     # Menu handlers
     
@@ -112,5 +124,10 @@ class Controller(threading.Thread):
         else:
             GObject.idle_add(self._show_error, args[1])
 
-    def request_done():
-        pass
+    def page_request_answer(number, page):
+        self._page_number = number
+        self._movie_page = page
+        
+        GObject.idle_add(self._update_movie_list)
+        
+
