@@ -1,6 +1,9 @@
+# -*- encoding: utf-8 -*-
+
 # ACCESO A LA API (CONCURRENTE)
 import requests
 import threading
+import sys
 
 # pagina
 # lista actual de pelis
@@ -29,16 +32,27 @@ class Model:
         url = self._server_url + '/login'
         payload = 'username=' + args[1] + '&passwd=' + args[2]
         
-        r = requests.post(url, payload)
-        
-        if r.status_code == requests.codes.ok and r.json()['result'] == 'success':
-            self._id_cookie = r.cookies['rack.session']
-            args[0].login_answer(True)
-        else:
-            print(r)
-            print(r.url)
-            print(r.text)
-            args[0].login_answer(False, r.json()['reason'])
+        try:
+	    r = requests.post(url, payload)
+
+	    # Server answered and we are logged
+            if r.status_code == requests.codes.ok and r.json()['result'] == 'success':
+                self._id_cookie = r.cookies['rack.session']
+                args[0].login_answer(True, '')
+	    # Server answered but the user or their passwd are incorrect
+            elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+                args[0].login_answer(False, 'La contraseña o usuario son incorrectas')
+	    # Server refused to answer us (404, not responding...)
+	    elif r.status_code != requests.codes.ok:
+	        args[0].login_answer(False, 'El servidor no se encuentra disponible')
+
+	except: # There was an exception like connection refused
+	    e = sys.exc_info()[1]
+	    args[0].login_answer(False, 'Error del servidor:\n' + str(e))
+
+        #print(r)
+        #print(r.url)
+        #print(r.text)        
     
     ### MODEL FUNCTIONS ###
     

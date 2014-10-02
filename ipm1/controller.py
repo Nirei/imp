@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import threading
 from gi.repository import Gtk, GObject
 from model import *
@@ -18,7 +20,7 @@ class Controller(threading.Thread):
 
     def _show_login_dialog(self, boolean):
         self._show_window("login-dialog", boolean)
-    
+
     def _show_error(self, message):
         # Solo una instancia activa del mensaje de error en cada momento... Concurrencia?
         # synchronized method de java?
@@ -40,6 +42,7 @@ class Controller(threading.Thread):
         self._show_login_dialog(True)
     
     def run(self):
+	GObject.threads_init()
         Gtk.main()
     
     ###### HANDLERS!! ######
@@ -55,7 +58,7 @@ class Controller(threading.Thread):
         if user == '':
             self._show_error('No ha introducido un nombre de usuario')
         elif passwd == '':
-            self._show_error('No ha introducido una contrase_a')
+            self._show_error('No ha introducido una contraseña')
         else:
             self._model.login(self, user, passwd)
 
@@ -84,15 +87,17 @@ class Controller(threading.Thread):
         print(a[b][0])
     
     ###### CALLBACKS!! ######
-    # Estas funciones son para llamar desde fuera, de modo que si realizan
+    # Estas funciones son para llamar desde el modelo, de modo que si realizan
     # cambios en la interfaz deben hacerlo a traves de GObject.idle_add()
     
-    def login_answer(self, *answer):
-        if answer[0]:
+    def login_answer(self, *args):
+	# Success
+        if args[0]:
             GObject.idle_add(self._show_login_dialog, False)
             GObject.idle_add(self._show_main_window, True)
+	# Failure
         else:
-            GObject.idle_add(self._show_error, answer[1])
+            GObject.idle_add(self._show_error, args[1])
     
     def request_done():
         pass
