@@ -27,6 +27,9 @@ class Model:
         self._server_url = server_url
         self._login = None
         self._cookie_jar = None
+        
+        self._page = None
+        self._page_number = 1
             
     ### REQUEST FUNCTIONS ###
     
@@ -89,20 +92,21 @@ class Model:
     def _page_request(self, args):
         url = self._server_url + '/movies/page/' + str(args[1])
         
-#        try:
-        r = requests.get(url, cookies=self._cookie_jar)
-        
-        if self._request_successful(r):
-	        page = r.json()['data']
-	        args[0].page_request_answer(args[1], page)
-        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-	        print(r)
-	        print(r.json())
-        else:
-            print(r)
-#        except:
-#	        e = sys.exc_info()[1]
-#	        args[0].login_answer(False, 'Error del servidor:\n' + str(e))
+        try:
+            r = requests.get(url, cookies=self._cookie_jar)
+            
+            if self._request_successful(r):
+	            self._page = r.json()['data']
+	            self._page_number = args[1]
+	            args[0].page_request_answer(args[1], self._page)
+            elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+	            print(r)
+	            print(r.json())
+            else:
+                print(r)
+        except:
+	        e = sys.exc_info()[1]
+	        args[0].login_answer(False, 'Error del servidor:\n' + str(e))
 	
 	### MODEL FUNCTIONS ###
     
@@ -116,8 +120,8 @@ class Model:
         rt.start()
     
     # Feature: movie list
-    def get_list(self, controller, page):
-        rt = RequestThread(self._page_request, controller, page)
+    def get_list(self, controller):
+        rt = RequestThread(self._page_request, controller, self._page_number)
         rt.start()
     
     def add_movie(self, *args):

@@ -31,11 +31,11 @@ class Controller(threading.Thread):
         
         dialog.hide()
     
-    def _update_movie_list(self):
+    def _update_movie_list(self, number, page):
         self._movie_list.clear()
-        self._label_page[0].set_text(str(self._page_number))
-        for movie in self._movie_page:
-            self._movie_list.append(movie['title'])
+        self._label_page.set_text(str(number))
+        for movie in page:
+            self._movie_list.append([movie['title']])
 
     ### CONSTRUCTOR & INHERITED METHODS ###
 
@@ -46,8 +46,6 @@ class Controller(threading.Thread):
         self._builder.add_from_file('gui.glade')
         self._builder.connect_signals(self)
         
-        self._movie_page = None
-        self._page_number = -1
         self._movie_list = self._builder.get_object('movie-list')
         self._label_page = self._builder.get_object('label-page')
         
@@ -109,7 +107,7 @@ class Controller(threading.Thread):
         if args[0]:
             GObject.idle_add(self._show_login_dialog, False)
             GObject.idle_add(self._show_main_window, True)
-            self._model.get_list(self, 1)
+            self._model.get_list(self)
 	# Failure
         else:
             GObject.idle_add(self._show_error, args[1])
@@ -124,9 +122,6 @@ class Controller(threading.Thread):
             GObject.idle_add(self._show_error, args[1])
 
     def page_request_answer(self, number, page):
-        self._page_number = number
-        self._movie_page = page
-        
-        GObject.idle_add(self._update_movie_list)
+        GObject.idle_add(self._update_movie_list, number, page)
         
 
