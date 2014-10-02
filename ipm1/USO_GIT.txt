@@ -1,0 +1,3 @@
+git log permite obtener la huella de un commit
+git checkout <huella> pone el repositorio en el momento del commit elegido
+git checkout origin/master te devuelve al estado actual del repositorio
