@@ -38,9 +38,15 @@ class Controller(threading.Thread):
             self._movie_list.append([movie['title']])
     
     def _update_nav_buttons_status(self, is_first, is_last):
-        print((is_first, is_last))
         self._prev_button.set_sensitive(not is_first)
         self._next_button.set_sensitive(not is_last)
+    
+    def _display_movie(self, movie):
+        self._movie_img.set_text(movie['url_image'])
+        self._movie_title.set_text(movie['title'])
+        self._movie_year.set_text(str(movie['year']))
+        self._movie_desc.set_text(str(movie['synopsis']))
+        self._movie_last_edit.set_text(movie['username'])
 
     ### CONSTRUCTOR & INHERITED METHODS ###
 
@@ -51,15 +57,22 @@ class Controller(threading.Thread):
         self._builder.add_from_file('gui.glade')
         self._builder.connect_signals(self)
         
+        # Important interface elements
         self._movie_list = self._builder.get_object('movie-list')
         self._label_page = self._builder.get_object('label-page')
         self._next_button = self._builder.get_object('button-next')
         self._prev_button = self._builder.get_object('button-prev')
+
+        self._movie_img = self._builder.get_object('movie-img')
+        self._movie_title = self._builder.get_object('movie-title')
+        self._movie_desc = self._builder.get_object('movie-synopsis')
+        self._movie_year = self._builder.get_object('movie-year')
+        self._movie_last_edit = self._builder.get_object('movie-last-edit')
         
         self._show_login_dialog(True)
     
     def run(self):
-	GObject.threads_init()
+        GObject.threads_init()
         Gtk.main()
     
     ###### HANDLERS!! ######
@@ -118,26 +131,30 @@ class Controller(threading.Thread):
     # cambios en la interfaz deben hacerlo a traves de GObject.idle_add()
     
     def login_answer(self, *args):
-	# Success
+    # Success
         if args[0]:
             GObject.idle_add(self._show_login_dialog, False)
             GObject.idle_add(self._show_main_window, True)
             self._model.get_list(self)
-	# Failure
+    # Failure
         else:
             GObject.idle_add(self._show_error, args[1])
 
     def logout_answer(self, *args):
-	# Success
+    # Success
         if args[0]:
             GObject.idle_add(self._show_main_window, False)
             GObject.idle_add(self._show_login_dialog, True)
-	# Failure
+    # Failure
         else:
             GObject.idle_add(self._show_error, args[1])
 
     def page_request_answer(self, number, page, is_first, is_last):
         GObject.idle_add(self._update_movie_list, number, page)
         GObject.idle_add(self._update_nav_buttons_status, is_first, is_last)
+        self._model.get_movie(self, 0)
+    
+    def movie_request_answer(self, movie):
+        GObject.idle_add(self._display_movie, movie)
         
 

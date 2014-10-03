@@ -186,10 +186,12 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkTextBuffer" id="movie-synopsis"/>
   <object class="GtkWindow" id="main-window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">IPM1 - Películas</property>
-    <property name="default_width">800</property>
+    <property name="window_position">center</property>
+    <property name="default_width">600</property>
     <property name="default_height">600</property>
     <signal name="remove" handler="on_exit" swapped="no"/>
     <child>
@@ -388,6 +390,8 @@
           <object class="GtkPaned" id="panedcontent">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="margin_right">10</property>
+            <property name="margin_bottom">10</property>
             <child>
               <object class="GtkBox" id="panedleft">
                 <property name="visible">True</property>
@@ -398,7 +402,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">movie-list</property>
-                    <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
                     <property name="enable_search">False</property>
                     <property name="search_column">0</property>
@@ -410,7 +413,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="movie-name">
-                        <property name="title" translatable="yes">movie-name</property>
+                        <property name="title" translatable="yes">Título</property>
                         <property name="clickable">True</property>
                         <child>
                           <object class="GtkCellRendererText" id="movie-name-text">
@@ -434,6 +437,7 @@
                   <object class="GtkToolbar" id="listcontrols">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="show_arrow">False</property>
                     <child>
                       <object class="GtkToolButton" id="button-prev">
                         <property name="use_action_appearance">False</property>
@@ -521,6 +525,7 @@
               <object class="GtkBox" id="panedright">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_bottom">10</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkImage" id="image">
@@ -538,8 +543,7 @@
                   <object class="GtkToolbar" id="imagecontrols">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">20</property>
-                    <property name="margin_right">20</property>
+                    <property name="show_arrow">False</property>
                     <child>
                       <object class="GtkToolItem" id="toolbutton17">
                         <property name="use_action_appearance">False</property>
@@ -565,9 +569,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkEntry" id="entry2">
+                          <object class="GtkEntry" id="movie-img">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="editable">False</property>
                           </object>
                         </child>
                       </object>
@@ -579,7 +584,7 @@
                     <child>
                       <object class="GtkToolButton" id="toolbutton15">
                         <property name="use_action_appearance">False</property>
-                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">toolbutton15</property>
                         <property name="use_underline">True</property>
@@ -593,7 +598,7 @@
                     <child>
                       <object class="GtkToolButton" id="toolbutton16">
                         <property name="use_action_appearance">False</property>
-                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">toolbutton16</property>
                         <property name="use_underline">True</property>
@@ -608,14 +613,13 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkGrid" id="moviedata">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">20</property>
                     <property name="column_spacing">8</property>
                     <child>
                       <object class="GtkLabel" id="label1">
@@ -667,7 +671,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Último editor</property>
+                        <property name="label" translatable="yes">Última edición</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -677,10 +681,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry1">
+                      <object class="GtkEntry" id="movie-title">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="editable">False</property>
                       </object>
                       <packing>
@@ -691,7 +694,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry3">
+                      <object class="GtkEntry" id="movie-year">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="editable">False</property>
@@ -704,7 +707,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry4">
+                      <object class="GtkEntry" id="movie-last-edit">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="editable">False</property>
@@ -717,12 +720,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTextView" id="textview1">
+                      <object class="GtkTextView" id="movie-desc">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="editable">False</property>
                         <property name="cursor_visible">False</property>
+                        <property name="buffer">movie-synopsis</property>
                         <property name="accepts_tab">False</property>
                       </object>
                       <packing>
@@ -734,15 +739,16 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkToolbar" id="editcontrols">
-                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="show_arrow">False</property>
                     <child>
                       <object class="GtkSeparatorToolItem" id="toolbutton13">
                         <property name="visible">True</property>
@@ -790,7 +796,7 @@
               </object>
               <packing>
                 <property name="resize">True</property>
-                <property name="shrink">True</property>
+                <property name="shrink">False</property>
               </packing>
             </child>
           </object>
