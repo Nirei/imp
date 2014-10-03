@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-# ACCESO A LA API (CONCURRENTE)
 import requests
 import threading
 import sys

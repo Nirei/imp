@@ -35,7 +35,9 @@ class Controller(threading.Thread):
         self._movie_list.clear()
         self._label_page.set_text(str(number))
         for movie in page:
+            # TODO: Maneras más eficientes de rellenar la lista??
             self._movie_list.append([movie['title']])
+        self._movie_list_view.set_cursor(0)
     
     def _update_nav_buttons_status(self, is_first, is_last):
         self._prev_button.set_sensitive(not is_first)
@@ -59,6 +61,7 @@ class Controller(threading.Thread):
         
         # Important interface elements
         self._movie_list = self._builder.get_object('movie-list')
+        self._movie_list_view = self._builder.get_object('movie-list-view')
         self._label_page = self._builder.get_object('label-page')
         self._next_button = self._builder.get_object('button-next')
         self._prev_button = self._builder.get_object('button-prev')
@@ -115,8 +118,10 @@ class Controller(threading.Thread):
     
     # Content handlers
     def on_selection_changed(self, tso):
-        (a,b) = tso.get_selected()
-        print(a[b][0])
+        print(tso)
+        model, paths = tso.get_selected_rows()
+        row = paths[0].get_indices()[0]
+        self._model.get_movie(self, row)
     
     def nav_prev(self, widget):
         self._model.prev_page()

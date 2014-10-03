@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- encoding: utf-8 -*-
+
 from model import *
 from controller import *
 from gi.repository import GObject
