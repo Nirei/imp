@@ -91,6 +91,7 @@ class Model:
 	        
     def _page_request(self, args):
         url = self._server_url + '/movies/page/' + str(args[1])
+        url_next = self._server_url + '/movies/page/' + str(args[1]+1)
         
         try:
             r = requests.get(url, cookies=self._cookie_jar)
@@ -98,7 +99,9 @@ class Model:
             if self._request_successful(r):
 	            self._page = r.json()['data']
 	            self._page_number = args[1]
-	            args[0].page_request_answer(args[1], self._page)
+	            is_first = self._page_number == 1
+	            is_last = requests.get(url_next, cookies=self._cookie_jar).json()['result'] == 'failure'
+	            args[0].page_request_answer(args[1], self._page, is_first, is_last)
             elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
 	            print(r)
 	            print(r.json())
@@ -123,6 +126,12 @@ class Model:
     def get_list(self, controller):
         rt = RequestThread(self._page_request, controller, self._page_number)
         rt.start()
+        
+    def next_page(self):
+        self._page_number-=1
+    
+    def prev_page(self):
+        self._page_number+=1
     
     def add_movie(self, *args):
         pass

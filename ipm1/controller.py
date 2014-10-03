@@ -36,6 +36,11 @@ class Controller(threading.Thread):
         self._label_page.set_text(str(number))
         for movie in page:
             self._movie_list.append([movie['title']])
+    
+    def _update_nav_buttons_status(self, is_first, is_last):
+        print((is_first, is_last))
+        self._prev_button.set_sensitive(not is_first)
+        self._next_button.set_sensitive(not is_last)
 
     ### CONSTRUCTOR & INHERITED METHODS ###
 
@@ -48,6 +53,8 @@ class Controller(threading.Thread):
         
         self._movie_list = self._builder.get_object('movie-list')
         self._label_page = self._builder.get_object('label-page')
+        self._next_button = self._builder.get_object('button-next')
+        self._prev_button = self._builder.get_object('button-prev')
         
         self._show_login_dialog(True)
     
@@ -98,6 +105,14 @@ class Controller(threading.Thread):
         (a,b) = tso.get_selected()
         print(a[b][0])
     
+    def nav_prev(self, widget):
+        self._model.prev_page()
+        self._model.get_list(self)
+    
+    def nav_next(self, widget):
+        self._model.next_page()
+        self._model.get_list(self)
+    
     ###### CALLBACKS!! ######
     # Estas funciones son para llamar desde el modelo, de modo que si realizan
     # cambios en la interfaz deben hacerlo a traves de GObject.idle_add()
@@ -121,7 +136,8 @@ class Controller(threading.Thread):
         else:
             GObject.idle_add(self._show_error, args[1])
 
-    def page_request_answer(self, number, page):
+    def page_request_answer(self, number, page, is_first, is_last):
         GObject.idle_add(self._update_movie_list, number, page)
+        GObject.idle_add(self._update_nav_buttons_status, is_first, is_last)
         
 

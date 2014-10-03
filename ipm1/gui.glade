@@ -442,6 +442,7 @@
                         <property name="label" translatable="yes">toolbutton5</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-go-back</property>
+                        <signal name="clicked" handler="nav_prev" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -496,6 +497,7 @@
                         <property name="label" translatable="yes">toolbutton7</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-go-forward</property>
+                        <signal name="clicked" handler="nav_next" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
