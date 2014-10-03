@@ -118,7 +118,6 @@ class Controller(threading.Thread):
     
     # Content handlers
     def on_selection_changed(self, tso):
-        print(tso)
         model, paths = tso.get_selected_rows()
         row = paths[0].get_indices()[0]
         self._model.get_movie(self, row)
@@ -157,7 +156,6 @@ class Controller(threading.Thread):
     def page_request_answer(self, number, page, is_first, is_last):
         GObject.idle_add(self._update_movie_list, number, page)
         GObject.idle_add(self._update_nav_buttons_status, is_first, is_last)
-        self._model.get_movie(self, 0)
     
     def movie_request_answer(self, movie):
         GObject.idle_add(self._display_movie, movie)

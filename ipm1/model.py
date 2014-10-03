@@ -11,13 +11,26 @@ import sys
 # Encapsula un thread que lanza la funcion pasada en el constructor.
 class RequestThread(threading.Thread):
         
-    def __init__(self, req_fun, *args):
+    def __init__(self, handler, method, url, params, data, cookies, *args):
         super(RequestThread, self).__init__()
-        self._req_fun = req_fun
+        self._handler = handler
+        self._method = method
+        self._url = url
+        self._params = params
+        self._data = data
+        self._cookies = cookies
         self._args = args
+        
+    def _request_function(self):
+#        try:
+            response = requests.request(self._method, self._url, params=self._params, data=self._data, cookies=self._cookies)
+            self._handler(response, self._args)
+#        except:
+#            e = sys.exc_info()[1]
+#            self._args[0].login_answer(False, 'Error del servidor:\n' + str(e))
     
     def run(self):
-        self._req_fun(self._args)
+        self._request_function()
     
 
 class Model:
@@ -35,112 +48,90 @@ class Model:
     def _request_successful(self, r):
         return r.status_code == requests.codes.ok and r.json()['result'] == 'success'
             
-    def _login_request(self, args):
-        url = self._server_url + '/login'
-        payload = 'username=' + args[1] + '&passwd=' + args[2]
-
-        #We are trying to connect with a user we have already logged, do nothing
-        if args[1] == self._login:
-            args[0].login_answer(False, 'El usuario ya está conectado')
+    def _login_request(self, r, args):                
+        # Server answered and we are logged
+        if self._request_successful(r):
+            self._cookie_jar = r.cookies
+            self._login = args[1]
+            # We have to delete the TextEntry used!
+            args[0]._builder.get_object("user-entry").set_text('')
+            args[0]._builder.get_object("passwd-entry").set_text('')
+            args[0].login_answer(True, '')
+        # Server answered but the user or their passwd are incorrect
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            args[0].login_answer(False, 'La contraseña o usuario son incorrectas')
+        # Server refused to answer us (404, 500...)
         else:
-            try:
-                r = requests.post(url, payload)
-                
-                # Server answered and we are logged
-                if self._request_successful(r):
-                    self._cookie_jar = r.cookies
-                    self._login = args[1]
-                    # We have to delete the TextEntry used!
-                    args[0]._builder.get_object("user-entry").set_text('')
-                    args[0]._builder.get_object("passwd-entry").set_text('')
-                    args[0].login_answer(True, '')
-                # Server answered but the user or their passwd are incorrect
-                elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-                    args[0].login_answer(False, 'La contraseña o usuario son incorrectas')
-                # Server refused to answer us (404, not responding...)
-                else:
-                    args[0].login_answer(False, 'El servidor no se encuentra disponible')
-            
-            except: # There was an exception like connection refused
-                e = sys.exc_info()[1]
-                args[0].login_answer(False, 'Error del servidor:\n' + str(e))
+            args[0].login_answer(False, 'El servidor no se encuentra disponible')
 
-    def _logout_request(self, args):
-        #We have to logout explicitly from the server
-        url = self._server_url + '/logout'
-        
-        try:
-            r = requests.get(url, cookies=self._cookie_jar)
+    def _logout_request(self, r, args):
+        # Server answered and we are logged out
+        if self._request_successful(r):
+            self._login = None
+            self._cookie_jar = None
+            args[0].logout_answer(True, '')
+        # Server answered but somehow he couldn't logged us out
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            args[0].logout_answer(False, 'No se pudo desconectar de la base de datos')
+        # Server refused to answer us (404, not responding...)
+        else:
+            args[0].logout_answer(False, 'El servidor no se encuentra disponible')
             
-            # Server answered and we are logged out
-            if self._request_successful(r):
-                self._login = None
-                self._cookie_jar = None
-                args[0].logout_answer(True, '')
-            # Server answered but somehow he couldn't logged us out
-            elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-                args[0].logout_answer(False, 'No se pudo desconectar de la base de datos')
-            # Server refused to answer us (404, not responding...)
-            else:
-                args[0].logout_answer(False, 'El servidor no se encuentra disponible')
-            
-        except: # There was an exception like connection refused
-            print(sys.exc_info()[1])
-            #e = sys.exc_info()[1]
-            #args[0].login_answer(False, 'Error del servidor:\n' + str(e))
-    
-    def _movie_request(self, args):
-        url = self._server_url + '/movies/' + str(args[1])
-        
-        try:
-            r = requests.get(url, cookies=self._cookie_jar)
-            if self._request_successful(r):
-                args[0].movie_request_answer(r.json()['data'])
-            elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-                print(r)
-                print(r.json())
-            else:
-                print(r)
-        except:
-            print(sys.exc_info()[1])
-            
-    def _page_request(self, args):
-        url = self._server_url + '/movies/page/' + str(args[1])
+    def _page_request(self, r, args):
         url_next = self._server_url + '/movies/page/' + str(args[1]+1)
-        
-        try:
-            r = requests.get(url, cookies=self._cookie_jar)
             
-            if self._request_successful(r):
-                self._page = r.json()['data']
-                self._page_number = args[1]
-                is_first = self._page_number == 1
-                is_last = requests.get(url_next, cookies=self._cookie_jar).json()['result'] == 'failure'
-                args[0].page_request_answer(args[1], self._page, is_first, is_last)
-            elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-                print(r)
-                print(r.json())
-            else:
-                print(r)
-        except:
-            #e = sys.exc_info()[1]
-            #args[0].login_answer(False, 'Error del servidor:\n' + str(e))
-            print(sys.exc_info()[1])
+        if self._request_successful(r):
+            self._page = r.json()['data']
+            self._page_number = args[1]
+            is_first = self._page_number == 1
+            is_last = requests.get(url_next, cookies=self._cookie_jar).json()['result'] == 'failure'
+            args[0].page_request_answer(args[1], self._page, is_first, is_last)
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            print(r)
+            print(r.json())
+        else:
+            print(r)
     
+    def _movie_request(self, r, args):
+        if self._request_successful(r):
+            args[0].movie_request_answer(r.json()['data'])
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            print(r)
+            print(r.json())
+        else:
+            print(r)
+    
+    def _add_movie_request(self, r, args):
+        if self._request_successful(r):
+            args[0].movie_request_answer(r.json()['data'])
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            print(r)
+            print(r.json())
+        else:
+            print(r)
+        
     ### MODEL FUNCTIONS ###
     
     # Feature: access control
     def login(self, controller, user, passwd):
-        rt = RequestThread(self._login_request, controller, user, passwd)
-        rt.start()
+        #We are trying to connect with a user we have already logged, do nothing
+        if user == self._login:
+            controller.login_answer(False, 'El usuario ya está conectado')
+        else:
+            url = self._server_url + '/login'
+            data = {'username' : user, 'passwd' : passwd}
+            rt = RequestThread(self._login_request, 'POST', url, None, data, self._cookie_jar, controller, user, passwd)
+            rt.start()
     
     def logout(self, controller):
-        rt = RequestThread(self._logout_request, controller)
+        url = self._server_url + '/logout'
+        rt = RequestThread(self._logout_request, 'GET', url, None, None, self._cookie_jar, controller)
         rt.start()
     
     # Feature: movie list
     def get_list(self, controller):
-        rt = RequestThread(self._page_request, controller, self._page_number)
+        url = self._server_url + '/movies/page/' + str(self._page_number)
+        rt = RequestThread(self._page_request, 'GET', url, None, None, self._cookie_jar, controller, self._page_number)
         rt.start()
         
     def next_page(self):
@@ -150,11 +141,16 @@ class Model:
         self._page_number+=1
     
     def get_movie(self, controller, number):
-        rt = RequestThread(self._movie_request, controller, self._page[number]['id'])
+        m_id = self._page[number]['id']
+        url = self._server_url + '/movies/' + str(m_id)
+        rt = RequestThread(self._movie_request, 'GET', url, None, None, self._cookie_jar, controller, m_id)
         rt.start()
     
-    def add_movie(self, *args):
-        pass
+    def add_movie(self, controller, movie):
+        url = self._server_url + '/movies'
+        data = movie
+        rt = RequestThread(self._movie_request, 'POST', url, None, data, self._cookie_jar, controller, movie)
+        rt.start()
     
     def del_movie(self, *args):
         pass
