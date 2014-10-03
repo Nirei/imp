@@ -112,6 +112,15 @@ class Model:
         
     ### MODEL FUNCTIONS ###
     
+    def get_username(self):
+        return self._login
+    
+    def next_page(self):
+        self._page_number-=1
+    
+    def prev_page(self):
+        self._page_number+=1
+    
     # Feature: access control
     def login(self, controller, user, passwd):
         #We are trying to connect with a user we have already logged, do nothing
@@ -133,12 +142,6 @@ class Model:
         url = self._server_url + '/movies/page/' + str(self._page_number)
         rt = RequestThread(self._page_request, 'GET', url, None, None, self._cookie_jar, controller, self._page_number)
         rt.start()
-        
-    def next_page(self):
-        self._page_number-=1
-    
-    def prev_page(self):
-        self._page_number+=1
     
     def get_movie(self, controller, number):
         m_id = self._page[number]['id']

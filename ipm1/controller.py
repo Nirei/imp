@@ -44,11 +44,34 @@ class Controller(threading.Thread):
         self._next_button.set_sensitive(not is_last)
     
     def _display_movie(self, movie):
-        self._movie_img.set_text(movie['url_image'])
-        self._movie_title.set_text(movie['title'])
-        self._movie_year.set_text(str(movie['year']))
-        self._movie_desc.set_text(str(movie['synopsis']))
-        self._movie_last_edit.set_text(movie['username'])
+        if movie:
+            self._movie_img.set_text(movie['url_image'])
+            self._movie_title.set_text(movie['title'])
+            self._movie_year.set_text(str(movie['year']))
+            self._movie_desc.set_text(str(movie['synopsis']))
+            self._movie_last_edit.set_text(movie['username'])
+        else:
+            self._movie_img.set_text('')
+            self._movie_title.set_text('')
+            self._movie_year.set_text('')
+            self._movie_desc.set_text('')
+            self._movie_last_edit.set_text('')
+            
+    def _set_movie_data_editable(self, boolean):
+        self._movie_list_view.set_sensitive(not boolean)
+
+        self._movie_img.set_editable(boolean)
+        self._movie_img.set_can_focus(boolean)
+        self._movie_title.set_editable(boolean)
+        self._movie_title.set_can_focus(boolean)
+        self._movie_year.set_editable(boolean)
+        self._movie_year.set_can_focus(boolean)
+        self._movie_desc_view.set_editable(boolean)
+        self._movie_desc_view.set_can_focus(boolean)
+        self._movie_desc_view.set_cursor_visible(boolean)
+       
+        self._edit_tools.set_visible(boolean)
+        self._image_paste.set_sensitive(boolean)
 
     ### CONSTRUCTOR & INHERITED METHODS ###
 
@@ -65,12 +88,18 @@ class Controller(threading.Thread):
         self._label_page = self._builder.get_object('label-page')
         self._next_button = self._builder.get_object('button-next')
         self._prev_button = self._builder.get_object('button-prev')
+        self._edit_tools = self._builder.get_object('editcontrols')
+        self._image_copy = self._builder.get_object('url-copy')
+        self._image_paste = self._builder.get_object('url-paste')
 
         self._movie_img = self._builder.get_object('movie-img')
         self._movie_title = self._builder.get_object('movie-title')
         self._movie_desc = self._builder.get_object('movie-synopsis')
+        self._movie_desc_view = self._builder.get_object('movie-desc')
         self._movie_year = self._builder.get_object('movie-year')
         self._movie_last_edit = self._builder.get_object('movie-last-edit')
+        
+        self._restore_cursor = 0
         
         self._show_login_dialog(True)
     
@@ -101,11 +130,30 @@ class Controller(threading.Thread):
             self._model.logout(self)
         Gtk.main_quit(*args)
     
-    # Menu handlers
-    
     # Toolbar handlers
     def on_add_movie(self, widget):
-        print("on_button_add_clicked")
+        # Get selected row on movie list
+        sel = self._movie_list_view.get_selection()
+        # Save index
+        paths = sel.get_selected_rows()[1]
+        if paths:
+            self._restore_cursor = paths[0].get_indices()[0]
+        # And unset cursor
+        sel.unselect_all()
+        
+        # Clear all fields
+        self._display_movie(None)
+        # Make data editable
+        self._set_movie_data_editable(True)
+        # And set the username
+        self._movie_last_edit.set_text(self._model.get_username())
+
+    
+    def on_edit_cancel(self, widget):
+        # Lock editable fields
+        self._set_movie_data_editable(False)
+        # And restore cursor (this triggers the loading of the movie data)
+        self._movie_list_view.set_cursor(self._restore_cursor)
     
     def on_modify_movie(self, widget):
         print("on_button_modify_clicked")
@@ -117,10 +165,12 @@ class Controller(threading.Thread):
         self._model.logout(self)
     
     # Content handlers
-    def on_selection_changed(self, tso):
-        model, paths = tso.get_selected_rows()
-        row = paths[0].get_indices()[0]
-        self._model.get_movie(self, row)
+    def on_selection_changed(self, sel):
+        paths = sel.get_selected_rows()[1]
+        # If something has been selected, update info
+        if paths:
+            row = paths[0].get_indices()[0]
+            self._model.get_movie(self, row)
     
     def nav_prev(self, widget):
         self._model.prev_page()
