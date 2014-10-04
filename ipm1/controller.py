@@ -184,8 +184,7 @@ class Controller(threading.Thread):
         self._adding = True
         
         # Save cursor
-        if paths:
-            self._restore_cursor = self._read_row()
+        self._restore_cursor = self._read_row()
         # And unset cursor
         sel.unselect_all()
         
