@@ -59,7 +59,18 @@ class Controller(threading.Thread):
             
     def _set_movie_data_editable(self, boolean):
         self._movie_list_view.set_sensitive(not boolean)
-
+        
+        # Menú
+        self._menu_add.set_sensitive(not boolean)
+        self._menu_modify.set_sensitive(not boolean)
+        self._menu_delete.set_sensitive(not boolean)
+        
+        # Barra de herramientas
+        self._add_button.set_sensitive(not boolean)
+        self._modify_button.set_sensitive(not boolean)
+        self._delete_button.set_sensitive(not boolean)
+        
+        # Zona de edición
         self._movie_img.set_editable(boolean)
         self._movie_img.set_can_focus(boolean)
         self._movie_title.set_editable(boolean)
@@ -72,7 +83,23 @@ class Controller(threading.Thread):
        
         self._edit_tools.set_visible(boolean)
         self._image_paste.set_sensitive(boolean)
-
+    
+    def _read_movie(self):
+        start, end = self._movie_desc.get_bounds()
+        try:
+            year = int(self._movie_year.get_text())
+        except:
+            # El año no es un número
+            self._show_error('El año introducido no es válido')
+            return None
+        
+        return {
+            'url_image' : self._movie_img.get_text(),
+            'title'     : self._movie_title.get_text(),
+            'year'      : year,
+            'desc'      : self._movie_desc.get_text(start, end, False) 
+        }
+    
     ### CONSTRUCTOR & INHERITED METHODS ###
 
     def __init__(self, model):
@@ -83,6 +110,14 @@ class Controller(threading.Thread):
         self._builder.connect_signals(self)
         
         # Important interface elements
+        self._menu_add = self._builder.get_object('file-add')
+        self._menu_modify = self._builder.get_object('file-modify')
+        self._menu_delete = self._builder.get_object('file-delete')
+               
+        self._add_button = self._builder.get_object('button-add')
+        self._modify_button = self._builder.get_object('button-modify')
+        self._delete_button = self._builder.get_object('button-delete')
+        
         self._movie_list = self._builder.get_object('movie-list')
         self._movie_list_view = self._builder.get_object('movie-list-view')
         self._label_page = self._builder.get_object('label-page')
@@ -100,6 +135,7 @@ class Controller(threading.Thread):
         self._movie_last_edit = self._builder.get_object('movie-last-edit')
         
         self._restore_cursor = 0
+        self._adding = False
         
         self._show_login_dialog(True)
     
@@ -132,6 +168,8 @@ class Controller(threading.Thread):
     
     # Toolbar handlers
     def on_add_movie(self, widget):
+        self._adding = True
+        
         # Get selected row on movie list
         sel = self._movie_list_view.get_selection()
         # Save index
@@ -154,6 +192,14 @@ class Controller(threading.Thread):
         self._set_movie_data_editable(False)
         # And restore cursor (this triggers the loading of the movie data)
         self._movie_list_view.set_cursor(self._restore_cursor)
+    
+    def on_edit_accept(self, widget):
+        # If we are adding a new movie
+        if self._adding:
+            print(self._read_movie())
+        # If modifying an existing one
+        else:
+            pass
     
     def on_modify_movie(self, widget):
         print("on_button_modify_clicked")
