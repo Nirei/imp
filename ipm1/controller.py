@@ -48,7 +48,7 @@ class Controller(threading.Thread):
             self._movie_img.set_text(movie['url_image'])
             self._movie_title.set_text(movie['title'])
             self._movie_year.set_text(str(movie['year']))
-            self._movie_desc.set_text(str(movie['synopsis']))
+            self._movie_desc.set_text(unicode(movie['synopsis']))
             self._movie_last_edit.set_text(movie['username'])
         else:
             self._movie_img.set_text('')
