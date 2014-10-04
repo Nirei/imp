@@ -65,7 +65,7 @@ class Model:
             args[0].login_answer(True, '')
         # Server answered but the user or their passwd are incorrect
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].login_answer(False, 'La contraseña o usuario son incorrectas')
+            args[0].login_answer(False, 'Usuario o contraseña incorrectas')
         # Server refused to answer us (404, 500...)
         else:
             args[0].login_answer(False, 'El servidor no se encuentra disponible')
@@ -78,7 +78,7 @@ class Model:
             args[0].logout_answer(True, '')
         # Server answered but somehow he couldn't logged us out
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].logout_answer(False, 'No se pudo desconectar de la base de datos')
+            args[0].logout_answer(False, 'No se pudo desasociar del sistema')
         # Server refused to answer us (404, not responding...)
         else:
             args[0].logout_answer(False, 'El servidor no se encuentra disponible')
@@ -109,7 +109,7 @@ class Model:
     
     def _add_movie_request(self, r, args):
         if self._request_successful(r):
-            args[0].movie_request_answer(r.json()['data'])
+            args[0].add_request_answer(True)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
             print(r)
             print(r.json())

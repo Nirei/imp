@@ -97,7 +97,7 @@ class Controller(threading.Thread):
             'url_image' : self._movie_img.get_text(),
             'title'     : self._movie_title.get_text(),
             'year'      : year,
-            'desc'      : self._movie_desc.get_text(start, end, False) 
+            'synopsis'      : self._movie_desc.get_text(start, end, False) 
         }
     
     ### CONSTRUCTOR & INHERITED METHODS ###
@@ -196,7 +196,7 @@ class Controller(threading.Thread):
     def on_edit_accept(self, widget):
         # If we are adding a new movie
         if self._adding:
-            print(self._read_movie())
+            self._model.add_movie(self, self._read_movie())
         # If modifying an existing one
         else:
             pass
@@ -231,21 +231,21 @@ class Controller(threading.Thread):
     # cambios en la interfaz deben hacerlo a traves de GObject.idle_add()
     
     def login_answer(self, *args):
-    # Success
+        # Success
         if args[0]:
             GObject.idle_add(self._show_login_dialog, False)
             GObject.idle_add(self._show_main_window, True)
             self._model.get_list(self)
-    # Failure
+        # Failure
         else:
             GObject.idle_add(self._show_error, args[1])
 
     def logout_answer(self, *args):
-    # Success
+        # Success
         if args[0]:
             GObject.idle_add(self._show_main_window, False)
             GObject.idle_add(self._show_login_dialog, True)
-    # Failure
+        # Failure
         else:
             GObject.idle_add(self._show_error, args[1])
 
@@ -255,5 +255,13 @@ class Controller(threading.Thread):
     
     def movie_request_answer(self, movie):
         GObject.idle_add(self._display_movie, movie)
+    
+    def add_request_answer(self, *args):
+        # Success
+        if args[0]:
+            GObject.idle_add(self._set_movie_data_editable(False))
+        # Failure
+        else:
+            GObject.idle_add(self._show_error, args[1])
         
 
