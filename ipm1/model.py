@@ -22,12 +22,18 @@ class RequestThread(threading.Thread):
         self._args = args
         
     def _request_function(self):
-#        try:
+        try:
             response = requests.request(self._method, self._url, params=self._params, data=self._data, cookies=self._cookies)
             self._handler(response, self._args)
-#        except:
-#            e = sys.exc_info()[1]
-#            self._args[0].login_answer(False, 'Error del servidor:\n' + str(e))
+        except:
+            print(self._method)
+            print(self._url)
+            print(self._params)
+            print(self._data)
+            print(self._cookies)
+            print(self._args)
+            e = sys.exc_info()[1]
+            self._args[0].login_answer(False, 'Error del servidor:\n' + str(e))
     
     def run(self):
         self._request_function()
@@ -90,7 +96,7 @@ class Model:
             print(r)
             print(r.json())
         else:
-            print(r)
+            raise Exception()
     
     def _movie_request(self, r, args):
         if self._request_successful(r):
@@ -99,7 +105,7 @@ class Model:
             print(r)
             print(r.json())
         else:
-            print(r)
+            raise Exception()
     
     def _add_movie_request(self, r, args):
         if self._request_successful(r):
@@ -108,17 +114,17 @@ class Model:
             print(r)
             print(r.json())
         else:
-            print(r)
+            raise Exception()
         
     ### MODEL FUNCTIONS ###
     
     def get_username(self):
         return self._login
     
-    def next_page(self):
+    def prev_page(self):
         self._page_number-=1
     
-    def prev_page(self):
+    def next_page(self):
         self._page_number+=1
     
     # Feature: access control

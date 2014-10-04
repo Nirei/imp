@@ -6,9 +6,9 @@ from controller import *
 from gi.repository import GObject
 
 # Localhost server
-model = Model('http://localhost:5000')
+#model = Model('http://localhost:5000')
 # General server
-#model = Model('http://ipm-movie-database.herokuapp.com')
+model = Model('http://ipm-movie-database.herokuapp.com')
 
 controller = Controller(model)
 
