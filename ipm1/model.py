@@ -134,6 +134,14 @@ class Model:
         else:
             raise Exception()
     
+    def _delete_request(self, r, args):
+        if self._request_successful(r):
+            args[0].delete_request_answer(True, None)
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            args[0].delete_request_answer(False, u'No se pudo editar la información de la película.\nEl servidor respondió:\n' + r.json()['reason'])
+        else:
+            raise Exception()
+    
     ### MODEL FUNCTIONS ###
     
     def get_username(self):
@@ -215,8 +223,15 @@ class Model:
         else:
             controller.modify_request_answer(False, u'No ha iniciado sesión')
     
-    def del_movie(self, *args):
-        pass
+    def delete_movie(self, controller, row):
+        # Require login
+        if self.is_logged_in():
+            m_id = self._page[row]['id']
+            url = self._server_url + '/movies/' + str(m_id)
+            rt = RequestThread(self._delete_request, 'DELETE', url, None, None, self._cookie_jar, controller)
+            rt.start()
+        else:
+            controller.modify_request_answer(False, u'No ha iniciado sesión')
     
     def is_logged_in(self):
         return self._login # None == False

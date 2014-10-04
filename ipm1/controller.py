@@ -104,6 +104,14 @@ class Controller(threading.Thread):
             'synopsis'      : self._movie_desc.get_text(start, end, False) 
         }
     
+    def _read_row(self):
+        sel = self._movie_list_view.get_selection()
+        paths = sel.get_selected_rows()[1]
+        if paths:
+            return paths[0].get_indices()[0]
+        else:
+            return None
+    
     ### CONSTRUCTOR & INHERITED METHODS ###
 
     def __init__(self, model):
@@ -175,12 +183,9 @@ class Controller(threading.Thread):
     def on_add_movie(self, widget):
         self._adding = True
         
-        # Get selected row on movie list
-        sel = self._movie_list_view.get_selection()
         # Save cursor
-        paths = sel.get_selected_rows()[1]
         if paths:
-            self._restore_cursor = paths[0].get_indices()[0]
+            self._restore_cursor = self._read_row()
         # And unset cursor
         sel.unselect_all()
         
@@ -196,10 +201,9 @@ class Controller(threading.Thread):
         
         # Make data editable
         self._set_movie_data_editable(True)
-        
     
     def on_delete_movie(self, widget):
-        print("on_button_delete_clicked")
+        self._model.delete_movie(self, self._read_row())
     
     def on_edit_cancel(self, widget):
         # Lock editable fields
@@ -209,10 +213,7 @@ class Controller(threading.Thread):
         
         # If modifyin, reload movie data
         if not self._adding:
-            sel = self._movie_list_view.get_selection()
-            paths = sel.get_selected_rows()[1]
-            row = paths[0].get_indices()[0]
-            self._model.get_movie(row)
+            self._model.get_movie(self._read_row())
     
     def on_edit_accept(self, widget):
         # If we are adding a new movie
@@ -220,23 +221,19 @@ class Controller(threading.Thread):
             self._model.add_movie(self, self._read_movie())
         # If modifying an existing one
         else:
-            # Get selected row on movie list
-            sel = self._movie_list_view.get_selection()
-            paths = sel.get_selected_rows()[1]
-            row = paths[0].get_indices()[0]
             # Send new info to model
-            self._model.modify_movie(self, row, self._read_movie())
+            self._model.modify_movie(self, self._read_row(), self._read_movie())
     
     def on_logout(self, widget):
         self._model.logout(self)
     
     # Content handlers
     def on_selection_changed(self, sel):
-        paths = sel.get_selected_rows()[1]
-        # If something has been selected, update info
-        if paths:
-            row = paths[0].get_indices()[0]
+        row = self._read_row()
+        # If a movie is selected, display it's info
+        if row is not None:
             self._model.get_movie(self, row)
+        # else ignore the event
     
     def nav_prev(self, widget):
         self._model.prev_page()
@@ -300,6 +297,15 @@ class Controller(threading.Thread):
         # Success
         if success:
             GObject.idle_add(self._set_movie_data_editable, False)
+            # Update movie list
+            self._model.get_list(self)
+        # Failure
+        else:
+            GObject.idle_add(self._show_error, args[0])
+    
+    def delete_request_answer(self, success, *args):
+        # Success
+        if success:
             # Update movie list
             self._model.get_list(self)
         # Failure
