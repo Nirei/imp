@@ -112,6 +112,11 @@ class Controller(threading.Thread):
         else:
             return None
     
+    def _unset_cursor(self):
+        sel = self._movie_list_view.get_selection()
+        sel.unselect_all()
+        
+    
     ### CONSTRUCTOR & INHERITED METHODS ###
 
     def __init__(self, model):
@@ -186,7 +191,7 @@ class Controller(threading.Thread):
         # Save cursor
         self._restore_cursor = self._read_row()
         # And unset cursor
-        sel.unselect_all()
+        self._unset_cursor()
         
         # Clear all fields
         self._display_movie(None)
