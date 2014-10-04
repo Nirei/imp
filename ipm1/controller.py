@@ -154,7 +154,7 @@ class Controller(threading.Thread):
     def on_login_dialog_close(self, *args):
         Gtk.main_quit(*args)
     
-    def on_dialog_login_button_clicked(self, widget):
+    def on_login(self, widget):
         user = self._builder.get_object('user-entry').get_text()
         passwd = self._builder.get_object('passwd-entry').get_text()
 
@@ -206,6 +206,13 @@ class Controller(threading.Thread):
         self._set_movie_data_editable(False)
         # And restore cursor (this triggers the loading of the movie data)
         self._movie_list_view.set_cursor(self._restore_cursor)
+        
+        # If modifyin, reload movie data
+        if not self._adding:
+            sel = self._movie_list_view.get_selection()
+            paths = sel.get_selected_rows()[1]
+            row = paths[0].get_indices()[0]
+            self._model.get_movie(row)
     
     def on_edit_accept(self, widget):
         # If we are adding a new movie
@@ -282,7 +289,7 @@ class Controller(threading.Thread):
     def add_request_answer(self, success, *args):
         # Success
         if success:
-            GObject.idle_add(self._set_movie_data_editable(False))
+            GObject.idle_add(self._set_movie_data_editable, False)
             # Update movie list
             self._model.get_list(self)
         # Failure
@@ -292,7 +299,7 @@ class Controller(threading.Thread):
     def modify_request_answer(self, success, *args):
         # Success
         if success:
-            GObject.idle_add(self._set_movie_data_editable(False))
+            GObject.idle_add(self._set_movie_data_editable, False)
             # Update movie list
             self._model.get_list(self)
         # Failure

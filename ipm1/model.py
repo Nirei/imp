@@ -42,8 +42,7 @@ class RequestThread(threading.Thread):
             self._args[0].login_answer(False, 'Error del servidor: ' + str(e))
 
         self._handler(response, self._args)
-           
-    
+     
     def run(self):
         self._request_function()
     
@@ -57,6 +56,11 @@ class Model:
         
         self._page = None
         self._page_number = 1
+    
+    ### VALIDATION FUNCTIONS ###
+    
+    def _movie_is_valid(self, movie):
+        return movie['title'] != '' and movie['category'] != '' and movie['synopsis'] != '' and isinstance( movie['year'], int )
             
     ### REQUEST FUNCTIONS ###
     
@@ -116,7 +120,7 @@ class Model:
     
     def _add_request(self, r, args):
         if self._request_successful(r):
-            args[0].add_request_answer(True)
+            args[0].add_request_answer(True, None)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
             args[0].add_request_answer(False, u'No se pudo añadir la información sobre la película.\nEl servidor respondió:\n' + r.json()['reason'])
         else:
@@ -124,7 +128,7 @@ class Model:
     
     def _modify_request(self, r, args):
         if self._request_successful(r):
-            args[0].modify_request_answer(True)
+            args[0].modify_request_answer(True, None)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
             args[0].modify_request_answer(False, u'No se pudo editar la información de la película.\nEl servidor respondió:\n' + r.json()['reason'])
         else:
@@ -179,16 +183,28 @@ class Model:
             controller.movie_request_answer(False, u'No ha iniciado sesión')
     
     def add_movie(self, controller, movie):
-        # Require login
+
+        # Validate data
+        if not self._movie_is_valid(movie):
+            controller.add_request_answer(False, u'Los datos introducidos nos son válidos')
+            return
+
+        # Require login            
         if self.is_logged_in():
             url = self._server_url + '/movies'
             data = movie
             rt = RequestThread(self._add_request, 'POST', url, None, data, self._cookie_jar, controller)
             rt.start()
         else:
-            controller.login_answer(False, u'No ha iniciado sesión')
+            controller.add_request_answer(False, u'No ha iniciado sesión')
         
     def modify_movie(self, controller, row, movie):
+
+        # Validate data
+        if not self._movie_is_valid(movie):
+            controller.modify_request_answer(False, u'Los datos introducidos nos son válidos')
+            return
+
         # Require login
         if self.is_logged_in():
             m_id = self._page[row]['id']

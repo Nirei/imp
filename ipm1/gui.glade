@@ -144,7 +144,7 @@
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <property name="xalign">0.82999998331069946</property>
-                <signal name="clicked" handler="on_dialog_login_button_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_login" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
