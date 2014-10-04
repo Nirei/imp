@@ -88,6 +88,7 @@ class Model:
         if self._request_successful(r):
             self._login = None
             self._cookie_jar = None
+            self._page_number = 1
             args[0].logout_answer(True, '')
         # Server answered but somehow he couldn't logged us out
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
