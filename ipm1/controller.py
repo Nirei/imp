@@ -115,7 +115,10 @@ class Controller(threading.Thread):
     def _unset_cursor(self):
         sel = self._movie_list_view.get_selection()
         sel.unselect_all()
-        
+    
+    def _lock_nav(self, lock):
+        self._prev_button.set_sensitive(not lock)
+        self._next_button.set_sensitive(not lock)
     
     ### CONSTRUCTOR & INHERITED METHODS ###
 
@@ -240,10 +243,12 @@ class Controller(threading.Thread):
         # else ignore the event
     
     def nav_prev(self, widget):
+        self._lock_nav(True)
         self._model.prev_page()
         self._model.get_list(self)
     
     def nav_next(self, widget):
+        self._lock_nav(True)
         self._model.next_page()
         self._model.get_list(self)
     
@@ -272,6 +277,7 @@ class Controller(threading.Thread):
             GObject.idle_add(self._show_error, args[1])
 
     def page_request_answer(self, success, *args):
+        GObject.idle_add(self._lock_nav, False)
         if success:
             GObject.idle_add(self._update_movie_list, args[0], args[1])
             GObject.idle_add(self._update_nav_buttons_status, args[2], args[3])
