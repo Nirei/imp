@@ -37,7 +37,6 @@ class Controller(threading.Thread):
         for movie in page:
             # TODO: Maneras más eficientes de rellenar la lista??
             self._movie_list.append([movie['title']])
-        self._movie_list_view.set_cursor(0)
     
     def _update_nav_buttons_status(self, is_first, is_last):
         self._prev_button.set_sensitive(not is_first)
@@ -50,12 +49,14 @@ class Controller(threading.Thread):
             self._movie_year.set_text(str(movie['year']))
             self._movie_desc.set_text(unicode(movie['synopsis']))
             self._movie_last_edit.set_text(movie['username'])
+            self._movie_category.set_text(movie['category'])
         else:
             self._movie_img.set_text('')
             self._movie_title.set_text('')
             self._movie_year.set_text('')
             self._movie_desc.set_text('')
             self._movie_last_edit.set_text('')
+            self._movie_category.set_text('')
             
     def _set_movie_data_editable(self, boolean):
         self._movie_list_view.set_sensitive(not boolean)
@@ -77,6 +78,8 @@ class Controller(threading.Thread):
         self._movie_title.set_can_focus(boolean)
         self._movie_year.set_editable(boolean)
         self._movie_year.set_can_focus(boolean)
+        self._movie_category.set_editable(boolean)
+        self._movie_category.set_can_focus(boolean)
         self._movie_desc_view.set_editable(boolean)
         self._movie_desc_view.set_can_focus(boolean)
         self._movie_desc_view.set_cursor_visible(boolean)
@@ -97,6 +100,7 @@ class Controller(threading.Thread):
             'url_image' : self._movie_img.get_text(),
             'title'     : self._movie_title.get_text(),
             'year'      : year,
+            'category'  : self._movie_category.get_text(),
             'synopsis'      : self._movie_desc.get_text(start, end, False) 
         }
     
@@ -133,6 +137,7 @@ class Controller(threading.Thread):
         self._movie_desc_view = self._builder.get_object('movie-desc')
         self._movie_year = self._builder.get_object('movie-year')
         self._movie_last_edit = self._builder.get_object('movie-last-edit')
+        self._movie_category = self._builder.get_object('movie-category')
         
         self._restore_cursor = 0
         self._adding = False
@@ -185,7 +190,6 @@ class Controller(threading.Thread):
         self._set_movie_data_editable(True)
         # And set the username
         self._movie_last_edit.set_text(self._model.get_username())
-
     
     def on_edit_cancel(self, widget):
         # Lock editable fields
@@ -236,6 +240,8 @@ class Controller(threading.Thread):
             GObject.idle_add(self._show_login_dialog, False)
             GObject.idle_add(self._show_main_window, True)
             self._model.get_list(self)
+            # Load first movie
+            self._movie_list_view.set_cursor(0)
         # Failure
         else:
             GObject.idle_add(self._show_error, args[1])
@@ -252,14 +258,18 @@ class Controller(threading.Thread):
     def page_request_answer(self, number, page, is_first, is_last):
         GObject.idle_add(self._update_movie_list, number, page)
         GObject.idle_add(self._update_nav_buttons_status, is_first, is_last)
+        # Load first movie
+        self._movie_list_view.set_cursor(0)
     
     def movie_request_answer(self, movie):
         GObject.idle_add(self._display_movie, movie)
     
-    def add_request_answer(self, *args):
+    def add_request_answer(self, success):
         # Success
-        if args[0]:
+        if success:
             GObject.idle_add(self._set_movie_data_editable(False))
+            # 
+            self._model.get_list(self)
         # Failure
         else:
             GObject.idle_add(self._show_error, args[1])

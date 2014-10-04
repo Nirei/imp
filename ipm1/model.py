@@ -22,6 +22,12 @@ class RequestThread(threading.Thread):
         self._args = args
         
     def _request_function(self):
+        print(self._method)
+        print(self._url)
+        print(self._params)
+        print(self._data)
+        print(self._cookies)
+        print(self._args)
         try:
             response = requests.request(self._method, self._url, params=self._params, data=self._data, cookies=self._cookies)
             self._handler(response, self._args)
@@ -107,7 +113,7 @@ class Model:
         else:
             raise Exception()
     
-    def _add_movie_request(self, r, args):
+    def _add_request(self, r, args):
         if self._request_successful(r):
             args[0].add_request_answer(True)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
@@ -158,7 +164,7 @@ class Model:
     def add_movie(self, controller, movie):
         url = self._server_url + '/movies'
         data = movie
-        rt = RequestThread(self._movie_request, 'POST', url, None, data, self._cookie_jar, controller, movie)
+        rt = RequestThread(self._add_request, 'POST', url, None, data, self._cookie_jar, controller, movie)
         rt.start()
     
     def del_movie(self, *args):
