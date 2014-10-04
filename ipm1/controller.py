@@ -177,7 +177,7 @@ class Controller(threading.Thread):
         
         # Get selected row on movie list
         sel = self._movie_list_view.get_selection()
-        # Save index
+        # Save cursor
         paths = sel.get_selected_rows()[1]
         if paths:
             self._restore_cursor = paths[0].get_indices()[0]
@@ -190,6 +190,16 @@ class Controller(threading.Thread):
         self._set_movie_data_editable(True)
         # And set the username
         self._movie_last_edit.set_text(self._model.get_username())
+        
+    def on_modify_movie(self, widget):
+        self._adding = False
+        
+        # Make data editable
+        self._set_movie_data_editable(True)
+        
+    
+    def on_delete_movie(self, widget):
+        print("on_button_delete_clicked")
     
     def on_edit_cancel(self, widget):
         # Lock editable fields
@@ -203,13 +213,12 @@ class Controller(threading.Thread):
             self._model.add_movie(self, self._read_movie())
         # If modifying an existing one
         else:
-            pass
-    
-    def on_modify_movie(self, widget):
-        print("on_button_modify_clicked")
-    
-    def on_delete_movie(self, widget):
-        print("on_button_delete_clicked")
+            # Get selected row on movie list
+            sel = self._movie_list_view.get_selection()
+            paths = sel.get_selected_rows()[1]
+            row = paths[0].get_indices()[0]
+            # Send new info to model
+            self._model.modify_movie(self, row, self._read_movie())
     
     def on_logout(self, widget):
         self._model.logout(self)
@@ -241,7 +250,6 @@ class Controller(threading.Thread):
             GObject.idle_add(self._show_main_window, True)
             self._model.get_list(self)
             # Load first movie
-            self._movie_list_view.set_cursor(0)
         # Failure
         else:
             GObject.idle_add(self._show_error, args[1])
@@ -255,23 +263,41 @@ class Controller(threading.Thread):
         else:
             GObject.idle_add(self._show_error, args[1])
 
-    def page_request_answer(self, number, page, is_first, is_last):
-        GObject.idle_add(self._update_movie_list, number, page)
-        GObject.idle_add(self._update_nav_buttons_status, is_first, is_last)
-        # Load first movie
-        self._movie_list_view.set_cursor(0)
+    def page_request_answer(self, success, *args):
+        if success:
+            GObject.idle_add(self._update_movie_list, args[0], args[1])
+            GObject.idle_add(self._update_nav_buttons_status, args[2], args[3])
+            # Load first movie
+            GObject.idle_add(self._movie_list_view.set_cursor, 0)
+            
+        else:
+            GObject.idle_add(self._show_error, args[0])
     
-    def movie_request_answer(self, movie):
-        GObject.idle_add(self._display_movie, movie)
+    def movie_request_answer(self, success, answer):
+        if success:
+            GObject.idle_add(self._display_movie, answer)
+        else:
+            GObject.idle_add(self._show_error, answer)
     
-    def add_request_answer(self, success):
+    def add_request_answer(self, success, *args):
         # Success
         if success:
             GObject.idle_add(self._set_movie_data_editable(False))
-            # 
+            # Update movie list
             self._model.get_list(self)
         # Failure
         else:
-            GObject.idle_add(self._show_error, args[1])
+            GObject.idle_add(self._show_error, args[0])
+    
+    def modify_request_answer(self, success, *args):
+        # Success
+        if success:
+            GObject.idle_add(self._set_movie_data_editable(False))
+            # Update movie list
+            self._model.get_list(self)
+        # Failure
+        else:
+            GObject.idle_add(self._show_error, args[0])
+            
         
 

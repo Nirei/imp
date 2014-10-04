@@ -195,7 +195,7 @@
     <property name="title" translatable="yes">IPM1 - Películas</property>
     <property name="window_position">center</property>
     <property name="default_width">600</property>
-    <property name="default_height">600</property>
+    <property name="default_height">400</property>
     <signal name="remove" handler="on_exit" swapped="no"/>
     <child>
       <object class="GtkBox" id="body">

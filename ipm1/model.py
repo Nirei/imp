@@ -22,24 +22,27 @@ class RequestThread(threading.Thread):
         self._args = args
         
     def _request_function(self):
-        print(self._method)
-        print(self._url)
-        print(self._params)
-        print(self._data)
-        print(self._cookies)
-        print(self._args)
+#        print(self._method)
+#        print(self._url)
+#        print(self._params)
+#        print(self._data)
+#        print(self._cookies)
+#        print(self._args)
         try:
             response = requests.request(self._method, self._url, params=self._params, data=self._data, cookies=self._cookies)
-            self._handler(response, self._args)
         except:
-            print(self._method)
-            print(self._url)
-            print(self._params)
-            print(self._data)
-            print(self._cookies)
-            print(self._args)
+#            print(self._method)
+#            print(self._url)
+#            print(self._params)
+#            print(self._data)
+#            print(self._cookies)
+#            print(self._args)
+#            print(response)
             e = sys.exc_info()[1]
-            self._args[0].login_answer(False, 'Error del servidor:\n' + str(e))
+            self._args[0].login_answer(False, 'Error del servidor: ' + str(e))
+
+        self._handler(response, self._args)
+           
     
     def run(self):
         self._request_function()
@@ -71,10 +74,10 @@ class Model:
             args[0].login_answer(True, '')
         # Server answered but the user or their passwd are incorrect
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].login_answer(False, 'Usuario o contraseña incorrectas')
+            args[0].login_answer(False, u'Usuario o contraseña incorrectas')
         # Server refused to answer us (404, 500...)
         else:
-            args[0].login_answer(False, 'El servidor no se encuentra disponible')
+            args[0].login_answer(False, u'El servidor no se encuentra disponible')
 
     def _logout_request(self, r, args):
         # Server answered and we are logged out
@@ -84,10 +87,10 @@ class Model:
             args[0].logout_answer(True, '')
         # Server answered but somehow he couldn't logged us out
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].logout_answer(False, 'No se pudo desasociar del sistema')
+            args[0].logout_answer(False, u'No se pudo desasociar del sistema')
         # Server refused to answer us (404, not responding...)
         else:
-            args[0].logout_answer(False, 'El servidor no se encuentra disponible')
+            args[0].logout_answer(False, u'El servidor no se encuentra disponible')
             
     def _page_request(self, r, args):
         url_next = self._server_url + '/movies/page/' + str(args[1]+1)
@@ -97,19 +100,17 @@ class Model:
             self._page_number = args[1]
             is_first = self._page_number == 1
             is_last = requests.get(url_next, cookies=self._cookie_jar).json()['result'] == 'failure'
-            args[0].page_request_answer(args[1], self._page, is_first, is_last)
+            args[0].page_request_answer(True, args[1], self._page, is_first, is_last)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            print(r)
-            print(r.json())
+            args[0].page_request_answer(False, u'No se pudo solicitar la página.\nEl servidor respondió:\n' + r.json()['reason'])
         else:
             raise Exception()
     
     def _movie_request(self, r, args):
         if self._request_successful(r):
-            args[0].movie_request_answer(r.json()['data'])
+            args[0].movie_request_answer(True, r.json()['data'])
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            print(r)
-            print(r.json())
+            args[0].movie_request_answer(False, u'No se pudo solicitar la información sobre la película.\nEl servidor respondió:\n' + r.json()['reason'])
         else:
             raise Exception()
     
@@ -117,11 +118,18 @@ class Model:
         if self._request_successful(r):
             args[0].add_request_answer(True)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            print(r)
-            print(r.json())
+            args[0].add_request_answer(False, u'No se pudo añadir la información sobre la película.\nEl servidor respondió:\n' + r.json()['reason'])
         else:
             raise Exception()
-        
+    
+    def _modify_request(self, r, args):
+        if self._request_successful(r):
+            args[0].modify_request_answer(True)
+        elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
+            args[0].modify_request_answer(False, u'No se pudo editar la información de la película.\nEl servidor respondió:\n' + r.json()['reason'])
+        else:
+            raise Exception()
+    
     ### MODEL FUNCTIONS ###
     
     def get_username(self):
@@ -137,7 +145,7 @@ class Model:
     def login(self, controller, user, passwd):
         #We are trying to connect with a user we have already logged, do nothing
         if user == self._login:
-            controller.login_answer(False, 'El usuario ya está conectado')
+            controller.login_answer(False, u'Ya ha iniciado sesión')
         else:
             url = self._server_url + '/login'
             data = {'username' : user, 'passwd' : passwd}
@@ -145,34 +153,56 @@ class Model:
             rt.start()
     
     def logout(self, controller):
-        url = self._server_url + '/logout'
-        rt = RequestThread(self._logout_request, 'GET', url, None, None, self._cookie_jar, controller)
-        rt.start()
+        if self.is_logged_in():
+            url = self._server_url + '/logout'
+            rt = RequestThread(self._logout_request, 'GET', url, None, None, self._cookie_jar, controller)
+            rt.start()
+        else:
+            controller.logout_answer(False, u'No ha iniciado sesión')
     
     # Feature: movie list
     def get_list(self, controller):
-        url = self._server_url + '/movies/page/' + str(self._page_number)
-        rt = RequestThread(self._page_request, 'GET', url, None, None, self._cookie_jar, controller, self._page_number)
-        rt.start()
+        if self.is_logged_in():
+            url = self._server_url + '/movies/page/' + str(self._page_number)
+            rt = RequestThread(self._page_request, 'GET', url, None, None, self._cookie_jar, controller, self._page_number)
+            rt.start()
+        else:
+            controller.page_request_answer(False, u'No ha iniciado sesión')
     
-    def get_movie(self, controller, number):
-        m_id = self._page[number]['id']
-        url = self._server_url + '/movies/' + str(m_id)
-        rt = RequestThread(self._movie_request, 'GET', url, None, None, self._cookie_jar, controller, m_id)
-        rt.start()
+    def get_movie(self, controller, row):
+        if self.is_logged_in():
+            m_id = self._page[row]['id']
+            url = self._server_url + '/movies/' + str(m_id)
+            rt = RequestThread(self._movie_request, 'GET', url, None, None, self._cookie_jar, controller, m_id)
+            rt.start()
+        else:
+            controller.movie_request_answer(False, u'No ha iniciado sesión')
     
     def add_movie(self, controller, movie):
-        url = self._server_url + '/movies'
-        data = movie
-        rt = RequestThread(self._add_request, 'POST', url, None, data, self._cookie_jar, controller, movie)
-        rt.start()
+        # Require login
+        if self.is_logged_in():
+            url = self._server_url + '/movies'
+            data = movie
+            rt = RequestThread(self._add_request, 'POST', url, None, data, self._cookie_jar, controller)
+            rt.start()
+        else:
+            controller.login_answer(False, u'No ha iniciado sesión')
+        
+    def modify_movie(self, controller, row, movie):
+        # Require login
+        if self.is_logged_in():
+            m_id = self._page[row]['id']
+            url = self._server_url + '/movies/' + str(m_id)
+            data = movie
+            rt = RequestThread(self._modify_request, 'PUT', url, None, data, self._cookie_jar, controller)
+            rt.start()
+        else:
+            controller.modify_request_answer(False, u'No ha iniciado sesión')
     
     def del_movie(self, *args):
         pass
     
-    def modify_movie(self, *args):
-        pass
-    
     def is_logged_in(self):
         return self._login # None == False
+    
     
