@@ -422,6 +422,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="movie-name-text">
                             <property name="width">200</property>
+                            <property name="height">20</property>
                             <property name="size_points">12</property>
                           </object>
                           <attributes>
