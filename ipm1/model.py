@@ -139,7 +139,7 @@ class Model:
         if self._request_successful(r):
             args[0].delete_request_answer(True, None)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].delete_request_answer(False, u'No se pudo editar la información de la película.\nEl servidor respondió:\n' + r.json()['reason'])
+            args[0].delete_request_answer(False, u'No se pudo eliminar la película.\nEl servidor respondió:\n' + r.json()['reason'])
         else:
             raise Exception()
     

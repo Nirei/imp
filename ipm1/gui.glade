@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
 <interface>
-  <requires lib="gtk+" version="3.4"/>
+  <!-- interface-requires gtk+ 3.4 -->
   <object class="GtkMessageDialog" id="error-dialog">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -142,6 +141,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <property name="xalign">0.82999998331069946</property>
                 <signal name="clicked" handler="on_login" swapped="no"/>
@@ -159,6 +159,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_exit" swapped="no"/>
               </object>
@@ -183,13 +184,6 @@
       <action-widget response="0">dialog-exit-button</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkListStore" id="movie-list">
-    <columns>
-      <!-- column-name movie-name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTextBuffer" id="movie-synopsis"/>
   <object class="GtkWindow" id="main-window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">IPM1 - Películas</property>
@@ -316,6 +310,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-add</property>
@@ -331,6 +326,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton2</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-edit</property>
@@ -346,6 +342,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-delete</property>
@@ -373,6 +370,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-disconnect</property>
@@ -448,6 +446,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">toolbutton5</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-go-back</property>
@@ -474,6 +473,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <child>
                           <object class="GtkLabel" id="label-page">
                             <property name="visible">True</property>
@@ -503,6 +503,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">toolbutton7</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-go-forward</property>
@@ -553,6 +554,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <child>
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
@@ -572,6 +574,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <child>
                           <object class="GtkEntry" id="movie-img">
                             <property name="visible">True</property>
@@ -590,9 +593,11 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">toolbutton16</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-copy</property>
+                        <signal name="clicked" handler="on_url_copy_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -605,9 +610,11 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">toolbutton15</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-paste</property>
+                        <signal name="clicked" handler="on_url_paste_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -806,6 +813,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">toolbutton9</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-cancel</property>
@@ -821,6 +829,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">toolbutton8</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-apply</property>
@@ -854,4 +863,11 @@
       </object>
     </child>
   </object>
+  <object class="GtkListStore" id="movie-list">
+    <columns>
+      <!-- column-name movie-name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTextBuffer" id="movie-synopsis"/>
 </interface>

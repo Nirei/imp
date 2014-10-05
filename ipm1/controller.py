@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 import threading
-from gi.repository import Gtk, GObject
+import os
+from gi.repository import Gtk, Gdk, GObject
 from model import *
 
 class Controller(threading.Thread):
@@ -119,7 +120,22 @@ class Controller(threading.Thread):
     def _lock_nav(self, lock):
         self._prev_button.set_sensitive(not lock)
         self._next_button.set_sensitive(not lock)
-    
+
+    def _url_copy(self, w):
+	url = self._builder.get_object('movie-img').get_text()
+	#print(url)
+	self._clipboard.set_text(url, -1)
+
+    def _url_paste(self, w):
+	w_url = self._builder.get_object('movie-img')
+	url = self._clipboard.wait_for_text()
+
+	if url != None:
+	    w_url.set_text(url)
+	# The clipboard was empty or its content is not text
+	else:
+	   print('ERROR: Clipboard empty or there is no text content')
+
     ### CONSTRUCTOR & INHERITED METHODS ###
 
     def __init__(self, model):
@@ -159,7 +175,9 @@ class Controller(threading.Thread):
         self._adding = False
         
         self._show_login_dialog(True)
-    
+
+	self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+
     def run(self):
         GObject.threads_init()
         Gtk.main()
@@ -322,5 +340,10 @@ class Controller(threading.Thread):
         else:
             GObject.idle_add(self._show_error, args[0])
             
-        
+    def on_url_copy_clicked(self, widget):
+	self._url_copy(widget)
+
+    def on_url_paste_clicked(self, widget):
+	self._url_paste(widget)
+
 
