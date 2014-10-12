@@ -1,0 +1,210 @@
+# Spanish translations for ipm package
+# Traducciones al español para el paquete ipm.
+# Copyright (C) 2014 THE ipm'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ipm package.
+# <andreu.barro@udc.es>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ipm 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-12 16:28+0200\n"
+"PO-Revision-Date: 2014-10-12 16:31+0200\n"
+"Last-Translator: <andreu.barro@udc.es>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: gui.glade:12
+msgid "Error"
+msgstr "Error"
+
+#: gui.glade:13
+msgid "no error message"
+msgstr "No hay mensaje de error"
+
+#: gui.glade:39
+msgid "Autenticación"
+msgstr "Autenticación"
+
+#: gui.glade:61
+msgid "Usuario"
+msgstr "Usuario"
+
+#: gui.glade:75
+msgid "Contraseña"
+msgstr "Contraseña"
+
+#: gui.glade:117
+msgid "Por favor, introduzca sus datos de inicio de sesión:"
+msgstr "Por favor, introduzca sus datos de inicio de sesión:"
+
+#: gui.glade:189
+msgid "IPM1 - Películas"
+msgstr "IPM1 - Películas"
+
+#: gui.glade:208
+msgid "_Archivo"
+msgstr "_Archivo"
+
+#: gui.glade:277
+msgid "Ay_uda"
+msgstr "Ayuda"
+
+#: gui.glade:314
+msgid "toolbutton1"
+msgstr ""
+
+#: gui.glade:330
+msgid "toolbutton2"
+msgstr ""
+
+#: gui.glade:346
+msgid "toolbutton3"
+msgstr ""
+
+#: gui.glade:374
+msgid "toolbutton4"
+msgstr ""
+
+#: gui.glade:418 gui.glade:641
+msgid "Título"
+msgstr "Título"
+
+#: gui.glade:450
+msgid "toolbutton5"
+msgstr ""
+
+#: gui.glade:481
+msgid "-1"
+msgstr "-1"
+
+#: gui.glade:507
+msgid "toolbutton7"
+msgstr ""
+
+#: gui.glade:563
+msgid "URL imagen"
+msgstr "URL imagen"
+
+#: gui.glade:597
+msgid "toolbutton16"
+msgstr ""
+
+#: gui.glade:614
+msgid "toolbutton15"
+msgstr ""
+
+#: gui.glade:658
+msgid "Descripción"
+msgstr "Descripción"
+
+#: gui.glade:672
+msgid "Año"
+msgstr "Año"
+
+#: gui.glade:686
+msgid "Última edición"
+msgstr "Última edición"
+
+#: gui.glade:700
+msgid "Categoría"
+msgstr "Categoría"
+
+#: gui.glade:817
+msgid "toolbutton9"
+msgstr ""
+
+#: gui.glade:833
+msgid "toolbutton8"
+msgstr ""
+
+#: model.py:44
+msgid "Server error:"
+msgstr "Error del servidor:"
+
+#: model.py:83
+msgid "Invalid login or password"
+msgstr "Usuario o contraseña inválido"
+
+#: model.py:86
+msgid "Server is not reachable"
+msgstr "Servidor no alcanzable"
+
+#: model.py:97
+msgid "Couldn't logout"
+msgstr "No se pudo salir de la sesión"
+
+#: model.py:100
+msgid "Server is not available"
+msgstr "Servidor no disponible"
+
+#: model.py:112
+msgid ""
+"Couldn't get the page.\n"
+"Server response:\n"
+msgstr ""
+
+#: model.py:120
+msgid ""
+"Couldn't get movie info.\n"
+"Server response:\n"
+msgstr ""
+"No pudo obtenerse la información\n"
+"Respuesta del servidor:\n"
+
+#: model.py:128
+msgid ""
+"Couldn't add movie info.\n"
+"Server response:\n"
+msgstr ""
+"No pudo añadirse la información\n"
+"Respuesta del servidor:\n"
+
+#: model.py:136
+msgid ""
+"Couldn't edit movie info.\n"
+"Server response:\n"
+msgstr ""
+"No pudo editarse la información\n"
+"Respuesta del servidor:\n"
+
+#: model.py:144
+msgid ""
+"Couldn't delete the movie.\n"
+"Server response:\n"
+msgstr ""
+"No pudo borrarse la información\n"
+"Respuesta del servidor:\n"
+
+#: model.py:163
+msgid "You are already logged"
+msgstr "La sesión ya está iniciada"
+
+#: model.py:176 model.py:185 model.py:194 model.py:210 model.py:227
+#: model.py:237
+msgid "You haven't logged yet"
+msgstr "No ha iniciado sesión"
+
+#: model.py:200 model.py:216
+msgid "Data introduced not valid"
+msgstr "Los datos introducidos no son válidos"
+
+#: controller.py:99
+msgid "Year introduced is not valid"
+msgstr "El año introducido no es válido"
+
+#: controller.py:139
+msgid "ERROR: Clipboard empty or there is no text content"
+msgstr "ERROR: El portapapeles está vacío o su contenido no es texto"
+
+#: controller.py:208
+msgid "Username field is empty"
+msgstr "No ha indicado usuario"
+
+#: controller.py:210
+msgid "Password field is empty"
+msgstr "No ha indicado contraseña"

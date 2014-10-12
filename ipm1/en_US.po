@@ -1,0 +1,211 @@
+# English translations for ipm package.
+# Copyright (C) 2014 THE ipm'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ipm package.
+# <andreu.barro@udc.es>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ipm 1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-12 17:05+0200\n"
+"PO-Revision-Date: 2014-10-12 17:09+0200\n"
+"Last-Translator: <andreu.barro@udc.es>\n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: gui.glade:12
+msgid "Error"
+msgstr "Error"
+
+#: gui.glade:13
+msgid "no error message"
+msgstr "no error message"
+
+#: gui.glade:39
+msgid "Autenticación"
+msgstr "Autentication"
+
+#: gui.glade:61
+msgid "Usuario"
+msgstr "User"
+
+#: gui.glade:75
+msgid "Contraseña"
+msgstr "Pass"
+
+#: gui.glade:117
+msgid "Por favor, introduzca sus datos de inicio de sesión:"
+msgstr "Please, introduce you login data:"
+
+#: gui.glade:189
+msgid "IPM1 - Películas"
+msgstr "IPM1 - Movies"
+
+#: gui.glade:208
+msgid "_Archivo"
+msgstr "_File"
+
+#: gui.glade:277
+msgid "Ay_uda"
+msgstr "_Help"
+
+#: gui.glade:314
+msgid "toolbutton1"
+msgstr "toolbutton1"
+
+#: gui.glade:330
+msgid "toolbutton2"
+msgstr "toolbutton2"
+
+#: gui.glade:346
+msgid "toolbutton3"
+msgstr "toolbutton3"
+
+#: gui.glade:374
+msgid "toolbutton4"
+msgstr "toolbutton4"
+
+#: gui.glade:418 gui.glade:641
+msgid "Título"
+msgstr "Title"
+
+#: gui.glade:450
+msgid "toolbutton5"
+msgstr "toolbutton5"
+
+#: gui.glade:481
+msgid "-1"
+msgstr "-1"
+
+#: gui.glade:507
+msgid "toolbutton7"
+msgstr "toolbutton7"
+
+#: gui.glade:563
+msgid "URL imagen"
+msgstr "image URL"
+
+#: gui.glade:597
+msgid "toolbutton16"
+msgstr "toolbutton16"
+
+#: gui.glade:614
+msgid "toolbutton15"
+msgstr "toolbutton15"
+
+#: gui.glade:658
+msgid "Descripción"
+msgstr "Description"
+
+#: gui.glade:672
+msgid "Año"
+msgstr "Year"
+
+#: gui.glade:686
+msgid "Última edición"
+msgstr "Last edition"
+
+#: gui.glade:700
+msgid "Categoría"
+msgstr "Category"
+
+#: gui.glade:817
+msgid "toolbutton9"
+msgstr "toolbutton9"
+
+#: gui.glade:833
+msgid "toolbutton8"
+msgstr "toolbutton8"
+
+#: controller.py:102
+msgid "Year introduced is not valid"
+msgstr "Year introduced is not valid"
+
+#: controller.py:142
+msgid "ERROR: Clipboard empty or there is no text content"
+msgstr "ERROR: Clipboard empty or there is no text content"
+
+#: controller.py:210
+msgid "Username field is empty"
+msgstr "Username field is empty"
+
+#: controller.py:212
+msgid "Password field is empty"
+msgstr "Password field is empty"
+
+#: model.py:46
+msgid "Server error:"
+msgstr "Server error:"
+
+#: model.py:85
+msgid "Invalid login or password"
+msgstr "Invalid login or password"
+
+#: model.py:88
+msgid "Server is not reachable"
+msgstr "Server is not reachable"
+
+#: model.py:99
+msgid "Couldn't logout"
+msgstr "Couldn't logout"
+
+#: model.py:102
+msgid "Server is not available"
+msgstr "Server is not available"
+
+#: model.py:114
+msgid ""
+"Couldn't get the page.\n"
+"Server response:\n"
+msgstr ""
+"Couldn't get the page.\n"
+"Server response:\n"
+
+#: model.py:122
+msgid ""
+"Couldn't get movie info.\n"
+"Server response:\n"
+msgstr ""
+"Couldn't get movie info.\n"
+"Server response:\n"
+
+#: model.py:130
+msgid ""
+"Couldn't add movie info.\n"
+"Server response:\n"
+msgstr ""
+"Couldn't add movie info.\n"
+"Server response:\n"
+
+#: model.py:138
+msgid ""
+"Couldn't edit movie info.\n"
+"Server response:\n"
+msgstr ""
+"Couldn't edit movie info.\n"
+"Server response:\n"
+
+#: model.py:146
+msgid ""
+"Couldn't delete the movie.\n"
+"Server response:\n"
+msgstr ""
+"Couldn't delete the movie.\n"
+"Server response:\n"
+
+#: model.py:165
+msgid "You are already logged"
+msgstr "You are already logged"
+
+#: model.py:178 model.py:187 model.py:196 model.py:212 model.py:229
+#: model.py:239
+msgid "You haven't logged yet"
+msgstr "You haven't logged yet"
+
+#: model.py:202 model.py:218
+msgid "Data introduced not valid"
+msgstr "Data introduced not valid"
