@@ -1,9 +1,14 @@
 # -*- encoding: utf-8 -*-
 
+import locale
+import gettext
 import threading
 import os
 from gi.repository import Gtk, Gdk, GObject
 from model import *
+
+_ = gettext.gettext			# Function renamed by convention        
+
 
 class Controller(threading.Thread):
 
@@ -94,7 +99,7 @@ class Controller(threading.Thread):
             year = int(self._movie_year.get_text())
         except:
             # El año no es un número
-            self._show_error('El año introducido no es válido')
+            self._show_error(_(u"Year introduced is not valid"))
             return None
         
         return {
@@ -134,17 +139,26 @@ class Controller(threading.Thread):
 	    w_url.set_text(url)
 	# The clipboard was empty or its content is not text
 	else:
-	   print('ERROR: Clipboard empty or there is no text content')
+	   print(_(u"ERROR: Clipboard empty or there is no text content"))
 
     ### CONSTRUCTOR & INHERITED METHODS ###
 
     def __init__(self, model):
         super(Controller, self).__init__()
+
+	#I18n and L10n preparation
+	locale.setlocale(locale.LC_ALL, '')	# Language preferred by user
+	LOCALE_DIR = os.path.join(os.path.dirname(__file__), "locale")
+	locale.bindtextdomain('movies', LOCALE_DIR)
+	gettext.bindtextdomain('movies', LOCALE_DIR)
+	gettext.textdomain('movies')
+
         self._model = model
         self._builder = Gtk.Builder()
-        self._builder.add_from_file('gui.glade')
+	self._builder.set_translation_domain('movies')
+        self._builder.add_from_file('gui.glade')	# The GUI must be loaded AFTER setting the L10n
         self._builder.connect_signals(self)
-        
+
         # Important interface elements
         self._menu_add = self._builder.get_object('file-add')
         self._menu_modify = self._builder.get_object('file-modify')
@@ -193,9 +207,9 @@ class Controller(threading.Thread):
         passwd = self._builder.get_object('passwd-entry').get_text()
 
         if user == '':
-            self._show_error('No ha introducido un nombre de usuario')
+            self._show_error(_(u"Username field is empty"))
         elif passwd == '':
-            self._show_error('No ha introducido una contraseña')
+            self._show_error(_(u"Password field is empty"))
         else:
             self._model.login(self, user, passwd)
 

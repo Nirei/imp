@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+import locale
+import gettext
 import requests
 import threading
 import sys
@@ -7,6 +9,8 @@ import sys
 # pagina
 # lista actual de pelis
 # user/pass
+
+_ = gettext.gettext			# Function renamed by convention
 
 # Encapsula un thread que lanza la funcion pasada en el constructor.
 class RequestThread(threading.Thread):
@@ -39,7 +43,7 @@ class RequestThread(threading.Thread):
 #            print(self._args)
 #            print(response)
             e = sys.exc_info()[1]
-            self._args[0].login_answer(False, 'Error del servidor: ' + str(e))
+            self._args[0].login_answer(False, _(u"Server error:") + str(e))
 
         self._handler(response, self._args)
      
@@ -78,10 +82,10 @@ class Model:
             args[0].login_answer(True, '')
         # Server answered but the user or their passwd are incorrect
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].login_answer(False, u'Usuario o contraseña incorrectas')
+            args[0].login_answer(False, _(u"Invalid login or password"))
         # Server refused to answer us (404, 500...)
         else:
-            args[0].login_answer(False, u'El servidor no se encuentra disponible')
+            args[0].login_answer(False, _(u"Server is not reachable"))
 
     def _logout_request(self, r, args):
         # Server answered and we are logged out
@@ -92,10 +96,10 @@ class Model:
             args[0].logout_answer(True, '')
         # Server answered but somehow he couldn't logged us out
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].logout_answer(False, u'No se pudo desasociar del sistema')
+            args[0].logout_answer(False, _(u"Couldn't logout"))
         # Server refused to answer us (404, not responding...)
         else:
-            args[0].logout_answer(False, u'El servidor no se encuentra disponible')
+            args[0].logout_answer(False, _(u"Server is not available"))
             
     def _page_request(self, r, args):
         url_next = self._server_url + '/movies/page/' + str(args[1]+1)
@@ -107,7 +111,7 @@ class Model:
             is_last = requests.get(url_next, cookies=self._cookie_jar).json()['result'] == 'failure'
             args[0].page_request_answer(True, args[1], self._page, is_first, is_last)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].page_request_answer(False, u'No se pudo solicitar la página.\nEl servidor respondió:\n' + r.json()['reason'])
+            args[0].page_request_answer(False, _(u"Couldn't get the page.\nServer response:\n") + r.json()['reason'])
         else:
             raise Exception()
     
@@ -115,7 +119,7 @@ class Model:
         if self._request_successful(r):
             args[0].movie_request_answer(True, r.json()['data'])
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].movie_request_answer(False, u'No se pudo solicitar la información sobre la película.\nEl servidor respondió:\n' + r.json()['reason'])
+            args[0].movie_request_answer(False, _(u"Couldn't get movie info.\nServer response:\n") + r.json()['reason'])
         else:
             raise Exception()
     
@@ -123,7 +127,7 @@ class Model:
         if self._request_successful(r):
             args[0].add_request_answer(True, None)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].add_request_answer(False, u'No se pudo añadir la información sobre la película.\nEl servidor respondió:\n' + r.json()['reason'])
+            args[0].add_request_answer(False, _(u"Couldn't add movie info.\nServer response:\n") + r.json()['reason'])
         else:
             raise Exception()
     
@@ -131,7 +135,7 @@ class Model:
         if self._request_successful(r):
             args[0].modify_request_answer(True, None)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].modify_request_answer(False, u'No se pudo editar la información de la película.\nEl servidor respondió:\n' + r.json()['reason'])
+            args[0].modify_request_answer(False, _(u"Couldn't edit movie info.\nServer response:\n") + r.json()['reason'])
         else:
             raise Exception()
     
@@ -139,7 +143,7 @@ class Model:
         if self._request_successful(r):
             args[0].delete_request_answer(True, None)
         elif r.status_code == requests.codes.ok and r.json()['result'] == 'failure':
-            args[0].delete_request_answer(False, u'No se pudo eliminar la película.\nEl servidor respondió:\n' + r.json()['reason'])
+            args[0].delete_request_answer(False, _(u"Couldn't delete the movie.\nServer response:\n") + r.json()['reason'])
         else:
             raise Exception()
     
@@ -158,7 +162,7 @@ class Model:
     def login(self, controller, user, passwd):
         #We are trying to connect with a user we have already logged, do nothing
         if user == self._login:
-            controller.login_answer(False, u'Ya ha iniciado sesión')
+            controller.login_answer(False, _(u"You are already logged"))
         else:
             url = self._server_url + '/login'
             data = {'username' : user, 'passwd' : passwd}
@@ -171,7 +175,7 @@ class Model:
             rt = RequestThread(self._logout_request, 'GET', url, None, None, self._cookie_jar, controller)
             rt.start()
         else:
-            controller.logout_answer(False, u'No ha iniciado sesión')
+            controller.logout_answer(False, _(u"You haven't logged yet"))
     
     # Feature: movie list
     def get_list(self, controller):
@@ -180,7 +184,7 @@ class Model:
             rt = RequestThread(self._page_request, 'GET', url, None, None, self._cookie_jar, controller, self._page_number)
             rt.start()
         else:
-            controller.page_request_answer(False, u'No ha iniciado sesión')
+            controller.page_request_answer(False, _(u"You haven't logged yet"))
     
     def get_movie(self, controller, row):
         if self.is_logged_in():
@@ -189,13 +193,13 @@ class Model:
             rt = RequestThread(self._movie_request, 'GET', url, None, None, self._cookie_jar, controller, m_id)
             rt.start()
         else:
-            controller.movie_request_answer(False, u'No ha iniciado sesión')
+            controller.movie_request_answer(False, _(u"You haven't logged yet"))
     
     def add_movie(self, controller, movie):
 
         # Validate data
         if not self._movie_is_valid(movie):
-            controller.add_request_answer(False, u'Los datos introducidos nos son válidos')
+            controller.add_request_answer(False, _(u"Data introduced not valid"))
             return
 
         # Require login            
@@ -205,13 +209,13 @@ class Model:
             rt = RequestThread(self._add_request, 'POST', url, None, data, self._cookie_jar, controller)
             rt.start()
         else:
-            controller.add_request_answer(False, u'No ha iniciado sesión')
+            controller.add_request_answer(False, _(u"You haven't logged yet"))
         
     def modify_movie(self, controller, row, movie):
 
         # Validate data
         if not self._movie_is_valid(movie):
-            controller.modify_request_answer(False, u'Los datos introducidos nos son válidos')
+            controller.modify_request_answer(False, _(u"Data introduced not valid"))
             return
 
         # Require login
@@ -222,7 +226,7 @@ class Model:
             rt = RequestThread(self._modify_request, 'PUT', url, None, data, self._cookie_jar, controller)
             rt.start()
         else:
-            controller.modify_request_answer(False, u'No ha iniciado sesión')
+            controller.modify_request_answer(False, _(u"You haven't logged yet"))
     
     def delete_movie(self, controller, row):
         # Require login
@@ -232,7 +236,7 @@ class Model:
             rt = RequestThread(self._delete_request, 'DELETE', url, None, None, self._cookie_jar, controller)
             rt.start()
         else:
-            controller.modify_request_answer(False, u'No ha iniciado sesión')
+            controller.modify_request_answer(False, _(u"You haven't logged yet"))
     
     def is_logged_in(self):
         return self._login # None == False
