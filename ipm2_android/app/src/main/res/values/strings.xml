@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ipm2_android</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="access_description">Introduzca usuario y contraseña:</string>
+    <string name="access_user">Usuario:</string>
+    <string name="access_pass">Contraseña:</string>
+    <string name="access_note">El usuario quedará registrado para próximas sesiones.</string>
+    <string name="access_login_button">Iniciar sesión</string>
+    <string name="access_connecting_text">Conectando...</string>
+
+</resources>
