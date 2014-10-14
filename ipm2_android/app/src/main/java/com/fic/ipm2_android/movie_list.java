@@ -8,14 +8,17 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class Acceso extends Activity
+public class movie_list extends Activity
 {
+
+    // VARIABLES PARA PRUEBAS
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acceso);
+        setContentView(R.layout.activity_movie_list);
     }
 
 
@@ -23,7 +26,7 @@ public class Acceso extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.acceso, menu);
+        getMenuInflater().inflate(R.menu.movie_list, menu);
         return true;
     }
 
@@ -34,18 +37,19 @@ public class Acceso extends Activity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings)
+        if(id == R.id.action_settings)
         {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    // EVENTOS
-
-    public void onLoginButtonClick(View v)
+    //EVENTOS DE LA INTERFAZ
+    public void onAdvSearchButtonClick(View v)
     {
         Button b = (Button) v;
-        b.setText(R.string.access_connecting_text);
+        this.count++;
+        b.setText("Pulsado " + this.count);
     }
+
 }

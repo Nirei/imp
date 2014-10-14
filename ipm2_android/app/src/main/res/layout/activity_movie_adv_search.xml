@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.fic.ipm2_android.movie_adv_search">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/advsearch_description"
+        android:id="@+id/advSearchDesc"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleField"
+        android:layout_below="@+id/advSearchDesc"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/advsearch_title_field"
+        android:inputType="text" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/yearField"
+        android:layout_below="@+id/titleField"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/advsearch_year_field"
+        android:numeric="integer"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/categoryField"
+        android:layout_below="@+id/yearField"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/advsearch_category_field"
+        android:inputType="text" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/descField"
+        android:layout_below="@+id/categoryField"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/advsearch_descriptionField"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/advsearch_search_button"
+        android:id="@+id/button"
+        android:layout_below="@+id/descField"
+        android:layout_centerHorizontal="true"
+        android:onClick="onSearchButtonClick" />
+</RelativeLayout>

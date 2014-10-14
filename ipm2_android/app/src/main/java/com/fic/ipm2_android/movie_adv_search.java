@@ -8,14 +8,17 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class Acceso extends Activity
+public class movie_adv_search extends Activity
 {
+
+    // VARIABLE DE PRUEBAS
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acceso);
+        setContentView(R.layout.activity_movie_adv_search);
     }
 
 
@@ -23,7 +26,7 @@ public class Acceso extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.acceso, menu);
+        getMenuInflater().inflate(R.menu.movie_adv_search, menu);
         return true;
     }
 
@@ -41,11 +44,11 @@ public class Acceso extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    // EVENTOS
-
-    public void onLoginButtonClick(View v)
+    // EVENTOS DE LA INTERFAZ
+    public void onSearchButtonClick(View v)
     {
         Button b = (Button) v;
-        b.setText(R.string.access_connecting_text);
+        this.count++;
+        b.setText("Pulsado " + this.count);
     }
 }
