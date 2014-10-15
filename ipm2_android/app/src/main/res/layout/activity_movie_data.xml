@@ -29,11 +29,4 @@
         android:layout_toRightOf="@+id/favCheckBox"
         android:layout_toEndOf="@+id/favCheckBox"
         android:onClick="onShowCommentsButtonClick" />
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/movieList"
-        android:layout_below="@+id/favCheckBox"
-        android:layout_centerHorizontal="true" />
 </RelativeLayout>

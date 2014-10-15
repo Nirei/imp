@@ -11,12 +11,12 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/passField"
+        android:id="@+id/commentField"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/passField"
-        android:layout_toStartOf="@+id/passField"
+        android:layout_toLeftOf="@+id/sendButton"
+        android:layout_toStartOf="@+id/sendButton"
         android:inputType="textMultiLine"
         android:hint="@string/moviecomments_commentHint" />
 
@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/moviecomments_send_button"
-        android:id="@+id/passField"
-        android:layout_alignBottom="@+id/passField"
+        android:id="@+id/sendButton"
+        android:layout_alignBottom="@+id/commentField"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick="onSendButtonClick" />
@@ -33,7 +33,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/commentList"
-        android:layout_below="@+id/passField"
-        android:layout_centerHorizontal="true" />
+        android:id="@android:id/list"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/commentField"/>
 </RelativeLayout>

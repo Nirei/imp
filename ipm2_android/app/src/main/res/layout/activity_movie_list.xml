@@ -29,8 +29,8 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/passField"
-        android:layout_below="@+id/simpleSearchField"
-        android:layout_centerHorizontal="true" />
+        android:id="@android:id/list"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/advSearchButton"/>
 
 </RelativeLayout>

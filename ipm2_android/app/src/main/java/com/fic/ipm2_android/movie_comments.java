@@ -1,11 +1,16 @@
 package com.fic.ipm2_android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class movie_comments extends Activity
@@ -14,11 +19,26 @@ public class movie_comments extends Activity
     // VARIABLE PARA PRUEBAS
     private int count = 0;
 
+    private String[] commentsList = {"prime", "mola", "no mola"};
+
+    //private algo movie = NULL;    // La película al que pertenecen los comentarios
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_comments);
+
+        // Obtenemos los parámetros que nos pasó la actividad movie_data
+        // Bundle bundle = getIntent.getExtras();
+        // this.movie = bundle.getSomething("movie");
+
+        // Indicamos al adaptador los datos a listar
+        ArrayAdapter ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.commentsList);
+
+        // Le pasamos el adaptador a la lista
+        ListView list = (ListView) findViewById(android.R.id.list);
+        list.setAdapter(ad);
     }
 
 

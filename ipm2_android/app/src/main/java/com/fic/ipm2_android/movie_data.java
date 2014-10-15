@@ -1,6 +1,7 @@
 package com.fic.ipm2_android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +15,14 @@ public class movie_data extends Activity
     // VARIABLE PARA PRUEBAS
     private int count = 0;
 
+    //private algo movie = NULL;    // La película que mostramos
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_data);
+
     }
 
 
@@ -47,8 +51,11 @@ public class movie_data extends Activity
     // EVENTOS DE LA INTERFAZ
     public void onShowCommentsButtonClick(View v)
     {
-        Button b = (Button) v;
-        this.count++;
-        b.setText("Pulsado " + this.count);
+        // Intent de nueva actividad
+        Intent i = new Intent(this, movie_comments.class);
+        // Pasamos como parámetro la peli de la cual coger los comentarios
+        //// i.putExtra("movie", this.movie);
+        // Iniciamos la actividad
+        startActivity(i);
     }
 }
