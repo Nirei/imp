@@ -11,9 +11,9 @@ public interface ModelInterface {
     public void logout();
     public boolean isLoggedIn();
 
-    public List<Movie> getList(int page);
-    public Movie getMovie(int id);
-    public void addMovie(Movie movie);
-    public void modifyMovie(Movie movie);
-    public void deleteMovie(int id);
+    public List<Movie> getList();
+    public Movie getMovie(int number);
+    public void setFavorite(int number, boolean fav);
+    public List<Comment> getComments();
+
 }
