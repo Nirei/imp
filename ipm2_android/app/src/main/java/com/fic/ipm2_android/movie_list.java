@@ -80,7 +80,7 @@ public class movie_list extends ListActivity
     }
 
     //EVENTOS DE LA INTERFAZ
-    public void onAdvSearchButtonClick(View v)
+    public void onSearchButtonClick(View v)
     {
         Button b = (Button) v;
         this.count++;

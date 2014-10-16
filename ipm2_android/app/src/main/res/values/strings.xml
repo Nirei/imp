@@ -1,30 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello_world">¡Hola mundo!</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">Buscador de películas</string>
-    <string name="title_activity_acceso">Inicio de sesión</string>
-    <string name="access_description">Introduzca usuario y contraseña:</string>
-    <string name="access_user">Usuario</string>
-    <string name="access_pass">Contraseña</string>
-    <string name="access_note">El usuario quedará registrado para próximas sesiones.</string>
-    <string name="access_login_button">Iniciar sesión</string>
-    <string name="access_connecting_text">Conectando…</string>
-    <string name="title_activity_movie_list">Lista de películas</string>
-    <string name="movielist_advsearch">Búsqueda\navanzada</string>
     <string name="title_activity_movie_data">Datos de película</string>
     <string name="title_activity_movie_comments">Comentarios</string>
-    <string name="title_activity_movie_adv_search">Búsqueda avanzada</string>
+    <string name="movielist_connecting_text">Conectando…</string>
+    <string name="movielist_advsearch">Búsqueda\navanzada</string>
+    <string name="movielist_search_button">Buscar</string>
     <string name="moviedata_fav">Favorito</string>
     <string name="moviedata_show_comments_button">Ver comentarios</string>
     <string name="moviecomments_commentHint">Escriba aquí su comentario</string>
     <string name="moviecomments_send_button">Enviar</string>
-    <string name="advsearch_description">Especifique los parámetros de su búsqueda:</string>
-    <string name="advsearch_search_button">Realizar búsqueda</string>
-    <string name="advsearch_descriptionField">Descripción</string>
-    <string name="advsearch_category_field">Categoría</string>
-    <string name="advsearch_year_field">Año</string>
-    <string name="advsearch_title_field">Título</string>
 
 </resources>

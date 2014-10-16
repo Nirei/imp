@@ -1,17 +1,17 @@
 package com.fic.ipm2_android;
-
 /**
  * Created by nirei on 15/10/14.
  */
-public class Movie {
-
+public class Movie
+{
     private int id;
     private String title;
     private String category;
     private String synopsis;
     private int year;
 
-    public Movie(int id, String title, String category, String synopsis, int year) {
+    public Movie(int id, String title, String category, String synopsis, int year)
+    {
         this.id = id;
         this.title = title;
         this.category = category;
@@ -19,23 +19,28 @@ public class Movie {
         this.year = year;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public int getYear() {
+    public int getYear()
+    {
         return year;
     }
 
-    public String getCategory() {
+    public String getCategory()
+    {
         return category;
     }
 
-    public String getSynopsis() {
+    public String getSynopsis()
+    {
         return synopsis;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 }

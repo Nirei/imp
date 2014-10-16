@@ -1,5 +1,4 @@
 package com.fic.ipm2_android;
-
 import java.util.List;
 
 /**
