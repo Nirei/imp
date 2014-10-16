@@ -17,8 +17,8 @@ public interface Model {
     public void setFavorite(int number, boolean fav);
 
     // Comment API
-    public List<Comment> getComments();
-    public void addComment();
-    public void deleteComment();
+    public List<Comment> getComments(int page);
+    public void addComment(String comment);
+    public void deleteComment(int commentId);
 
 }

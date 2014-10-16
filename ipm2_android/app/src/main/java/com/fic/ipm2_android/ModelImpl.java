@@ -16,14 +16,10 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public void login(String username, String password) {
-        
-    }
+    public void login(String username, String password) {}
 
     @Override
-    public void logout() {
-
-    }
+    public void logout() {}
 
     @Override
     public boolean isLoggedIn() {
@@ -31,14 +27,10 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public void addComment() {
-
-    }
+    public void addComment() {}
 
     @Override
-    public void deleteComment() {
-
-    }
+    public void deleteComment() {}
 
     @Override
     public List<Comment> getComments() {
@@ -51,9 +43,7 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public void setFavorite(int number, boolean fav) {
-
-    }
+    public void setFavorite(int number, boolean fav) {}
 
     @Override
     public Movie getMovie(int id) {
