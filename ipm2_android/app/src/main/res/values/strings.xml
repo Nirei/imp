@@ -12,5 +12,12 @@
     <string name="moviedata_show_comments_button">Ver comentarios</string>
     <string name="moviecomments_commentHint">Escriba aquí su comentario</string>
     <string name="moviecomments_send_button">Enviar</string>
+    <string name="title_activity_session_list">Lista de cuentas</string>
+    <string name="title_activity_no_accounts">No hay cuentas disponibles</string>
+    <string name="no_accounts">Entre en Ajustes/Cuentas para autenticar su cuenta.</string>
+    <string name="ipm_accounts">Cuentas de IPM:</string>
+    <string name="unable_auth_token">Incapaz de obtener la cookie.</string>
+    <string name="account">Cuenta: </string>
+
 
 </resources>

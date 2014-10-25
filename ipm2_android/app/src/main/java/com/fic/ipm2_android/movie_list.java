@@ -2,7 +2,9 @@ package com.fic.ipm2_android;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
+
 
 public class movie_list extends ListActivity
 {
@@ -20,9 +24,7 @@ public class movie_list extends ListActivity
     // VARIABLES PARA PRUEBAS
     private int count = 0;
 
-    private StringBuffer[] movieList = {new StringBuffer("Shrek"), new StringBuffer("El padrion"),
-                                        new StringBuffer("Papá pitufo"), new StringBuffer("Harry Potter"),
-                                        new StringBuffer("Brave Heart")}; // La lista de pelis
+    private List<String> movieList; // La lista de pelis
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -30,30 +32,46 @@ public class movie_list extends ListActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
-        // Indicamos al adaptador los datos a listar
-        ArrayAdapter ad = new ArrayAdapter<StringBuffer>(this, android.R.layout.simple_list_item_1, this.movieList);
+        final Context context = this;
 
-        // Le pasamos el adaptador a la lista
-        ListView list = (ListView) findViewById(android.R.id.list);
-        list.setAdapter(ad);
-
-        // Los elementos de la lista se pueden seleccionar
-        list.setClickable(true);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        new Thread(new Runnable() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-            {
-                TextView item = (TextView) view;
+            public void run() {
+                // Obtenemos la primera lista de pelis
+                movieList = Model.getList();
 
-                Intent intent = new Intent(movie_list.this, movie_data.class);
-                //intent.putExtra("movie", view.getText());
-                startActivity(intent);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Indicamos al adaptador los datos a listar
+                        ArrayAdapter ad = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, movieList);
 
-                return;
+                        // Le pasamos el adaptador a la lista
+                        ListView list = (ListView) findViewById(android.R.id.list);
+                        list.setAdapter(ad);
+
+                        // Los elementos de la lista se pueden seleccionar
+                        list.setClickable(true);
+
+                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+                            {
+                                TextView item = (TextView) view;
+
+                                Intent intent = new Intent(movie_list.this, movie_data.class);
+                                //intent.putExtra("movie", view.getText());
+                                startActivity(intent);
+
+                                return;
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }).start();
+
     }
 
 
