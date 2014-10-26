@@ -1,12 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.fic.ipm2_android.movie_data">
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -29,4 +24,87 @@
         android:layout_toRightOf="@+id/favCheckBox"
         android:layout_toEndOf="@+id/favCheckBox"
         android:onClick="onShowCommentsButtonClick" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/commentButton"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:adjustViewBounds="true"
+                android:id="@+id/imageView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/not_found"
+                android:id="@+id/titleField"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/imageView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/not_found"
+                android:id="@+id/synopsisField"
+                android:layout_below="@+id/titleField"
+                android:layout_alignParentLeft="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="italic"
+                android:text="@string/user_tag"
+                android:id="@+id/userTag"
+                android:layout_alignParentLeft="true"
+                android:layout_alignBottom="@+id/userField"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="italic"
+                android:text="@string/not_found"
+                android:id="@+id/userField"
+                android:layout_below="@+id/synopsisField"
+                android:layout_toRightOf="@+id/userTag"
+                android:layout_marginLeft="5sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="italic"
+                android:text="@string/email_tag"
+                android:id="@+id/emailTag"
+                android:layout_alignParentLeft="true"
+                android:layout_alignBottom="@+id/emailField"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/not_found"
+                android:textStyle="italic"
+                android:id="@+id/emailField"
+                android:layout_below="@+id/userField"
+                android:layout_toRightOf="@+id/emailTag"
+                android:layout_marginLeft="5sp"/>
+
+
+            </RelativeLayout>
+    </ScrollView>
+
+
 </RelativeLayout>

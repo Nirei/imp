@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +42,10 @@ public class movie_list extends ListActivity
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-            {
-                LinearLayout item = (LinearLayout) view;
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(movie_list.this, movie_data.class);
-                //intent.putExtra("movie", view.getText());
+                // Obtenemos la PreMovie de la peli seleccionada
+                intent.putExtra("id", movieList.get(i).getId());
                 startActivity(intent);
 
                 return;
