@@ -41,7 +41,7 @@ public class Model {
     // Movie API
     public static List<String> getList() {
 
-        String url = address + "movies/" + Integer.toString(page++);
+        String url = address + "movies/page/" + Integer.toString(page++);
 
         AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
         HttpGet request = new HttpGet(url);
@@ -53,32 +53,23 @@ public class Model {
 
         try {
 
-            movielist.add("z");
             response = client.execute(request);
-            movielist.add("a");
             responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
-
-            movielist.add("b");
 
             movielist.add(responseObject.getString("result"));
 
-            movielist.add("c");
-            //movielist.add(responseObject.get("data").toString());
-
             // Lista final
-            /*JSONArray lista = responseObject.getJSONArray("data");
+            JSONArray lista = responseObject.getJSONArray("data");
             for(int i=0; i<lista.length(); i++) {
                 JSONObject elemento = lista.getJSONObject(i);
                 movielist.add(elemento.getString("title"));
-            }*/
+            }
 
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
             client.close();
         }
-
-        movielist.add("HECHO");
 
         return movielist;
     }
