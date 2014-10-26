@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,8 +54,8 @@ public class movie_data extends Activity
                         // ¡¡Comprobamos que el servidor devolvió algo!!
                         if(datos != null) {
                             // E insertamos los datos
-                            String title = new String(datos.getTitle() + " (" + Integer.toString(datos.getYear())
-                                    + ", " + datos.getCategory() + ")");
+                            String title = datos.getTitle() + " (" + Integer.toString(datos.getYear())
+                                    + ", " + datos.getCategory() + ")";
                             titulo.setText(title);
                             sinopsis.setText(datos.getSynopsis());
                             user.setText(datos.getUsername());
@@ -82,6 +83,24 @@ public class movie_data extends Activity
                                     });
                                 }
                             }).start();
+
+                            // Y por último preguntamos si es favorita
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final boolean fav = Model.getFavorite(datos);
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CheckBox caja = (CheckBox) findViewById(R.id.favCheckBox);
+
+                                            // Marcamos la casilla si es favorita
+                                            caja.setChecked(fav);
+                                        }
+                                    });
+                                }
+                            }).start();
                         }
                     }
                 });
@@ -91,13 +110,38 @@ public class movie_data extends Activity
     }
 
     // EVENTOS DE LA INTERFAZ
-    public void onShowCommentsButtonClick(View v)
-    {
+    public void onShowCommentsButtonClick(View v) {
         // Intent de nueva actividad
         Intent i = new Intent(this, movie_comments.class);
         // Pasamos como parámetro la peli de la cual coger los comentarios
         i.putExtra("id", this.id);
         // Iniciamos la actividad
         startActivity(i);
+    }
+
+    public void onFavButtonClick(View v) {
+        // Avisamos al usuario de que se está atendiendo a la petición
+        final CheckBox caja = (CheckBox) findViewById(R.id.favCheckBox);
+
+        caja.setText(R.string.setting);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Model.setFavorite(datos);
+
+                final boolean fav = Model.getFavorite(datos);
+                
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Marcamos la casilla si es favorita
+                        caja.setChecked(fav);
+
+                        caja.setText(R.string.done);
+                    }
+                });
+            }
+        }).start();
     }
 }

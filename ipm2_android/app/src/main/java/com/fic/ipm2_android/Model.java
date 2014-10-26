@@ -2,18 +2,16 @@ package com.fic.ipm2_android;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.CookieStore;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -160,7 +158,69 @@ public class Model {
         return listaMovies;
     }
 
-    public static void setFavorite(int number, boolean fav) {}
+    public static boolean getFavorite(Movie movie) {
+
+        String url = address + "movies/" + Integer.toString(movie.getId()) + "/fav";
+
+        AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
+        HttpGet request = new HttpGet(url);
+        HttpResponse response = null;
+        JSONObject responseObject = null;
+
+        // IMPORTANTE: Es necesario pasar la cookie
+        request.addHeader("Cookie", cookie);
+
+        boolean fav = false;
+
+        try {
+
+            response = client.execute(request);
+            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+            // El server respondió
+            if(responseObject.getString("result").startsWith("success")) {
+
+                String favorito = responseObject.getString("data");
+
+                fav = favorito.startsWith("true");
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+
+        return fav;
+    }
+
+    public static void setFavorite(Movie movie) {
+        String url = address + "movies/" + Integer.toString(movie.getId()) + "/fav";
+
+        AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
+        HttpPost request = new HttpPost(url);
+        HttpResponse response = null;
+        JSONObject responseObject = null;
+
+        // IMPORTANTE: Es necesario pasar la cookie
+        request.addHeader("Cookie", cookie);
+
+        try {
+
+            response = client.execute(request);
+            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+            // El server no pudo realizar la petición
+            if(responseObject.getString("result").startsWith("failure")) {
+                throw new Exception();
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+    }
 
     // Comments API
     public static List<Comment> getComments(int page) {

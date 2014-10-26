@@ -18,12 +18,14 @@
     <string name="ipm_accounts">Cuentas de IPM:</string>
     <string name="unable_auth_token">Incapaz de obtener la cookie.</string>
     <string name="account">Cuenta: </string>
-    <string name="loading">Cargando...</string>
+    <string name="loading">Cargando…</string>
     <string name="no_more_pages">No hay más películas</string>
     <string name="user_tag">Última edición por:</string>
     <string name="email_tag">Email:</string>
     <string name="not_found">Error en base de datos</string>
-    <string name="searching">Buscando...</string>
+    <string name="searching">Buscando…</string>
+    <string name="setting">Marcando…</string>
+    <string name="done">Listo</string>
 
 
 </resources>
