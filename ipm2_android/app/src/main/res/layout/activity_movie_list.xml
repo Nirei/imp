@@ -26,11 +26,22 @@
         android:layout_alignParentEnd="true"
         android:onClick="onSearchButtonClick" />
 
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/movielist_load_button"
+        android:id="@+id/loadButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="onLoadButtonClick"/>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@android:id/list"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/searchButton"/>
+        android:layout_below="@id/searchButton"
+        android:layout_above="@+id/loadButton"/>
 
 </RelativeLayout>

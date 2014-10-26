@@ -22,7 +22,6 @@ public class Model {
     static String address;
     static String user;
     static String cookie;
-    static int page;
 
     // Login API
     public static void login(String name, String token) {
@@ -34,21 +33,20 @@ public class Model {
         else {
             address = GlobalNames.ADDRESS_NET;
         }
-        page = 1;
     }
 
 
     // Movie API
-    public static List<PreMovie> getList() {
+    public static List<PreMovie> getList(int page, List<PreMovie> list) {
 
-        String url = address + "movies/page/" + Integer.toString(page++);
+        String url = address + "movies/page/" + Integer.toString(page);
 
         AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
         HttpGet request = new HttpGet(url);
         HttpResponse response = null;
         JSONObject responseObject = null;
 
-        List<PreMovie> movielist = new ArrayList<PreMovie>();
+        List<PreMovie> movielist = list;
 
         try {
 
@@ -57,12 +55,15 @@ public class Model {
 
             PreMovie row = null;
 
-            // Lista final
-            JSONArray lista = responseObject.getJSONArray("data");
-            for(int i=0; i<lista.length(); i++) {
-                JSONObject elemento = lista.getJSONObject(i);
-                row = new PreMovie(elemento);
-                movielist.add(row);
+            // Hay más pelis para cargar
+            if(responseObject.getString("result").startsWith("success")) {
+                // Lista final
+                JSONArray lista = responseObject.getJSONArray("data");
+                for(int i=0; i<lista.length(); i++) {
+                    JSONObject elemento = lista.getJSONObject(i);
+                    row = new PreMovie(elemento);
+                    movielist.add(row);
+                }
             }
 
         } catch(Exception e) {
@@ -72,6 +73,15 @@ public class Model {
         }
 
         return movielist;
+    }
+
+    public static boolean areThereMorePages(int page) {
+
+        List<PreMovie> resultado = Model.getList(page, new ArrayList<PreMovie>());
+
+        // Si la lista devuelta está vacía, no hay más páginas
+        return !resultado.isEmpty();
+
     }
 
     public static Movie getMovie(int id) {

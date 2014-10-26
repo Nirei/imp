@@ -8,6 +8,7 @@
     <string name="movielist_connecting_text">Conectando…</string>
     <string name="movielist_advsearch">Búsqueda\navanzada</string>
     <string name="movielist_search_button">Buscar</string>
+    <string name="movielist_load_button">Cargar más peliculas</string>
     <string name="moviedata_fav">Favorito</string>
     <string name="moviedata_show_comments_button">Ver comentarios</string>
     <string name="moviecomments_commentHint">Escriba aquí su comentario</string>
@@ -18,6 +19,8 @@
     <string name="ipm_accounts">Cuentas de IPM:</string>
     <string name="unable_auth_token">Incapaz de obtener la cookie.</string>
     <string name="account">Cuenta: </string>
+    <string name="loading">Cargando...</string>
+    <string name="no_more_pages">No hay más películas</string>
 
 
 </resources>
