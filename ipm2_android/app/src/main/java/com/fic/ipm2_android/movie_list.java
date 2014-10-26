@@ -24,7 +24,7 @@ public class movie_list extends ListActivity
     // VARIABLES PARA PRUEBAS
     private int count = 0;
 
-    private List<String> movieList; // La lista de pelis
+    private List<PreMovie> movieList; // La lista de pelis
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,7 +44,7 @@ public class movie_list extends ListActivity
                     @Override
                     public void run() {
                         // Indicamos al adaptador los datos a listar
-                        ArrayAdapter ad = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, movieList);
+                        ArrayAdapter ad = new MovieListAdapter(context, movieList);
 
                         // Le pasamos el adaptador a la lista
                         ListView list = (ListView) findViewById(android.R.id.list);

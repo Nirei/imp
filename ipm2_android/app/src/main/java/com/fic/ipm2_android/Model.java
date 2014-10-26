@@ -39,7 +39,7 @@ public class Model {
 
 
     // Movie API
-    public static List<String> getList() {
+    public static List<PreMovie> getList() {
 
         String url = address + "movies/page/" + Integer.toString(page++);
 
@@ -48,21 +48,21 @@ public class Model {
         HttpResponse response = null;
         JSONObject responseObject = null;
 
-        List<String> movielist = new ArrayList<String>();
-        movielist.add(url);
+        List<PreMovie> movielist = new ArrayList<PreMovie>();
 
         try {
 
             response = client.execute(request);
             responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
 
-            movielist.add(responseObject.getString("result"));
+            PreMovie row = null;
 
             // Lista final
             JSONArray lista = responseObject.getJSONArray("data");
             for(int i=0; i<lista.length(); i++) {
                 JSONObject elemento = lista.getJSONObject(i);
-                movielist.add(elemento.getString("title"));
+                row = new PreMovie(elemento);
+                movielist.add(row);
             }
 
         } catch(Exception e) {
