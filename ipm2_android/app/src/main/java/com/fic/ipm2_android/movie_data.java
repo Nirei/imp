@@ -59,27 +59,29 @@ public class movie_data extends Activity
                             email.setText(datos.getEmail());
 
                             // Aquí pediremos la imagen
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final Bitmap bmp = Model.getImage(datos.getImage_url());
+                            if(!datos.getImage_url().isEmpty()) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final Bitmap bmp = Model.getImage(datos.getImage_url());
 
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            // Configuramos el widget (tamaño de imagen y reescalado)
-                                            ImageView imageView = (ImageView)findViewById(R.id.imageView);
-                                            DisplayMetrics tam = new DisplayMetrics();
-                                            getWindowManager().getDefaultDisplay().getMetrics(tam);
-                                            // Máximo de ancho la mitad de la pantalla
-                                            imageView.setMaxWidth(tam.widthPixels/2);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // Configuramos el widget (tamaño de imagen y reescalado)
+                                                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                                                DisplayMetrics tam = new DisplayMetrics();
+                                                getWindowManager().getDefaultDisplay().getMetrics(tam);
+                                                // Máximo de ancho la mitad de la pantalla
+                                                imageView.setMaxWidth(tam.widthPixels / 2);
 
-                                            // Ponemos la imagen en su widget
-                                            imageView.setImageBitmap(bmp);
-                                        }
-                                    });
-                                }
-                            }).start();
+                                                // Ponemos la imagen en su widget
+                                                imageView.setImageBitmap(bmp);
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
 
                             // Y por último preguntamos si es favorita
                             new Thread(new Runnable() {

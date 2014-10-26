@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Opciones</string>
     <string name="app_name">Buscador de películas</string>
     <string name="title_activity_movie_data">Datos de película</string>
     <string name="title_activity_movie_comments">Comentarios</string>
@@ -22,7 +22,7 @@
     <string name="no_more_pages">No hay más películas</string>
     <string name="user_tag">Última edición por:</string>
     <string name="email_tag">Email:</string>
-    <string name="not_found">Error en base de datos</string>
+    <string name="not_found">Error del servidor</string>
     <string name="searching">Buscando…</string>
     <string name="setting">Marcando…</string>
     <string name="done">Listo</string>
@@ -30,5 +30,6 @@
     <string name="written">Escrito el</string>
     <string name="commentlist_load_button">Cargar más comentarios</string>
     <string name="no_more_comments">No hay más comentarios</string>
+    <string name="sending">Enviando…</string>
 
 </resources>

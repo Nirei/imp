@@ -10,9 +10,13 @@ import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -293,7 +297,52 @@ public class Model {
 
     }
 
-    public static void addComment(String comment) {}
+    public static int addComment(int id, String comment) {
+        String url = address + "movies/" + Integer.toString(id) + "/comments";
+
+        AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
+        HttpResponse response = null;
+
+        HttpPost request = new HttpPost(url);
+        JSONObject responseObject = null;
+
+        // IMPORTANTE: Es necesario pasar la cookie
+        request.addHeader("Cookie", cookie);
+
+        int comment_id = -1;
+
+        // Añadimos el dato
+        BasicNameValuePair par = new BasicNameValuePair("content", comment);
+        List<NameValuePair> lista = new ArrayList<NameValuePair>();
+        lista.add(par);
+
+        try {
+
+            UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(lista);
+
+            request.setEntity(urlEncodedFormEntity);
+
+            response = client.execute(request);
+            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+            // El server no pudo realizar la petición
+            if(responseObject.getString("result").startsWith("success")) {
+                comment_id = responseObject.getInt("data");
+            } else {
+                throw new Exception(responseObject.getString("reason"));
+            }
+
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+
+        return comment_id;
+    }
 
     public static void deleteComment(int commentId) {}
 

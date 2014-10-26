@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -63,6 +64,9 @@ public class movie_comments extends Activity
             @Override
             public void run() {
                 // Obtenemos la siguiente página de pelis
+                if(page == 1) {
+                    commentsList = new ArrayList<Comment>();
+                }
                 final List<Comment> nuevaLista = Model.getComments(id, page, commentsList);
                 page = page+1;
 
@@ -87,9 +91,43 @@ public class movie_comments extends Activity
     // EVENTOS DE LA INTERFAZ
     public void onSendButtonClick(View v)
     {
-        Button b = (Button) v;
-        this.count++;
-        b.setText("Pulsado " + this.count);
+        // Obtenemos el texto del comentario
+        EditText texto = (EditText) findViewById(R.id.commentField);
+        final String content = texto.getText().toString();
+
+        // ¡¡Ojo, si el campo de texto está vacío no mandamos nada!!
+        if(content.isEmpty()) {
+            return;
+        }
+
+        // Indicamos al usuario que el mensaje se está enviando
+        final Button b = (Button) v;
+        b.setText(R.string.sending);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final int comment_id = Model.addComment(id, content);
+
+                // Cada página nueva que se cargue implica actualizar la vista
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(comment_id != -1) {
+                            // Reiniciamos la lista de comentarios
+                            page = 1;
+                            loadCommentListPage();
+                            b.setText(R.string.commentlist_load_button);
+                        } else {
+                            b.setText(R.string.not_found);
+                        }
+                    }
+                });
+
+
+            }
+        }).start();
     }
 
     public void onLoadCommentsButtonClick(View v) {
