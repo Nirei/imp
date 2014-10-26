@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.http.AndroidHttpClient;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
@@ -194,31 +195,58 @@ public class Model {
         return fav;
     }
 
-    public static void setFavorite(Movie movie) {
+    public static void setFavorite(Movie movie, boolean fav) {
         String url = address + "movies/" + Integer.toString(movie.getId()) + "/fav";
 
         AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
-        HttpPost request = new HttpPost(url);
         HttpResponse response = null;
-        JSONObject responseObject = null;
 
-        // IMPORTANTE: Es necesario pasar la cookie
-        request.addHeader("Cookie", cookie);
+        // Marcar como favorito
+        if(fav) {
+            HttpPost request = new HttpPost(url);
+            JSONObject responseObject = null;
 
-        try {
+            // IMPORTANTE: Es necesario pasar la cookie
+            request.addHeader("Cookie", cookie);
 
-            response = client.execute(request);
-            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+            try {
 
-            // El server no pudo realizar la petición
-            if(responseObject.getString("result").startsWith("failure")) {
-                throw new Exception();
+                response = client.execute(request);
+                responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+                // El server no pudo realizar la petición
+                if(responseObject.getString("result").startsWith("failure")) {
+                    throw new Exception();
+                }
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            } finally {
+                client.close();
             }
+        // Desmarcar como favorito
+        } else {
+            HttpDelete request = new HttpDelete(url);
+            JSONObject responseObject = null;
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        } finally {
-            client.close();
+            // IMPORTANTE: Es necesario pasar la cookie
+            request.addHeader("Cookie", cookie);
+
+            try {
+
+                response = client.execute(request);
+                responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+                // El server no pudo realizar la petición
+                if(responseObject.getString("result").startsWith("failure")) {
+                    throw new Exception();
+                }
+
+            } catch(Exception e) {
+                e.printStackTrace();
+            } finally {
+                client.close();
+            }
         }
     }
 

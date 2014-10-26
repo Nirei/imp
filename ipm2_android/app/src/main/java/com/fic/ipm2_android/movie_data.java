@@ -128,10 +128,10 @@ public class movie_data extends Activity
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Model.setFavorite(datos);
+                Model.setFavorite(datos, caja.isChecked());
 
                 final boolean fav = Model.getFavorite(datos);
-                
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
