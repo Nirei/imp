@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -85,9 +86,52 @@ public class movie_list extends ListActivity
 
     //EVENTOS DE LA INTERFAZ
     public void onSearchButtonClick(View v) {
-        Button b = (Button) v;
-        this.count++;
-        b.setText("Pulsado " + this.count);
+        // Indicamos que se está realizando la búsqueda
+        final Button b = (Button) v;
+        b.setText(R.string.searching);
+
+        EditText campo = (EditText) findViewById(R.id.simpleSearchField);
+        final String criteria = campo.getText().toString();
+        final Context context = this;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                List<PreMovie> res = null;
+
+                // Si el criterio es una cadena vacía, cargamos la página normal de películas
+                if(criteria.isEmpty()) {
+                    res = Model.getList(1, new ArrayList<PreMovie>());
+                } else {
+                    res = Model.findMovies(criteria);
+                }
+                final List<PreMovie> nuevaLista = res;
+
+                // Ahora la interfaz debe cargar los datos de la película
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // No existe tal película
+                        if(nuevaLista == null) {
+                            page = 1; // La última página cargada vuelve a ser la 1
+                        }
+
+                        // Indicamos al adaptador los datos a listar
+                        movieList = nuevaLista;
+                        ArrayAdapter ad = new MovieListAdapter(context, movieList);
+
+                        // Le pasamos el adaptador a la lista
+                        ListView list = (ListView) findViewById(android.R.id.list);
+                        list.setAdapter(ad);
+
+                        // Actualizamos la info del botón
+                        b.setText(R.string.movielist_search_button);
+                    }
+                });
+            }
+        }).start();
     }
 
     public void onLoadButtonClick(View v) {

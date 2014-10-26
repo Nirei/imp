@@ -6,7 +6,6 @@
     <string name="title_activity_movie_data">Datos de película</string>
     <string name="title_activity_movie_comments">Comentarios</string>
     <string name="movielist_connecting_text">Conectando…</string>
-    <string name="movielist_advsearch">Búsqueda\navanzada</string>
     <string name="movielist_search_button">Buscar</string>
     <string name="movielist_load_button">Cargar más peliculas</string>
     <string name="moviedata_fav">Favorito</string>
@@ -24,6 +23,7 @@
     <string name="user_tag">Última edición por:</string>
     <string name="email_tag">Email:</string>
     <string name="not_found">Error en base de datos</string>
+    <string name="searching">Buscando...</string>
 
 
 </resources>

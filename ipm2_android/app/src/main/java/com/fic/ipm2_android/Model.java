@@ -120,6 +120,46 @@ public class Model {
         return datos;
     }
 
+    public static List<PreMovie> findMovies(String criteria) {
+        // IMPORTANTE: Hay que parchear espacios y sustituírlos por %20 o NO FUNCIONARÁ
+        String criteria_patched = criteria.replace(" ", "%20");
+
+        String url = address + "movies?q=" + criteria_patched;
+
+        AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
+        HttpGet request = new HttpGet(url);
+        HttpResponse response = null;
+        JSONObject responseObject = null;
+
+        List<PreMovie> listaMovies = new ArrayList<PreMovie>();
+
+        try {
+
+            response = client.execute(request);
+            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+            PreMovie row = null;
+
+            // Tenemos varias películas con ese criterio
+            if(responseObject.getString("result").startsWith("success")) {
+                // Lista resultante
+                JSONArray lista = responseObject.getJSONArray("data");
+                for(int i=0; i<lista.length(); i++) {
+                    JSONObject elemento = lista.getJSONObject(i);
+                    row = new PreMovie(elemento);
+                    listaMovies.add(row);
+                }
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+
+        return listaMovies;
+    }
+
     public static void setFavorite(int number, boolean fav) {}
 
     // Comments API
