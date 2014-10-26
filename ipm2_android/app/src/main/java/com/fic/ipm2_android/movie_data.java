@@ -14,9 +14,6 @@ import android.widget.TextView;
 public class movie_data extends Activity
 {
 
-    // VARIABLE PARA PRUEBAS
-    private int count = 0;
-
     // La id de la peli
     private int id;
     // Los datos de la peli

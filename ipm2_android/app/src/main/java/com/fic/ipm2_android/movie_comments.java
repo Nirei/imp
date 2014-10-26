@@ -1,6 +1,7 @@
 package com.fic.ipm2_android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class movie_comments extends Activity
 {
@@ -19,7 +23,13 @@ public class movie_comments extends Activity
     // VARIABLE PARA PRUEBAS
     private int count = 0;
 
-    private String[] commentsList = {"prime", "mola", "no mola"};
+    // Id de la película
+    private int id;
+
+    // Última página de comentarios cargada
+    private int page = 1;
+
+    private List<Comment> commentsList = new ArrayList();
 
     //private algo movie = NULL;    // La película al que pertenecen los comentarios
 
@@ -29,39 +39,49 @@ public class movie_comments extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_comments);
 
-        // Obtenemos los parámetros que nos pasó la actividad movie_data
-        // Bundle bundle = getIntent.getExtras();
-        // this.movie = bundle.getSomething("movie");
+        // Obtenemos el intent que inició la actividad
+        Intent intent = getIntent();
 
-        // Indicamos al adaptador los datos a listar
-        ArrayAdapter ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, this.commentsList);
+        // Y sacamos la id de la peli cuyos comentarios debemos mostrar
+        this.id = intent.getIntExtra("id", -1);
 
-        // Le pasamos el adaptador a la lista
         ListView list = (ListView) findViewById(android.R.id.list);
-        list.setAdapter(ad);
+        // Los elementos de la lista no se pueden seleccionar
+        list.setClickable(false);
+
+        // Cargamos la primera página de comentarios
+        this.loadCommentListPage();
+
     }
 
+    // Obtención de páginas de películas
+    public void loadCommentListPage() {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.movie_comments, menu);
-        return true;
-    }
+        final Context context = this;
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Obtenemos la siguiente página de pelis
+                final List<Comment> nuevaLista = Model.getComments(id, page, commentsList);
+                page = page+1;
+
+                // Cada página nueva que se cargue implica actualizar la vista
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Indicamos al adaptador los datos a listar
+                        commentsList = nuevaLista;
+                        ArrayAdapter ad = new CommentListAdapter(context, commentsList);
+
+                        // Le pasamos el adaptador a la lista
+                        ListView list = (ListView) findViewById(android.R.id.list);
+                        list.setAdapter(ad);
+                    }
+                });
+            }
+        }).start();
+
     }
 
     // EVENTOS DE LA INTERFAZ
@@ -70,5 +90,37 @@ public class movie_comments extends Activity
         Button b = (Button) v;
         this.count++;
         b.setText("Pulsado " + this.count);
+    }
+
+    public void onLoadCommentsButtonClick(View v) {
+
+        final Button b = (Button) v;
+
+        // Advertimos al usuario de que estamos realizando la petición
+        b.setText(R.string.loading);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final boolean hay = Model.areThereMoreComments(id, page);
+
+                // Cada página nueva que se cargue implica actualizar la vista
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(hay) {
+                            // Actualizamos la lista de pelis
+                            loadCommentListPage();
+                            b.setText(R.string.commentlist_load_button);
+                        } else {
+                            b.setText(R.string.no_more_comments);
+                        }
+                    }
+                });
+
+
+            }
+        }).start();
     }
 }

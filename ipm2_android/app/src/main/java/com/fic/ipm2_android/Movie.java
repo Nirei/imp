@@ -52,47 +52,23 @@ public class Movie
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public String getSynopsis() {
         return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
     }
 
     public String getImage_url() {
         return image_url;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
-
     public int getYear() {
         return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

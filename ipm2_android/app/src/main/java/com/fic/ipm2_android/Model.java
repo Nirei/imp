@@ -49,8 +49,6 @@ public class Model {
         HttpResponse response = null;
         JSONObject responseObject = null;
 
-        List<PreMovie> movielist = list;
-
         try {
 
             response = client.execute(request);
@@ -65,7 +63,7 @@ public class Model {
                 for(int i=0; i<lista.length(); i++) {
                     JSONObject elemento = lista.getJSONObject(i);
                     row = new PreMovie(elemento);
-                    movielist.add(row);
+                    list.add(row);
                 }
             }
 
@@ -75,7 +73,7 @@ public class Model {
             client.close();
         }
 
-        return movielist;
+        return list;
     }
 
     public static boolean areThereMorePages(int page) {
@@ -251,8 +249,48 @@ public class Model {
     }
 
     // Comments API
-    public static List<Comment> getComments(int page) {
-        return null;
+    public static List<Comment> getComments(int id, int page, List<Comment> list) {
+        String url = address + "movies/" + Integer.toString(id) + "/comments/page/" + Integer.toString(page);
+
+        AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
+        HttpGet request = new HttpGet(url);
+        HttpResponse response = null;
+        JSONObject responseObject = null;
+
+        try {
+
+            response = client.execute(request);
+            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+            Comment row = null;
+
+            // Hay más comentarios para cargar
+            if(responseObject.getString("result").startsWith("success")) {
+                // Lista final
+                JSONArray lista = responseObject.getJSONArray("data");
+                for(int i=0; i<lista.length(); i++) {
+                    JSONObject elemento = lista.getJSONObject(i);
+                    row = new Comment(elemento);
+                    list.add(row);
+                }
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+
+        return list;
+    }
+
+    public static boolean areThereMoreComments(int id, int page) {
+
+        List<Comment> resultado = Model.getComments(id, page, new ArrayList<Comment>());
+
+        // Si la lista devuelta está vacía, no hay más páginas
+        return !resultado.isEmpty();
+
     }
 
     public static void addComment(String comment) {}

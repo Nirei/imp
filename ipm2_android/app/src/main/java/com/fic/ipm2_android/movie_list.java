@@ -9,11 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +17,6 @@ import java.util.List;
 
 public class movie_list extends ListActivity
 {
-    private int count = 0;
     private int page = 1;
 
     private List<PreMovie> movieList = new ArrayList<PreMovie>(); // La lista de pelis

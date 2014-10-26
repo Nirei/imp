@@ -26,6 +26,9 @@
     <string name="searching">Buscando…</string>
     <string name="setting">Marcando…</string>
     <string name="done">Listo</string>
-
+    <string name="commented"> comentó:</string>
+    <string name="written">Escrito el</string>
+    <string name="commentlist_load_button">Cargar más comentarios</string>
+    <string name="no_more_comments">No hay más comentarios</string>
 
 </resources>
