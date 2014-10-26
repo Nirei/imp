@@ -103,8 +103,10 @@ public class movie_list extends ListActivity
                 // Si el criterio es una cadena vacía, cargamos la página normal de películas
                 if(criteria.isEmpty()) {
                     res = Model.getList(1, new ArrayList<PreMovie>());
+                    page = 1; // La primera página vuelve a ser la 1
                 } else {
                     res = Model.findMovies(criteria);
+                    page = -2; // Usamos la página para marcar que es una lista de búsqueda
                 }
                 final List<PreMovie> nuevaLista = res;
 
@@ -112,11 +114,6 @@ public class movie_list extends ListActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        // No existe tal película
-                        if(nuevaLista == null) {
-                            page = 1; // La última página cargada vuelve a ser la 1
-                        }
 
                         // Indicamos al adaptador los datos a listar
                         movieList = nuevaLista;
@@ -128,6 +125,14 @@ public class movie_list extends ListActivity
 
                         // Actualizamos la info del botón
                         b.setText(R.string.movielist_search_button);
+
+                        // En los resultados de búsqueda el botón de cargar sobra, lo quitamos
+                        Button b2 = (Button) findViewById(R.id.loadButton);
+                        if(page == -2) {
+                            b2.setVisibility(View.GONE);
+                        } else {
+                            b2.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -144,6 +149,13 @@ public class movie_list extends ListActivity
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // Este bucle no debería poder ejecutarse NUNCA (el botón no está en pantalla cuando
+                // se muestra una búsqueda concreta, y por tanto no puede ejecutarse este evento),
+                // pero lo pongo igual para evitar problemas.
+                if(page == -2) {
+                    page = 1;
+                }
+
                 final boolean hay = Model.areThereMorePages(page);
 
                 // Cada página nueva que se cargue implica actualizar la vista
