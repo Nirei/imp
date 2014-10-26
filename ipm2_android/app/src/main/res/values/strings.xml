@@ -35,7 +35,7 @@
     <string name="delete_comment_button">Borrar comentario</string>
     <string name="not_author">No eres autor de este comentario</string>
     <string name="dialog_title">Borrar comentario</string>
-    <string name="dialog_question">¿Seguro que quieres borrar el comentario?</string>
+    <string name="dialog_question">¿Seguro que quieres borrar el comentario? ¡No habrá vuelta atrás!</string>
     <string name="dialog_accept">Sí</string>
     <string name="dialog_cancel">No</string>
 
