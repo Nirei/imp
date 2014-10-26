@@ -38,6 +38,10 @@
             android:name=".no_accounts"
             android:label="@string/title_activity_no_accounts" >
         </activity>
+        <activity
+            android:name=".comment_display"
+            android:label="@string/title_activity_comment_display" >
+        </activity>
     </application>
 
 </manifest>

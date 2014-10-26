@@ -47,11 +47,30 @@ public class movie_comments extends Activity
         this.id = intent.getIntExtra("id", -1);
 
         ListView list = (ListView) findViewById(android.R.id.list);
-        // Los elementos de la lista no se pueden seleccionar
-        list.setClickable(false);
+        // Los elementos de la lista se pueden seleccionar (para poder borrarlos)
+        list.setClickable(true);
 
         // Cargamos la primera página de comentarios
         this.loadCommentListPage();
+
+        // Creamos evento para tocar comentarios
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(movie_comments.this, comment_display.class);
+                // Obtenemos la PreMovie de la peli seleccionada
+                intent.putExtra("movie_id", id);
+                intent.putExtra("comment_id", commentsList.get(i).getId());
+                intent.putExtra("content", commentsList.get(i).getContent());
+                intent.putExtra("date", commentsList.get(i).getDate());
+                intent.putExtra("username", commentsList.get(i).getUser());
+                intent.putExtra("email", commentsList.get(i).getEmail());
+                startActivity(intent);
+
+                return;
+            }
+        });
 
     }
 
@@ -124,8 +143,6 @@ public class movie_comments extends Activity
                         }
                     }
                 });
-
-
             }
         }).start();
     }

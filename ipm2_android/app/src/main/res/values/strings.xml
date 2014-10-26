@@ -12,7 +12,7 @@
     <string name="moviedata_show_comments_button">Ver comentarios</string>
     <string name="moviecomments_commentHint">Escriba aquí su comentario</string>
     <string name="moviecomments_send_button">Enviar</string>
-    <string name="title_activity_session_list">Lista de cuentas</string>
+    <string name="title_activity_session_list">ipm2</string>
     <string name="title_activity_no_accounts">No hay cuentas disponibles</string>
     <string name="no_accounts">Entre en Ajustes/Cuentas para autenticar su cuenta.</string>
     <string name="ipm_accounts">Cuentas de IPM:</string>
@@ -31,5 +31,12 @@
     <string name="commentlist_load_button">Cargar más comentarios</string>
     <string name="no_more_comments">No hay más comentarios</string>
     <string name="sending">Enviando…</string>
+    <string name="title_activity_comment_display">Mostrar comentario</string>
+    <string name="delete_comment_button">Borrar comentario</string>
+    <string name="not_author">No eres autor de este comentario</string>
+    <string name="dialog_title">Borrar comentario</string>
+    <string name="dialog_question">¿Seguro que quieres borrar el comentario?</string>
+    <string name="dialog_accept">Sí</string>
+    <string name="dialog_cancel">No</string>
 
 </resources>

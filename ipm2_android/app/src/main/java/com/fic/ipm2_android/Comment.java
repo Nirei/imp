@@ -8,6 +8,7 @@ import org.json.JSONObject;
  */
 public class Comment {
 
+    private int id;
     private String content;
     private String date;
     private String user;
@@ -15,6 +16,7 @@ public class Comment {
 
     public Comment(JSONObject data) {
         try {
+            id = data.getInt("id");
             content = data.getString("content");
             date = data.getString("comment_date");
             user = data.getString("username");
@@ -22,6 +24,22 @@ public class Comment {
         } catch(JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public Comment(int id, String content, String date, String user, String email) {
+        this.id = id;
+        this.content = content;
+        this.date = date;
+        this.user = user;
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getContent() {

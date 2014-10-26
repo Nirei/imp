@@ -344,7 +344,43 @@ public class Model {
         return comment_id;
     }
 
-    public static void deleteComment(int commentId) {}
+    public static boolean deleteComment(int movieId, int commentId) {
+        String url = address + "movies/" + Integer.toString(movieId)
+                + "/comments/" + Integer.toString(commentId);
+
+        AndroidHttpClient client = AndroidHttpClient.newInstance(GlobalNames.HTTP_USER_AGENT);
+        HttpResponse response = null;
+
+        HttpDelete request = new HttpDelete(url);
+        JSONObject responseObject = null;
+
+        // IMPORTANTE: Es necesario pasar la cookie
+        request.addHeader("Cookie", cookie);
+
+        boolean done = true;
+
+        try {
+
+            response = client.execute(request);
+            responseObject = new JSONObject(EntityUtils.toString(response.getEntity()));
+
+            // El server no pudo realizar la petición
+            if(responseObject.getString("result").startsWith("failure")) {
+                done = false;
+                throw new Exception(responseObject.getString("reason"));
+            }
+
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
+
+        return done;
+    }
 
     // Image API
     // Obtención de la imagen (servidor distinto a la BD de películas)
