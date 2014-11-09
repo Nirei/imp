@@ -11,6 +11,7 @@ var loginModule = ( function () {
 	};
     
     function init() {
+        checkSession();
         bindUIActions();
     }
     
@@ -18,24 +19,30 @@ var loginModule = ( function () {
         dom.loginButton.onclick = doLogin;
     }
     
+    function goToApp() {
+        window.location = appUrl;
+    }
+    
+    // CASOS DE USO
+    
     function doLogin() {
-        console.log("Doing login");
-        goToApp();
+        var user = "test1";
+        var pass = "test1";
+        ajax.post(modelUrl + "?action=login", "user=" + user + "&pass=" + pass, sessionCallback);
+        // En principio login y session comparten el callback porque hace lo mismo, ya veremos
     }
     
     function checkSession() {
         ajax.get(modelUrl + "?action=session", sessionCallback);
     }
     
+    // CALLBACKS
+    
     function sessionCallback(response) {
         var objectJSON = JSON.parse(responseText);
         if( objectJSON['result'] ) {
             goToApp();
         }
-    }
-    
-    function goToApp() {
-        window.location = appUrl;
     }
     
     return {

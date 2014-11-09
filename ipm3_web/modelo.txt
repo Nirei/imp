@@ -5,4 +5,6 @@ http://localhost:8080/cgi-bin/model.py?action=XXXX&etc=...
 Donde XXXX =
 
 session: consulta si tenemos una sesión iniciada
+login: inicia sesión si no está iniciada ya (args: user, pass)
+
 
