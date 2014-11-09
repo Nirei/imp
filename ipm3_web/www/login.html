@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>$$TITLE$$</title>
-    <meta name="description" content="$$PAGE_DESCRIPTION$$">
+    <title>IPMDB - Inicio de sesión</title>
+    <meta name="description" content="Inicio de sesión de IPMDB">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
     <!--- DOMINIO DE LA PÁGINA <link rel="canonical" href=""> --->
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -20,11 +21,11 @@
   <body>
     <div class="container">
       <form class="form-signin" role="form">
-        <h2 class="form-signin-heading">$$APP_NAME$$</h2>
+        <h2 class="form-signin-heading"><i class="fa fa-film"></i> IPMDB - Inicio de sesión</h2>
         <hr />
-        <input class="form-control" type="text" id="username" placeholder="$$USERNAME$$" />
-        <input class="form-control" type="password" id="password" placeholder="$$PASSWORD$$" />
-        <input class="btn btn-lg btn-primary btn-block" type="button" value="$$ACCEPT$$" />
+        <input class="form-control" type="text" id="username" placeholder="Usuario" />
+        <input class="form-control" type="password" id="password" placeholder="Contrasinal" />
+        <input class="btn btn-lg btn-primary btn-block" type="button" id="loginButton" value="Conectar" />
       </div>
     </div>
     
@@ -32,5 +33,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <script src="js/ajax.js"></script>
+    <script src="js/login.js"></script>
   </body>
 </html>

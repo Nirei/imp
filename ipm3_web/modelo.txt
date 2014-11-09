@@ -1,0 +1,8 @@
+URLs para las que se hacen llamadas al modelo en el servidor:
+
+http://localhost:8080/cgi-bin/model.py?action=XXXX&etc=...
+
+Donde XXXX =
+
+session: consulta si tenemos una sesión iniciada
+
