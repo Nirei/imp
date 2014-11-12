@@ -2,6 +2,9 @@
 # -*- encoding: utf-8 -*-
 
 import requests
+import cgi
+import Cookie
+import os
 import sys
 
 # The classes that handles with the connections to the database server mdb
