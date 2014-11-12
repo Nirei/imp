@@ -61,20 +61,20 @@ class Model:
         # We assume Javascript already give us the page the browser wants
         url = self.server_url + '/movies/page/' + str(page)
         response = self.send_request('GET', url, None, None)
-        return response
+        return response.json()
 
     # Get movie data
     def movie_request(self, movie_id):
         url = self.server_url + '/movies/' + str(movie_id)
         response = self.send_request('GET', url, None, None)
-        return response
+        return response.json()
 
     # Get fav status
     def fav_request(self, movie_id, cookie):    
         url = self.server_url + '/movies/' + str(movie_id) + '/fav'
         # First we check the fav status of this movie
         response = self.send_request('GET', url, None, cookie)
-        return response
+        return response.json()
 
     # Change favorite
     def fav_mark_request(self, movie_id, mark, cookie):
@@ -85,7 +85,7 @@ class Model:
         else:
             method = 'DELETE'
         response = self.send_request(method, url, None, cookie)
-        return response
+        return response.json()
 
         ### Comments-related methods ### 
 
@@ -94,27 +94,27 @@ class Model:
         # We assume Javascript already give us the page the browser wants
         url = self.server_url + '/movies/' + str(movie_id) + '/comments/page/' + str(page)
         response = self.send_request('GET', url, None, None)
-        return response
+        return response.json()
 
     # Post new comment
     def post_comment_request(self, movie_id, comment, cookie):
         url = self.server_url + '/movies/' + str(movie_id) + '/comments'
         response = self.send_request('POST', url, comment, cookie)
-        return response
+        return response.json()
 
     # Delete comment
     def del_comment_request(self, movie_id, comment_id, cookie):
         url = self.server_url + '/movies/' + str(movie_id) + '/comments/' + str(comment_id)
         response = self.send_request('DELETE', url, None, cookie)
-        return response
+        return response.json()
 
         ### Private methods ###
 
     # Send the final request to the server
     def send_request(self, method, url, datos, cookie):
         response = requests.request(method, url, params=None, data=datos, cookies=cookie)
-        # We return the JSON Object received in the response
-        return response.json()
+        # We return the response
+        return response
 
     # Parse request params
     def get_params(self):
