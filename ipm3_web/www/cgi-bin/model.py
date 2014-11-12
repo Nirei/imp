@@ -31,8 +31,8 @@ class Model:
             if response:
                 new_cookie = self.create_cookie(data.cookies)
                 return response, new_cookie
-        else:
-            return "{'error': 'connection error'}", None
+            else:
+                return "{'error': 'connection error'}", None
 
         except requests.exceptions.ConnectionError:
 
