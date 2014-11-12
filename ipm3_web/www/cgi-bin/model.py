@@ -37,7 +37,14 @@ class Model:
             return "{'error': 'connection error'}", None
 
     #def session_request(self, cookie_string):
-     #   auth = Auth()
+     #   response = None
+        #url = self.server_url + '/session'
+#        try:
+ #           self.set_cookie(cookie_string)
+  #          data = requests.get(SERVER + "/session", cookies=self.cookies)
+   #         return data.text
+    #    except requests.exceptions.ConnectionError:
+     #       return None
       #  response = auth.session(cookie_string)
        # if response:
         #    return response
