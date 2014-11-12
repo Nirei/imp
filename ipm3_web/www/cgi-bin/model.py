@@ -111,8 +111,8 @@ class Model:
         ### Private methods ###
 
     # Send the final request to the server
-    def send_request(self, method, url, datos, cookies):
-        response = requests.request(method, url, params=None, data=datos, cookie=cookies)
+    def send_request(self, method, url, datos, cookie):
+        response = requests.request(method, url, params=None, data=datos, cookies=cookie)
         # We return the JSON Object received in the response
         return response.json()
 
