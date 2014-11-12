@@ -35,6 +35,7 @@ class Model:
                 return "{'error': 'connection error'}", None
 
         except requests.exceptions.ConnectionError:
+            return None
 
     def session_request(self, cookie_string):
         auth = Auth()
