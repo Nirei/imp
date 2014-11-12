@@ -32,18 +32,17 @@ class Model:
                 new_cookie = self.create_cookie(data.cookies)
                 return response, new_cookie
             else:
-                return "{'error': 'connection error'}", None
-
+                return None, None              
         except requests.exceptions.ConnectionError:
-            return None
+            return "{'error': 'connection error'}", None
 
-    def session_request(self, cookie_string):
-        auth = Auth()
-        response = auth.session(cookie_string)
-        if response:
-            return response
-        else:
-            return "{'error': 'connection error'}"
+    #def session_request(self, cookie_string):
+     #   auth = Auth()
+      #  response = auth.session(cookie_string)
+       # if response:
+        #    return response
+        #else:
+        #    return "{'error': 'connection error'}"
 
 		### Movie data-related methods ###
 
@@ -159,16 +158,6 @@ class Model:
             else: # other actions reuse the received cookie
 
         return "{'error': 'incorrect url'}", None
-
-**session: consulta si ya tenemos la sesión iniciada. (Sin atributos)
-	**login: inicia sesión si no está iniciada ya (args: user, pass)
-	**logout: cierra la sesión iniciada (Sin atributos)
-	movie_list: obtiene una página de películas (args: page)
-	movie_data: obtiene los datos de una película (args: movie_id)
-	**set_fav: marca/desmarca como favorito la película (args: movie_id)
-	get_comments: obtiene los comentarios de una película (args: movie_id, page)
-	**new_comment: manda un comentario nuevo (args: movie_id, comment)
-	**del_comment: borra un comentario (args: movie_id, comment_id)
 
 try:
     cookie_string = os.environ.get('HTTP_COOKIE') # get the cookie
