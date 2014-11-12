@@ -55,10 +55,10 @@ class Model:
 
     # Get new movie page
     def movie_page_request(self, page):
-	    # We assume Javascript already give us the page the browser wants
+        # We assume Javascript already give us the page the browser wants
         url = self.server_url + '/movies/page/' + str(page)
-    	response = self.send_request('GET', url, None, None)
-	    return response
+        response = self.send_request('GET', url, None, None)
+        return response
 
     # Get movie data
     def movie_request(self, movie_id):
