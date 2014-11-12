@@ -109,7 +109,7 @@ class Model:
 
     # Send the final request to the server
     def send_request(self, method, url, data, cookies):
-        response = requests.request(method, url, params=None, data, cookie=cookies)
+        response = requests.request(method, url, None, data, cookie=cookies)
         # We return the JSON Object received in the response
         return response.json()
 
