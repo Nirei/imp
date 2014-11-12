@@ -141,8 +141,11 @@ class Model:
         if action:
             ##Actions that do not need a cookie##
             if action == "movie_list":
+				pass
             elif action == "movie_data":
+				pass
             elif action == "get_comments":
+				pass
             ##Actions that return a cookie##
             elif action == "login":
                 response, cookie = self.login_request(params)
@@ -151,12 +154,15 @@ class Model:
             elif cookie_string and cookie_string.startswith("ipm-mdb="):
                 cook = cookie_string[8:]
                 if action == "logout":
+					pass
                 elif action == "session":
                     response = self.session_request(cook)
                 elif action == "set_fav":
+					pass
                 elif action == "new_comment":
+					pass
                 elif action == "del_comment":
-
+					pass
                 return response, None
             else:
                 return response = "{'error': 'incorrect cookie'}"
