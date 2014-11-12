@@ -77,9 +77,19 @@ class Model:
 	response = self.send_request('GET', url, None, None)
 
 	return response
-    
+
+    # Get fav status
+    def fav_request(self, movie_id, cookie):    
+
+	url = self.server_url + '/movies/' + str(movie_id) + '/fav'
+
+	# First we check the fav status of this movie
+	response = self.send_request('GET', url, None, cookie)
+
+	return response
+
     # Change favorite
-    def fav_request(self, movie_id, cookie):
+    def fav_mark_request(self, movie_id, mark, cookie):
 
 	url = self.server_url + '/movies/' + str(movie_id) + '/fav'
 
@@ -87,10 +97,10 @@ class Model:
 	check = self.send_request('GET', url, None, cookie)
 
 	# We will mark/unmark depending on the current fav status of the movie
-	if(check.json['data'] == "True"):
-	    method = 'DELETE'
-	else:
+	if(mark):
 	    method = 'POST'
+	else:
+	    method = 'DELETE'
 
 	response = self.send_request(method, url, None, cookie)
 
@@ -123,11 +133,13 @@ class Model:
 
 	response = self.send_request('DELETE', url, None, cookie)
 
+	return response
+
 		### Private methods ###
 
     def send_request(self, method, url, data, cookies):
 
-	response = requests.request(method, url, params=None, data)
+	response = requests.request(method, url, params=None, data, cookie=cookies)
 
 	# We return the JSON Object received in the response
 	return response.json()
