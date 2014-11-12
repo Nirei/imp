@@ -55,7 +55,7 @@ class Model:
         response = None
         url = self.server_url + '/logout'
         try:
-            data = self.send_request('GET', url, None, cookies=cookie)
+            data = self.send_request('GET', url, None, cookie)
             return data.text
         except requests.exceptions.ConnectionError:
             return "{'error': 'connection error'}"
@@ -164,13 +164,13 @@ class Model:
                 # Creating new cookie jar
                 cookie_jar = requests.cookies.cookielib.CookieJar()
                 # Creating a new cookie with the string of cookie given by the browser
-                cookie_session = requests.cookies.create_cookie('rack.session', cookie_string)
+                cookie_session = requests.cookies.create_cookie('rack.session', cookie_string[8:])
                 # Introducing the cookie into the cookie jar
                 cookie_jar.set_cookie(cookie_session)
                 if action == "logout":
-                    response = self.logout_request(cookie_session)
+                    response = self.logout_request(cookie_jar)
                 elif action == "session":
-                    response = self.session_request(cookie_session)
+                    response = self.session_request(cookie_jar)
                 elif action == "set_fav":
                     pass
                 elif action == "new_comment":
