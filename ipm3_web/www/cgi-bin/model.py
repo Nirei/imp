@@ -117,7 +117,7 @@ class Model:
         return response.json()
 
     # Parse request params
-    def get_params():
+    def get_params(self):
         form = cgi.FieldStorage()
         action = None
         params = None
@@ -128,7 +128,7 @@ class Model:
         return action, params
 
     # Creates a new cookie from a string
-    def create_cookie(cookie_string):
+    def create_cookie(self, cookie_string):
         cookie = None
         if cookie_string:
             cookie = Cookie.SimpleCookie()
