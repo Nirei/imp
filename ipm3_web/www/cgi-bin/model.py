@@ -39,20 +39,26 @@ class Model:
         except requests.exceptions.ConnectionError:
             return "{'error': 'connection error'}", None
 
-    #def session_request(self, cookie_string):
-     #   response = None
-        #url = self.server_url + '/session'
-#        try:
- #           self.set_cookie(cookie_string)
-  #          data = requests.get(SERVER + "/session", cookies=self.cookies)
-   #         return data.text
-    #    except requests.exceptions.ConnectionError:
-     #       return None
-      #  response = auth.session(cookie_string)
-       # if response:
-        #    return response
-        #else:
-        #    return "{'error': 'connection error'}"
+    # Ask the server if the browser's cookie is still valid
+    def session_request(self, cookie):
+        response = None
+        url = self.server_url + '/session'
+        try:
+            data = self.send_request('GET', url, None, cookie)
+            return data.text
+        except requests.exceptions.ConnectionError:
+            return "{'error': 'connection error'}"
+
+
+    # Do logout
+    def logout_request(self, cookie):
+        response = None
+        url = self.server_url + '/logout'
+        try:
+            data = self.send_request('GET', url, None, cookies=cookie)
+            return data.text
+        except requests.exceptions.ConnectionError:
+            return "{'error': 'connection error'}"
 
         ### Movie data-related methods ###
 
@@ -61,20 +67,20 @@ class Model:
         # We assume Javascript already give us the page the browser wants
         url = self.server_url + '/movies/page/' + str(page)
         response = self.send_request('GET', url, None, None)
-        return response.json()
+        return response.text
 
     # Get movie data
     def movie_request(self, movie_id):
         url = self.server_url + '/movies/' + str(movie_id)
         response = self.send_request('GET', url, None, None)
-        return response.json()
+        return response.text
 
     # Get fav status
     def fav_request(self, movie_id, cookie):    
         url = self.server_url + '/movies/' + str(movie_id) + '/fav'
         # First we check the fav status of this movie
         response = self.send_request('GET', url, None, cookie)
-        return response.json()
+        return response.text
 
     # Change favorite
     def fav_mark_request(self, movie_id, mark, cookie):
@@ -85,7 +91,7 @@ class Model:
         else:
             method = 'DELETE'
         response = self.send_request(method, url, None, cookie)
-        return response.json()
+        return response.text
 
         ### Comments-related methods ### 
 
@@ -94,19 +100,19 @@ class Model:
         # We assume Javascript already give us the page the browser wants
         url = self.server_url + '/movies/' + str(movie_id) + '/comments/page/' + str(page)
         response = self.send_request('GET', url, None, None)
-        return response.json()
+        return response.text
 
     # Post new comment
     def post_comment_request(self, movie_id, comment, cookie):
         url = self.server_url + '/movies/' + str(movie_id) + '/comments'
         response = self.send_request('POST', url, comment, cookie)
-        return response.json()
+        return response.text
 
     # Delete comment
     def del_comment_request(self, movie_id, comment_id, cookie):
         url = self.server_url + '/movies/' + str(movie_id) + '/comments/' + str(comment_id)
         response = self.send_request('DELETE', url, None, cookie)
-        return response.json()
+        return response.text
 
         ### Private methods ###
 
@@ -123,6 +129,7 @@ class Model:
         params = None
         if form.has_key("action"):
             action = form["action"].value
+        # Login
         if form.has_key("username") and form.has_key("passwd"):
             params = dict(username=form["username"].value, passwd=form["passwd"].value)
         return action, params
@@ -136,7 +143,6 @@ class Model:
             cookie['ipm-mdb']['expires'] = 24 * 60 * 60
         return cookie
 
-
         ### Main of this cgi script ###
 
     def main(self, cookie_string):
@@ -144,28 +150,33 @@ class Model:
         if action:
             ##Actions that do not need a cookie##
             if action == "movie_list":
-				pass
+                pass
             elif action == "movie_data":
-				pass
+                pass
             elif action == "get_comments":
-				pass
+                pass
             ##Actions that return a cookie##
             elif action == "login":
                 response, cookie = self.login_request(params)
                 return response, cookie
             ##Actions that need a cookie##
             elif cookie_string and cookie_string.startswith("ipm-mdb="):
-                cook = cookie_string[8:]
+                # Creating new cookie jar
+                cookie_jar = requests.cookies.cookielib.CookieJar()
+                # Creating a new cookie with the string of cookie given by the browser
+                cookie_session = requests.cookies.create_cookie('rack.session', cookie_string)
+                # Introducing the cookie into the cookie jar
+                cookie_jar.set_cookie(cookie_session)
                 if action == "logout":
-					pass
+                    response = self.logout_request(cookie_session)
                 elif action == "session":
-                    response = self.session_request(cook)
+                    response = self.session_request(cookie_session)
                 elif action == "set_fav":
-					pass
+                    pass
                 elif action == "new_comment":
-					pass
+                    pass
                 elif action == "del_comment":
-					pass
+                    pass
                 return response, None
             else:
                 return "{'error': 'incorrect cookie'}", None
