@@ -1,0 +1,17 @@
+Las URLs para las que se hacen llamadas al modelo en el servidor tienen la forma:
+
+http://localhost:8080/www/cgi-bin/model.py?action=action_value&atrib1=value1&atrib2=value2&...
+
+Donde los posibles valores para action son:
+
+	**session: consulta si ya tenemos la sesión iniciada. (Sin atributos)
+	**login: inicia sesión si no está iniciada ya (args: user, pass)
+	**logout: cierra la sesión iniciada (Sin atributos)
+	movie_list: obtiene una página de películas (args: page)
+	movie_data: obtiene los datos de una película (args: movie_id)
+	**set_fav: marca/desmarca como favorito la película (args: movie_id)
+	get_comments: obtiene los comentarios de una película (args: movie_id, page)
+	**new_comment: manda un comentario nuevo (args: movie_id, comment)
+	**del_comment: borra un comentario (args: movie_id, comment_id)
+
+Las action marcadas con ** necesitan enviar una cookie al servidor
