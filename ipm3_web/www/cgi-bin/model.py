@@ -140,7 +140,7 @@ class Model:
         ### Main of this cgi script ###
 
     def main(self, cookie_string):
-        action, params = get_params()
+        action, params = self.get_params()
         if action:
             ##Actions that do not need a cookie##
             if action == "movie_list":
