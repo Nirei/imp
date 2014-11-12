@@ -20,16 +20,22 @@ class Model:
 
 		### Authentication-related methods ###
 
-    def do_login(params):
-        auth = Auth()
-        response = auth.login(params)
-        if response:
-            new_cookie = create_cookie(auth.get_cookie())
-            return response, new_cookie
+    # Do login
+    def login_request(self, login_data):
+        response = None
+        url = self.server_url + '/login'
+        try:
+            data = self.send_request('POST', url, login_data, None)
+            response = data.text
+            if response:
+                new_cookie = self.create_cookie(data.cookies)
+                return response, new_cookie
         else:
             return "{'error': 'connection error'}", None
 
-    def do_session(cookie_string):
+        except requests.exceptions.ConnectionError:
+
+    def session_request(self, cookie_string):
         auth = Auth()
         response = auth.session(cookie_string)
         if response:
@@ -125,20 +131,42 @@ class Model:
     def main(cookie_string):
         action, params = get_params()
         if action:
-            if action == "login": # login returns a new cookie
-                response, cookie = do_login(params)
+            ##Actions that do not need a cookie##
+            if action == "movie_list":
+            elif action == "movie_data":
+            elif action == "get_comments":
+            ##Actions that return a cookie##
+            elif action == "login":
+                response, cookie = self.login_request(params)
                 return response, cookie
+            ##Actions that need a cookie##
+            elif cookie_string and cookie_string.startswith("ipm-mdb="):
+                cook = cookie_string[8:]
+                if action == "logout":
+                elif action == "session":
+                    response = self.session_request(cook)
+                elif action == "set_fav":
+                elif action == "new_comment":
+                elif action == "del_comment":
+
+                return response, None
+            else:
+                return response = "{'error': 'incorrect cookie'}"
+
+                
             else: # other actions reuse the received cookie
-                if cookie_string and cookie_string.startswith("ipm-mdb="):
-                    if action == "session":
-                        response = do_session(cookie_string[8:])
-                    else:
-                        response = "{'error': 'incorrect params'}"
-                else:
-                    response = "{'error': 'incorrect cookie'}"
-            return response, None
+
         return "{'error': 'incorrect url'}", None
 
+**session: consulta si ya tenemos la sesión iniciada. (Sin atributos)
+	**login: inicia sesión si no está iniciada ya (args: user, pass)
+	**logout: cierra la sesión iniciada (Sin atributos)
+	movie_list: obtiene una página de películas (args: page)
+	movie_data: obtiene los datos de una película (args: movie_id)
+	**set_fav: marca/desmarca como favorito la película (args: movie_id)
+	get_comments: obtiene los comentarios de una película (args: movie_id, page)
+	**new_comment: manda un comentario nuevo (args: movie_id, comment)
+	**del_comment: borra un comentario (args: movie_id, comment_id)
 
 try:
     cookie_string = os.environ.get('HTTP_COOKIE') # get the cookie
