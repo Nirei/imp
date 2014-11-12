@@ -167,9 +167,6 @@ class Model:
             else:
                 return "{'error': 'incorrect cookie'}", None
 
-                
-            else: # other actions reuse the received cookie
-
         return "{'error': 'incorrect url'}", None
 
 try:
