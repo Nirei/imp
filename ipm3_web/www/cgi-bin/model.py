@@ -165,7 +165,7 @@ class Model:
 					pass
                 return response, None
             else:
-                return response = "{'error': 'incorrect cookie'}"
+                return "{'error': 'incorrect cookie'}", None
 
                 
             else: # other actions reuse the received cookie
