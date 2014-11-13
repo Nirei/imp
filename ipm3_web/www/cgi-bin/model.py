@@ -69,8 +69,8 @@ class Model:
         return response.text
 
     # Get movie data
-    def movie_request(self, movie_id):
-        url = self.server_url + '/movies/' + str(movie_id)
+    def movie_request(self, params):
+        url = self.server_url + '/movies/' + str(params["movie_id"])
         response = self.send_request('GET', url, None, None)
         return response.text
 
@@ -134,9 +134,11 @@ class Model:
         if form.has_key("username") and form.has_key("passwd"):
             params = dict(username=form["username"].value, passwd=form["passwd"].value)
         # Movie page request
-        if form.has_key("page"):
-        	params = dict(page = form["page"].value)
-		# Post comment
+        elif form.has_key("page"):
+            params = dict(page = form["page"].value)
+        # Movie data request
+        elif form.has_key("movie_id"):
+            params = dict(movie_id = form["movie_id"].value)
         return action, params
 
     # Creates a new cookie from a string
@@ -159,7 +161,8 @@ class Model:
                 response = self.movie_page_request(params)
                 return response, None
             elif action == "movie_data":
-                pass
+                response = self.movie_request(params)
+                return response, None
             elif action == "get_comments":
                 pass
             ##Actions that return a cookie##
