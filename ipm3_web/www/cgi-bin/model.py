@@ -82,10 +82,10 @@ class Model:
         return response.text
 
     # Change favorite
-    def fav_mark_request(self, movie_id, mark, cookie):
-        url = self.server_url + '/movies/' + str(movie_id) + '/fav'
+    def fav_mark_request(self, params, cookie):
+        url = self.server_url + '/movies/' + str(params["movie_id"]) + '/fav'
         # We will mark/unmark depending on the current fav status of the movie
-        if(mark):
+        if(str(params["mark"]) == "true"):
             method = 'POST'
         else:
             method = 'DELETE'
@@ -133,16 +133,20 @@ class Model:
         # Login
         if form.has_key("username") and form.has_key("passwd"):
             params = dict(username = form["username"].value, passwd = form["passwd"].value)
-        # Get comments
-        elif form.has_key("movie_id") and form.has_key("page"):
-            params = dict(movie_id = form["movie_id"].value, page = form["page"].value)
+        if form.has_key("movie_id"):
+            # Get comments
+            if form.has_key("page"):
+                params = dict(movie_id = form["movie_id"].value, page = form["page"].value)
+            # Set fav status
+            elif form.has_key("mark"):
+                params = dict(movie_id = form["movie_id"].value, mark = form["mark"].value)
+            # Movie data request
+            # Get fav status
+            else:
+                params = dict(movie_id = form["movie_id"].value)
         # Movie page request
-        elif form.has_key("page"):
+        if form.has_key("page"):
             params = dict(page = form["page"].value)
-        # Movie data request
-        # Get fav status
-        elif form.has_key("movie_id"):
-            params = dict(movie_id = form["movie_id"].value)
         return action, params
 
     # Creates a new cookie from a string
@@ -189,7 +193,7 @@ class Model:
                 elif action == "get_fav":
                     response = self.fav_request(params, cookie_jar)
                 elif action == "set_fav":
-                    pass
+                    response = self.fav_mark_request(params, cookie_jar)
                 elif action == "new_comment":
                     pass
                 elif action == "del_comment":
