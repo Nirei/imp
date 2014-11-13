@@ -58,6 +58,7 @@ class Model:
         except requests.exceptions.ConnectionError:
             return "{'error': 'connection error'}"
 
+
         ### Movie data-related methods ###
 
     # Get new movie page
@@ -91,6 +92,7 @@ class Model:
         response = self.send_request(method, url, None, cookie)
         return response.text
 
+
         ### Comments-related methods ### 
 
     # Get comments page
@@ -111,6 +113,7 @@ class Model:
         url = self.server_url + '/movies/' + str(movie_id) + '/comments/' + str(comment_id)
         response = self.send_request('DELETE', url, None, cookie)
         return response.text
+
 
         ### Private methods ###
 
@@ -141,7 +144,8 @@ class Model:
             cookie['ipm-mdb']['expires'] = 24 * 60 * 60
         return cookie
 
-        ### Main of this cgi script ###
+
+        ### Main of cgi script ###
 
     def main(self, cookie_string):
         action, params = self.get_params()
