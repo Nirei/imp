@@ -103,9 +103,10 @@ class Model:
         return response.text
 
     # Post new comment
-    def post_comment_request(self, movie_id, comment, cookie):
-        url = self.server_url + '/movies/' + str(movie_id) + '/comments'
-        response = self.send_request('POST', url, comment, cookie)
+    def post_comment_request(self, params, cookie):
+        url = self.server_url + '/movies/' + str(params["movie_id"]) + '/comments'
+        content = dict(content = params["comment"])
+        response = self.send_request('POST', url, content, cookie)
         return response.text
 
     # Delete comment
@@ -128,6 +129,7 @@ class Model:
         form = cgi.FieldStorage()
         action = None
         params = None
+        print form
         if form.has_key("action"):
             action = form["action"].value
         # Login
@@ -143,6 +145,9 @@ class Model:
             # Set fav status
             elif form.has_key("mark"):
                 params = dict(movie_id = form["movie_id"].value, mark = form["mark"].value)
+            # Send comment
+            elif form.has_key("comment"):
+                params = dict(movie_id = form["movie_id"].value, comment = form["comment"].value)
             # Delete comment
             elif form.has_key("comment_id"):
                 params = dict(movie_id = form["movie_id"].value, comment_id = form["comment_id"].value)
@@ -198,7 +203,7 @@ class Model:
                 elif action == "set_fav":
                     response = self.fav_mark_request(params, cookie_jar)
                 elif action == "new_comment":
-                    pass
+                    response = self.post_comment_request(params, cookie_jar)
                 elif action == "del_comment":
                     response = self.del_comment_request(params, cookie_jar)
                 return response, None
