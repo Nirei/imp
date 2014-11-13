@@ -109,8 +109,8 @@ class Model:
         return response.text
 
     # Delete comment
-    def del_comment_request(self, movie_id, comment_id, cookie):
-        url = self.server_url + '/movies/' + str(movie_id) + '/comments/' + str(comment_id)
+    def del_comment_request(self, params, cookie):
+        url = self.server_url + '/movies/' + str(params["movie_id"]) + '/comments/' + str(params["comment_id"])
         response = self.send_request('DELETE', url, None, cookie)
         return response.text
 
@@ -133,6 +133,9 @@ class Model:
         # Login
         if form.has_key("username") and form.has_key("passwd"):
             params = dict(username = form["username"].value, passwd = form["passwd"].value)
+        # Movie page request
+        if form.has_key("page"):
+            params = dict(page = form["page"].value)
         if form.has_key("movie_id"):
             # Get comments
             if form.has_key("page"):
@@ -140,13 +143,13 @@ class Model:
             # Set fav status
             elif form.has_key("mark"):
                 params = dict(movie_id = form["movie_id"].value, mark = form["mark"].value)
+            # Delete comment
+            elif form.has_key("comment_id"):
+                params = dict(movie_id = form["movie_id"].value, comment_id = form["comment_id"].value)
             # Movie data request
             # Get fav status
             else:
                 params = dict(movie_id = form["movie_id"].value)
-        # Movie page request
-        if form.has_key("page"):
-            params = dict(page = form["page"].value)
         return action, params
 
     # Creates a new cookie from a string
@@ -197,7 +200,7 @@ class Model:
                 elif action == "new_comment":
                     pass
                 elif action == "del_comment":
-                    pass
+                    response = self.del_comment_request(params, cookie_jar)
                 return response, None
             else:
                 return "{'error': 'incorrect cookie'}", None
