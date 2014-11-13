@@ -75,8 +75,8 @@ class Model:
         return response.text
 
     # Get fav status
-    def fav_request(self, movie_id, cookie):    
-        url = self.server_url + '/movies/' + str(movie_id) + '/fav'
+    def fav_request(self, params, cookie):    
+        url = self.server_url + '/movies/' + str(params["movie_id"]) + '/fav'
         # First we check the fav status of this movie
         response = self.send_request('GET', url, None, cookie)
         return response.text
@@ -140,6 +140,7 @@ class Model:
         elif form.has_key("page"):
             params = dict(page = form["page"].value)
         # Movie data request
+        # Get fav status
         elif form.has_key("movie_id"):
             params = dict(movie_id = form["movie_id"].value)
         return action, params
@@ -185,6 +186,8 @@ class Model:
                     response = self.logout_request(cookie_jar)
                 elif action == "session":
                     response = self.session_request(cookie_jar)
+                elif action == "get_fav":
+                    response = self.fav_request(params, cookie_jar)
                 elif action == "set_fav":
                     pass
                 elif action == "new_comment":
