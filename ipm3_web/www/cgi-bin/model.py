@@ -32,7 +32,7 @@ class Model:
             data = self.send_request('POST', url, login_data, None)
             response = data.text
             if response:
-                new_cookie = self.create_cookie(data.cookies)
+                new_cookie = self.create_cookie(data.cookies['rack.session'])
                 return response, new_cookie
             else:
                 return None, None              
@@ -41,7 +41,6 @@ class Model:
 
     # Ask the server if the browser's cookie is still valid
     def session_request(self, cookie):
-        response = None
         url = self.server_url + '/session'
         try:
             data = self.send_request('GET', url, None, cookie)
@@ -52,7 +51,6 @@ class Model:
 
     # Do logout
     def logout_request(self, cookie):
-        response = None
         url = self.server_url + '/logout'
         try:
             data = self.send_request('GET', url, None, cookie)
