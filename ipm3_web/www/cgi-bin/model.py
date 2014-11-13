@@ -96,9 +96,9 @@ class Model:
         ### Comments-related methods ### 
 
     # Get comments page
-    def comments_request(self, movie_id, page):
+    def comments_request(self, params):
         # We assume Javascript already give us the page the browser wants
-        url = self.server_url + '/movies/' + str(movie_id) + '/comments/page/' + str(page)
+        url = self.server_url + '/movies/' + str(params["movie_id"]) + '/comments/page/' + str(params["page"])
         response = self.send_request('GET', url, None, None)
         return response.text
 
@@ -132,7 +132,10 @@ class Model:
             action = form["action"].value
         # Login
         if form.has_key("username") and form.has_key("passwd"):
-            params = dict(username=form["username"].value, passwd=form["passwd"].value)
+            params = dict(username = form["username"].value, passwd = form["passwd"].value)
+        # Get comments
+        elif form.has_key("movie_id") and form.has_key("page"):
+            params = dict(movie_id = form["movie_id"].value, page = form["page"].value)
         # Movie page request
         elif form.has_key("page"):
             params = dict(page = form["page"].value)
@@ -164,7 +167,8 @@ class Model:
                 response = self.movie_request(params)
                 return response, None
             elif action == "get_comments":
-                pass
+                response = self.comments_request(params)
+                return response, None
             ##Actions that return a cookie##
             elif action == "login":
                 response, cookie = self.login_request(params)
