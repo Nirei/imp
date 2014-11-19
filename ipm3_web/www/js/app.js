@@ -25,7 +25,6 @@ var appModule = ( function () {
         doLogin: doLogin,
         checkSession: checkSession,
         doLogout: doLogout,
-        deleteCookie: deleteCookie
     };
 
 })();

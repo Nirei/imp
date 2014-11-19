@@ -203,18 +203,17 @@ class Model:
                     # Introducing the cookie into the cookie jar
                     cookie_jar.set_cookie(cookie_session)
                     if action == "logout":
-                        response = self.logout_request(cookie_jar)
+                        return self.logout_request(cookie_jar)
                     elif action == "session":
-                        response = self.session_request(cookie_jar)
+                        return self.session_request(cookie_jar), None
                     elif action == "get_fav":
-                        response = self.fav_request(params, cookie_jar)
+                        return self.fav_request(params, cookie_jar), None
                     elif action == "set_fav":
-                        response = self.fav_mark_request(params, cookie_jar)
+                        return self.fav_mark_request(params, cookie_jar), None
                     elif action == "new_comment":
-                        response = self.post_comment_request(params, cookie_jar)
+                        return self.post_comment_request(params, cookie_jar), None
                     elif action == "del_comment":
-                        response = self.del_comment_request(params, cookie_jar)
-                    return response, None
+                        return self.del_comment_request(params, cookie_jar), None
                 else:
                     return '{"error": "incorrect cookie"}', None
             else:
