@@ -189,27 +189,27 @@ class Model:
             ##Actions that need a cookie##
             elif cookie_string:
                 if cookie_string.startswith("ipm-mdb="):
-		            # Creating new cookie jar
-		            cookie_jar = requests.cookies.cookielib.CookieJar()
-		            # Creating a new cookie with the string of cookie given by the browser
-		            cookie_session = requests.cookies.create_cookie('rack.session', cookie_string[8:])
-		            # Introducing the cookie into the cookie jar
-		            cookie_jar.set_cookie(cookie_session)
-		            if action == "logout":
-		                response = self.logout_request(cookie_jar)
-		            elif action == "session":
-		                response = self.session_request(cookie_jar)
-		            elif action == "get_fav":
-		                response = self.fav_request(params, cookie_jar)
-		            elif action == "set_fav":
-		                response = self.fav_mark_request(params, cookie_jar)
-		            elif action == "new_comment":
-		                response = self.post_comment_request(params, cookie_jar)
-		            elif action == "del_comment":
-		                response = self.del_comment_request(params, cookie_jar)
-		            return response, None
-		        else:
-		            return "{'error': 'incorrect cookie'}", None
+                    # Creating new cookie jar
+                    cookie_jar = requests.cookies.cookielib.CookieJar()
+                    # Creating a new cookie with the string of cookie given by the browser
+                    cookie_session = requests.cookies.create_cookie('rack.session', cookie_string[8:])
+                    # Introducing the cookie into the cookie jar
+                    cookie_jar.set_cookie(cookie_session)
+                    if action == "logout":
+                        response = self.logout_request(cookie_jar)
+                    elif action == "session":
+                        response = self.session_request(cookie_jar)
+                    elif action == "get_fav":
+                        response = self.fav_request(params, cookie_jar)
+                    elif action == "set_fav":
+                        response = self.fav_mark_request(params, cookie_jar)
+                    elif action == "new_comment":
+                        response = self.post_comment_request(params, cookie_jar)
+                    elif action == "del_comment":
+                        response = self.del_comment_request(params, cookie_jar)
+                    return response, None
+                else:
+                    return "{'error': 'incorrect cookie'}", None
             else:
                 return "{'error': 'you didn't send a cookie'}", None
 
