@@ -3,10 +3,6 @@ var appModule = ( function () {
     var ajax = ajaxModule;
     
     var modelUrl = "/cgi-bin/model.py";
-    
-    function deleteCookie() {
-        document.cookie = "ipm-db=;expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    }
 
     //////////////////    
     // CASOS DE USO //

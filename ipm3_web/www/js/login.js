@@ -55,7 +55,6 @@ var loginModule = ( function () {
         console.log(objectJSON);
         if( objectJSON.hasOwnProperty('result') && objectJSON['result'] == 'success' ) {
             console.log("Logged in");
-            console.log(document.cookie);
             // goToApp();
         }
     }

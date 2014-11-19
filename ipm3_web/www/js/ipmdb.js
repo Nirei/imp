@@ -54,7 +54,6 @@ var ipmdbModule = ( function () {
     function logoutCallback(response) {
         var objectJSON = JSON.parse(response);
         console.log(objectJSON);
-        app.deleteCookie();
         goToLogin();
     }
     

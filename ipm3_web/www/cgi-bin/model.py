@@ -52,11 +52,12 @@ class Model:
     # Do logout
     def logout_request(self, cookie):
         url = self.server_url + '/logout'
+        void_cookie = self.empty_cookie();
         try:
             data = self.send_request('GET', url, None, cookie)
-            return data.text
+            return data.text, void_cookie
         except requests.exceptions.ConnectionError:
-            return '{"error": "connection error"}'
+            return '{"error": "connection error"}', void_cookie
 
 
         ### Movie data-related methods ###
@@ -166,6 +167,12 @@ class Model:
             cookie['ipm-mdb']['expires'] = 24 * 60 * 60
         return cookie
 
+    # Creates an empty cookie with past expire date
+    def empty_cookie(self):
+        cookie = Cookie.SimpleCookie()
+        cookie['ipm-mdb'] = ''
+        cookie['ipm-mdb']['expires'] = 'Thu, 01 Jan 1970 00:00:01 GMT'
+        return cookie
 
         ### Main of cgi script ###
 
@@ -211,7 +218,7 @@ class Model:
                 else:
                     return '{"error": "incorrect cookie"}', None
             else:
-                return '{"error": "you did not send a cookie"}', None
+                return '{"result": "failure"}', None
 
         return '{"error": "incorrect url"}', None
 
