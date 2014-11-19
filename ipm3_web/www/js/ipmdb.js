@@ -58,7 +58,7 @@ var ipmdbModule = ( function () {
         dom.movieYear.innerHTML       = data.year
         dom.movieGenre.innerHTML      = data.category
         dom.movieSynopsis.innerHTML   = data.synopsis
-        dom.movieUser.innerHTML       = data.user
+        dom.movieUser.innerHTML       = data.username
     }
     
     function logout() {
@@ -110,11 +110,13 @@ var ipmdbModule = ( function () {
     function pageCallback(response) {
         var json = JSON.parse(response);
         if( json['result'] == 'success' ) {
+            app.getMovie(json['data'][0].id, movieCallback);
             displayPage(json['data']);
         } else {
             // Chapuza
             prevPage();
         }
+        
     }
     
     function movieCallback(response) {
