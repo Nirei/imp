@@ -31,6 +31,11 @@ var appModule = ( function () {
     function getFav(id, callback) {
         ajax.get(modelUrl + "?action=get_fav&movie_id=" + id, callback);
     }
+    
+    function setFav(id, status, callback) {
+        console.log(status);
+        ajax.post(modelUrl + "?action=set_fav", "movie_id=" + id + "&mark=" + status, callback);
+    }
 
     return {
         doLogin: doLogin,
@@ -39,6 +44,7 @@ var appModule = ( function () {
         getPage: getPage,
         getMovie: getMovie,
         getFav: getFav,
+        setFav: setFav,
     };
 
 })();

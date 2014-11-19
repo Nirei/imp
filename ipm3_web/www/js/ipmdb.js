@@ -11,6 +11,7 @@ var ipmdbModule = ( function () {
   	    prevPage        : document.querySelector("#btn-backward"),
    	    nextPage        : document.querySelector("#btn-forward"),
    	    pageIndex       : document.querySelector("#page-index"),
+   	    movieId         : document.querySelector("#movie-id"),
    	    movieTitle      : document.querySelector("#movie-title"),
    	    movieYear       : document.querySelector("#movie-year"),
    	    movieGenre      : document.querySelector("#movie-genre"),
@@ -56,6 +57,7 @@ var ipmdbModule = ( function () {
     }
     
     function displayMovie(data) {
+        dom.movieId.innerHTML         = data.id
         dom.movieTitle.innerHTML      = data.title
         dom.movieYear.innerHTML       = data.year
         dom.movieGenre.innerHTML      = data.category
@@ -93,15 +95,19 @@ var ipmdbModule = ( function () {
     }
     
     function setFavIconStatus(status) {
-        if(status) {
-            dom.favStatus.class = "fav-icon-true";
+        if(status == "true") {
+            dom.favStatus.className = "fav-icon-true";
         } else {
-            dom.favStatus.class = "fav-icon-false";
+            dom.favStatus.className = "fav-icon-false";
         }
     }
     
     function changeFavStatus() {
-        console.log("not implemented");
+        if(dom.favStatus.className == "fav-icon-true") {
+            app.setFav(dom.movieId.innerHTML, false, setFavCallback);
+        } else {
+            app.setFav(dom.movieId.innerHTML, true, setFavCallback);
+        }
     }
     
     ///////////////
@@ -151,10 +157,22 @@ var ipmdbModule = ( function () {
     function getFavCallback(response) {
         var json = JSON.parse(response);
         
+        console.log(json);
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
         } else if( json['result'] == 'success' ) {
             setFavIconStatus(json['data']);
+        }
+    }
+    
+    function setFavCallback(response) {
+        var json = JSON.parse(response);
+        
+        console.log(json);
+        if( json.hasOwnProperty('error') ) {
+            displayError(json['error']);
+        } else if( json['result'] == 'success' ) {
+            getFav(dom.movieId.innerHTML);
         }
     }
     
