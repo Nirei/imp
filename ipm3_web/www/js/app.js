@@ -27,6 +27,10 @@ var appModule = ( function () {
     function getMovie(id, callback) {
         ajax.get(modelUrl + "?action=movie_data&movie_id=" + id, callback);
     }
+    
+    function getFav(id, callback) {
+        ajax.get(modelUrl + "?action=get_fav&movie_id=" + id, callback);
+    }
 
     return {
         doLogin: doLogin,
@@ -34,6 +38,7 @@ var appModule = ( function () {
         doLogout: doLogout,
         getPage: getPage,
         getMovie: getMovie,
+        getFav: getFav,
     };
 
 })();

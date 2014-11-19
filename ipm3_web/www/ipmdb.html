@@ -22,8 +22,8 @@
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
+            <a class="btn btn-sm btn-default" href="#" id="logout-button"><i class="fa fa-power-off"></i> Desconectar</a>
             <div class="navbar-header">
-                <a class="btn btn-sm btn-default" href="#" id="logout-button"><i class="fa fa-power-off"></i> Desconectar</a>
                 <a class="navbar-brand" href="#"><i class="fa fa-film"></i> IPMDB</a>
             </div>
         </div>
@@ -43,7 +43,10 @@
             <div class="col-sm-9 col-md-10 col-sm-offset-3 col-md-offset-2 main">
                     <div class="row">
                         <div class="col-md-8 movie-table">
-                            <h1 class="page-header" id="movie-title"></h1>
+                            <h1 class="page-header">
+                                <a href="#" class="fav-icon-false" id="fav-status"><i class="fa fa-star-o"></i><i class="fa fa-star"></i></a>
+                                <value id="movie-title"></value>
+                            </h1>
                             <label>Ano</label><value id="movie-year"></value>
                             <label>Categoría</label><value id="movie-genre"></value>
                             <label>Descrición</label><value id="movie-synopsis"></value>

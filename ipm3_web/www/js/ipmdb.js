@@ -16,6 +16,7 @@ var ipmdbModule = ( function () {
    	    movieGenre      : document.querySelector("#movie-genre"),
    	    movieSynopsis   : document.querySelector("#movie-synopsis"),
    	    movieUser       : document.querySelector("#movie-user"),
+   	    favStatus       : document.querySelector("#fav-status"),
 	};
     
     function init() {
@@ -27,6 +28,7 @@ var ipmdbModule = ( function () {
         dom.logoutButton.onclick = logout;
         dom.prevPage.onclick = prevPage;
         dom.nextPage.onclick = nextPage;
+        dom.favStatus.onclick = changeFavStatus;
     }
     
     function goToLogin() {
@@ -65,6 +67,10 @@ var ipmdbModule = ( function () {
         app.doLogout(logoutCallback);
     }
     
+    function getFav(id) {
+        app.getFav(id, getFavCallback);
+    }
+    
     function loadPage() {
         dom.pageIndex.innerHTML = page;
         app.getPage(page, pageCallback);
@@ -84,6 +90,18 @@ var ipmdbModule = ( function () {
     
     function movieClicked() {
         app.getMovie(this.id.substr(this.id.indexOf('-')+1), movieCallback);
+    }
+    
+    function setFavIconStatus(status) {
+        if(status) {
+            dom.favStatus.class = "fav-icon-true";
+        } else {
+            dom.favStatus.class = "fav-icon-false";
+        }
+    }
+    
+    function changeFavStatus() {
+        console.log("not implemented");
     }
     
     ///////////////
@@ -125,8 +143,19 @@ var ipmdbModule = ( function () {
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
         } else if( json['result'] == 'success' ) {
+            getFav(json['data'].id);
             displayMovie(json['data']);
-        } 
+        }
+    }
+    
+    function getFavCallback(response) {
+        var json = JSON.parse(response);
+        
+        if( json.hasOwnProperty('error') ) {
+            displayError(json['error']);
+        } else if( json['result'] == 'success' ) {
+            setFavIconStatus(json['data']);
+        }
     }
     
     return {
