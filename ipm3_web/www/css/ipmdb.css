@@ -111,6 +111,10 @@ span#movie-id {
     visibility: hidden;
 }
 
+#movie-cover-img {
+    display: none;
+}
+
 .fav-icon-false, .fav-icon-true, .fav-icon-false:hover, .fav-icon-true:hover, .fav-icon-false:active, .fav-icon-true:active, .fav-icon-false:visited, .fav-icon-true:visited, .fav-icon-false:focus, .fav-icon-true:focus {
     color: #990;
     text-decoration: none;

@@ -17,7 +17,9 @@ var ipmdbModule = ( function () {
    	    movieGenre      : document.querySelector("#movie-genre"),
    	    movieSynopsis   : document.querySelector("#movie-synopsis"),
    	    movieUser       : document.querySelector("#movie-user"),
+   	    movieCover      : document.querySelector("#movie-cover-img"),
    	    favStatus       : document.querySelector("#fav-status"),
+   	    coverPlaceholder: document.querySelector("#movie-cover-ph"),
 	};
     
     function init() {
@@ -30,6 +32,7 @@ var ipmdbModule = ( function () {
         dom.prevPage.onclick = prevPage;
         dom.nextPage.onclick = nextPage;
         dom.favStatus.onclick = changeFavStatus;
+        dom.movieCover.onload = displayCover;
     }
     
     function goToLogin() {
@@ -52,7 +55,6 @@ var ipmdbModule = ( function () {
             a.onclick = movieClicked
             li.appendChild(a);
             dom.movieList.appendChild(li);
-            
         }
     }
     
@@ -63,6 +65,7 @@ var ipmdbModule = ( function () {
         dom.movieGenre.innerHTML      = data.category
         dom.movieSynopsis.innerHTML   = data.synopsis
         dom.movieUser.innerHTML       = data.username
+        dom.movieCover.src            = data.url_image
     }
     
     function logout() {
@@ -91,6 +94,8 @@ var ipmdbModule = ( function () {
     }
     
     function movieClicked() {
+        dom.movieCover.style.display = "none";
+        dom.coverPlaceholder.style.display = "inline";
         app.getMovie(this.id.substr(this.id.indexOf('-')+1), movieCallback);
     }
     
@@ -108,6 +113,11 @@ var ipmdbModule = ( function () {
         } else {
             app.setFav(dom.movieId.innerHTML, true, setFavCallback);
         }
+    }
+    
+    function displayCover() {
+        dom.movieCover.style.display = "inline";
+        dom.coverPlaceholder.style.display = "none";
     }
     
     ///////////////
