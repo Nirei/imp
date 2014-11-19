@@ -38,7 +38,7 @@ var loginModule = ( function () {
     function doLogin() {
         var user = dom.userField.value;
         var pass = dom.passField.value;
-        ajax.post(modelUrl + "?action=login", "user=" + user + "&pass=" + pass, sessionCallback);
+        ajax.post(modelUrl + "?action=login", "username=" + user + "&passwd=" + pass, sessionCallback);
         // En principio login y session comparten el callback porque hace lo mismo, ya veremos
     }
     
@@ -57,7 +57,9 @@ var loginModule = ( function () {
             displayError(objectJSON['error']);
         }
         
+        console.log(objectJSON);
         if( objectJSON.hasOwnProperty('result') && objectJSON['result'] == 'success' ) {
+            console.log("Logged in");
             goToApp();
         }
     }
