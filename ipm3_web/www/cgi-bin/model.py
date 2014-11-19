@@ -37,7 +37,7 @@ class Model:
             else:
                 return None, None              
         except requests.exceptions.ConnectionError:
-            return "{'error': 'connection error'}", None
+            return '{"error": "connection error"}', None
 
     # Ask the server if the browser's cookie is still valid
     def session_request(self, cookie):
@@ -46,7 +46,7 @@ class Model:
             data = self.send_request('GET', url, None, cookie)
             return data.text
         except requests.exceptions.ConnectionError:
-            return "{'error': 'connection error'}"
+            return '{"error": "connection error"}'
 
 
     # Do logout
@@ -56,7 +56,7 @@ class Model:
             data = self.send_request('GET', url, None, cookie)
             return data.text
         except requests.exceptions.ConnectionError:
-            return "{'error': 'connection error'}"
+            return '{"error": "connection error"}'
 
 
         ### Movie data-related methods ###
@@ -209,11 +209,11 @@ class Model:
                         response = self.del_comment_request(params, cookie_jar)
                     return response, None
                 else:
-                    return "{'error': 'incorrect cookie'}", None
+                    return '{"error": "incorrect cookie"}', None
             else:
-                return "{'error': 'you didn't send a cookie'}", None
+                return '{"error": "you did not send a cookie"}', None
 
-        return "{'error': 'incorrect url'}", None
+        return '{"error": "incorrect url"}', None
 
 try:
     cookie_string = os.environ.get('HTTP_COOKIE') # get the cookie
