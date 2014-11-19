@@ -8,6 +8,7 @@
     <meta name="description" content="Inicio de sesión de IPMDB">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/generic.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <!--- DOMINIO DE LA PÁGINA <link rel="canonical" href=""> --->
     
@@ -20,6 +21,11 @@
   </head>
   <body>
     <div class="container">
+        <div class="alert alert-error" id="error-display">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>Error</strong>
+            <span class="error-msg" id="error-message"></span>
+        </div>
       <form class="form-signin" role="form">
         <h2 class="form-signin-heading"><i class="fa fa-film"></i> IPMDB - Inicio de sesión</h2>
         <hr />
@@ -33,7 +39,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    
+    <!-- Scripts propios -->
     <script src="js/ajax.js"></script>
     <script src="js/login.js"></script>
   </body>

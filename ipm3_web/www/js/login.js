@@ -1,13 +1,16 @@
 var loginModule = ( function () {
     
     var ajax = ajaxModule;
-    
-    var serverUrl = "http://localhost:8080/"
-    var modelUrl = serverUrl + "cgi-bin/model.py";
-    var appUrl = serverUrl + "ipmdb.html";
+
+    var modelUrl = "/cgi-bin/model.py";
+    var appUrl = "/ipmdb.html";
         
 	var dom = {
 	    loginButton 	: document.querySelector("#loginButton"),
+  	    userField    	: document.querySelector("#username"),
+   	    passField    	: document.querySelector("#password"),
+   	    errorDisplay    : document.querySelector("#error-display"),
+   	    errorMessage    : document.querySelector("#error-message")
 	};
     
     function init() {
@@ -23,11 +26,18 @@ var loginModule = ( function () {
         window.location = appUrl;
     }
     
-    // CASOS DE USO
+    function displayError(msg) {
+        dom.errorMessage.innerHTML = msg;
+        dom.errorDisplay.style.visibility = "visible";
+    }
+
+    //////////////////    
+    // CASOS DE USO //
+    //////////////////
     
     function doLogin() {
-        var user = "test1";
-        var pass = "test1";
+        var user = dom.userField.value;
+        var pass = dom.passField.value;
         ajax.post(modelUrl + "?action=login", "user=" + user + "&pass=" + pass, sessionCallback);
         // En principio login y session comparten el callback porque hace lo mismo, ya veremos
     }
@@ -36,11 +46,18 @@ var loginModule = ( function () {
         ajax.get(modelUrl + "?action=session", sessionCallback);
     }
     
-    // CALLBACKS
+    ///////////////
+    // CALLBACKS //
+    ///////////////
     
     function sessionCallback(response) {
-        var objectJSON = JSON.parse(responseText);
-        if( objectJSON['result'] ) {
+        var objectJSON = JSON.parse(response);
+        if( objectJSON.hasOwnProperty('error') ) {
+            console.log(objectJSON['error']);
+            displayError(objectJSON['error']);
+        }
+        
+        if( objectJSON.hasOwnProperty('result') && objectJSON['result'] == 'success' ) {
             goToApp();
         }
     }
@@ -52,3 +69,4 @@ var loginModule = ( function () {
 })();
 
 loginModule.init();
+
