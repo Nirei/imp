@@ -1,8 +1,7 @@
 var loginModule = ( function () {
-    
-    var ajax = ajaxModule;
 
-    var modelUrl = "/cgi-bin/model.py";
+    var app = appModule;
+    
     var appUrl = "/ipmdb.html";
         
 	var dom = {
@@ -14,12 +13,12 @@ var loginModule = ( function () {
 	};
     
     function init() {
-        checkSession();
+        app.checkSession(callback);
         bindUIActions();
     }
     
     function bindUIActions() {
-        dom.loginButton.onclick = doLogin;
+        dom.loginButton.onclick = app.doLogin(callback);
     }
     
     function goToApp() {
@@ -30,27 +29,12 @@ var loginModule = ( function () {
         dom.errorMessage.innerHTML = msg;
         dom.errorDisplay.style.visibility = "visible";
     }
-
-    //////////////////    
-    // CASOS DE USO //
-    //////////////////
-    
-    function doLogin() {
-        var user = dom.userField.value;
-        var pass = dom.passField.value;
-        ajax.post(modelUrl + "?action=login", "username=" + user + "&passwd=" + pass, sessionCallback);
-        // En principio login y session comparten el callback porque hace lo mismo, ya veremos
-    }
-    
-    function checkSession() {
-        ajax.get(modelUrl + "?action=session", sessionCallback);
-    }
     
     ///////////////
     // CALLBACKS //
     ///////////////
     
-    function sessionCallback(response) {
+    function callback(response) {
         var objectJSON = JSON.parse(response);
         if( objectJSON.hasOwnProperty('error') ) {
             console.log(objectJSON['error']);
