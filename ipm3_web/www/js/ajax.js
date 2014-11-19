@@ -14,7 +14,7 @@ var ajaxModule = (function () {
                 if (xmlhttp.status == 200) {
                     callback(xmlhttp.responseText);
                 } else {
-                    console.log(xmlhttp.responseText);
+                    console.log("Recibido código de estado " + xmlhttp.status + ": " + xmlhttp.responseText);
                 }
             }
         }

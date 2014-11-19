@@ -1,5 +1,6 @@
 var loginModule = ( function () {
 
+    var self = this;
     var app = appModule;
     
     var appUrl = "/ipmdb.html";
@@ -13,12 +14,12 @@ var loginModule = ( function () {
 	};
     
     function init() {
-        app.checkSession(callback);
+        app.checkSession(sessionCallback);
         bindUIActions();
     }
     
     function bindUIActions() {
-        dom.loginButton.onclick = app.doLogin(callback);
+        dom.loginButton.onclick = login;
     }
     
     function goToApp() {
@@ -30,11 +31,21 @@ var loginModule = ( function () {
         dom.errorDisplay.style.visibility = "visible";
     }
     
+    ///////////////////
+    // FUNCTIONALITY //
+    ///////////////////
+    
+    function login() {
+        var user = dom.userField.value;
+        var pass = dom.passField.value;
+        app.doLogin(user, pass, sessionCallback);
+    }
+    
     ///////////////
     // CALLBACKS //
     ///////////////
     
-    function callback(response) {
+    function sessionCallback(response) {
         var objectJSON = JSON.parse(response);
         if( objectJSON.hasOwnProperty('error') ) {
             console.log(objectJSON['error']);
@@ -44,7 +55,8 @@ var loginModule = ( function () {
         console.log(objectJSON);
         if( objectJSON.hasOwnProperty('result') && objectJSON['result'] == 'success' ) {
             console.log("Logged in");
-            goToApp();
+            console.log(document.cookie);
+            // goToApp();
         }
     }
     
