@@ -38,7 +38,7 @@ var loginModule = ( function () {
     function login() {
         var user = dom.userField.value;
         var pass = dom.passField.value;
-        app.doLogin(user, pass, sessionCallback);
+        app.doLogin(user, pass, loginCallback);
     }
     
     ///////////////
@@ -46,16 +46,32 @@ var loginModule = ( function () {
     ///////////////
     
     function sessionCallback(response) {
-        var objectJSON = JSON.parse(response);
-        if( objectJSON.hasOwnProperty('error') ) {
-            console.log(objectJSON['error']);
-            displayError(objectJSON['error']);
+        var json = JSON.parse(response);
+        if( json.hasOwnProperty('error') ) {
+            console.log(json['error']);
+            displayError(json['error']);
         }
         
-        console.log(objectJSON);
-        if( objectJSON.hasOwnProperty('result') && objectJSON['result'] == 'success' ) {
+        if( json.hasOwnProperty('result') == json['result'] == 'success' ) {
             console.log("Logged in");
             goToApp();
+        }
+    }
+    
+    function loginCallback(response) {
+        var json = JSON.parse(response);
+        if( json.hasOwnProperty('error') ) {
+            console.log(json['error']);
+            displayError(json['error']);
+        }
+        
+        if( json.hasOwnProperty('result') ) {
+            if( json['result'] == 'success' ) {
+                console.log("Logged in");
+                goToApp();
+            } else if( json['result'] == 'failure' && json['reason'] == 'not found' ) {
+                displayError('O usuario especificado non se atopa na base de datos');
+            }
         }
     }
     

@@ -37,7 +37,7 @@ class Model:
             else:
                 return None, None              
         except requests.exceptions.ConnectionError:
-            return '{"error": "connection error"}', None
+            return u'{"error": "connection error"}', None
 
     # Ask the server if the browser's cookie is still valid
     def session_request(self, cookie):
@@ -46,7 +46,7 @@ class Model:
             data = self.send_request('GET', url, None, cookie)
             return data.text
         except requests.exceptions.ConnectionError:
-            return '{"error": "connection error"}'
+            return u'{"error": "connection error"}'
 
 
     # Do logout
@@ -57,7 +57,7 @@ class Model:
             data = self.send_request('GET', url, None, cookie)
             return data.text, void_cookie
         except requests.exceptions.ConnectionError:
-            return '{"error": "connection error"}', void_cookie
+            return u'{"error": "connection error"}', void_cookie
 
 
         ### Movie data-related methods ###
@@ -171,7 +171,7 @@ class Model:
     def empty_cookie(self):
         cookie = Cookie.SimpleCookie()
         cookie['ipm-mdb'] = ''
-        cookie['ipm-mdb']['expires'] = 'Thu, 01 Jan 1970 00:00:01 GMT'
+        cookie['ipm-mdb']['expires'] = u'Thu, 01 Jan 1970 00:00:01 GMT'
         return cookie
 
         ### Main of cgi script ###
@@ -215,11 +215,11 @@ class Model:
                     elif action == "del_comment":
                         return self.del_comment_request(params, cookie_jar), None
                 else:
-                    return '{"error": "incorrect cookie"}', None
+                    return u'{"error": "incorrect cookie"}', None
             else:
-                return '{"result": "failure"}', None
+                return u'{"result": "failure"}', None
 
-        return '{"error": "incorrect url"}', None
+        return u'{"error": "incorrect url"}', None
 
 try:
     cookie_string = os.environ.get('HTTP_COOKIE') # get the cookie
@@ -227,7 +227,7 @@ try:
     response, cookie = modelo.main(cookie_string)
     if cookie:
         print cookie
-    print 'Content-Type: application/json\n\n'
-    print response
+    print u'Content-Type: application/json\n\n'
+    print response.encode('ascii','xmlcharrefreplace')
 except:
         cgi.print_exception()

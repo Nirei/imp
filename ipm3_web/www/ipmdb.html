@@ -31,21 +31,11 @@
     <div class="container-fluid" id="content">
         <div class="row">
             <div class="hidden-xs col-sm-3 col-md-2 affix sidebar">
-                <ul class="nav nav-sidebar">
-                    <li>El padrino 0</li>
-                    <li>El padrino 1</li>
-                    <li>El padrino 2</li>
-                    <li>El padrino 3</li>
-                    <li>El padrino 4</li>
-                    <li>El padrino 5</li>
-                    <li>El padrino 6</li>
-                    <li>El padrino 7</li>
-                    <li>El padrino 8</li>
-                    <li>El padrino 9</li>
+                <ul class="nav nav-sidebar" id="movie-list">
                 </ul>
                 <div class="bottom">
                     <a id="btn-backward" class="btn btn-default btn-lg btn-sm" role="button" href="#">&nbsp;<i class="fa fa-step-backward"></i>&nbsp;</a>
-                    <span id="page-index">1</span>
+                    <span id="page-index"></span>
                     <a id="btn-forward" class="btn btn-default btn-lg btn-sm" role="button" href="#">&nbsp;<i class="fa fa-step-forward"></i>&nbsp;</a>
                 </div>
 
@@ -53,11 +43,11 @@
             <div class="col-sm-9 col-md-10 col-sm-offset-3 col-md-offset-2 main">
                     <div class="row">
                         <div class="col-md-8 movie-table">
-                            <h1 class="page-header">El Padrino 4</h1>
-                            <label>Ano</label><value>2078</value>
-                            <label>Categoría</label><value>Acción, Terror</value>
-                            <label>Descrición</label><value>The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.</value>
-                            <label>Editado</label><value>manusky</value>
+                            <h1 class="page-header" id="movie-title"></h1>
+                            <label>Ano</label><value id="movie-year"></value>
+                            <label>Categoría</label><value id="movie-genre"></value>
+                            <label>Descrición</label><value id="movie-synopsis"></value>
+                            <label>Editado</label><value id="movie-user"></value>
                         </div>
                         <div class="col-md-4 movie-cover">
                             <i class="fa fa-file-image-o"></i>

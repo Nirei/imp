@@ -1,7 +1,6 @@
 var appModule = ( function () {
     
     var ajax = ajaxModule;
-    
     var modelUrl = "/cgi-bin/model.py";
 
     //////////////////    
@@ -20,11 +19,21 @@ var appModule = ( function () {
     function doLogout(callback) {
         ajax.get(modelUrl + "?action=logout", callback);
     }
+    
+    function getPage(page, callback) {
+        ajax.get(modelUrl + "?action=movie_list&page=" + page, callback);
+    }
+    
+    function getMovie(id, callback) {
+        ajax.get(modelUrl + "?action=movie_data&movie_id=" + id, callback);
+    }
 
     return {
         doLogin: doLogin,
         checkSession: checkSession,
         doLogout: doLogout,
+        getPage: getPage,
+        getMovie: getMovie,
     };
 
 })();
