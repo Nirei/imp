@@ -1,6 +1,7 @@
 var ipmdbModule = ( function () {
     
     var app = appModule;
+    var currentMovie = 0;
     var page = 1;
     var commentPage = 0;
 
@@ -12,7 +13,6 @@ var ipmdbModule = ( function () {
   	    prevPage        : document.querySelector("#btn-backward"),
    	    nextPage        : document.querySelector("#btn-forward"),
    	    pageIndex       : document.querySelector("#page-index"),
-   	    movieId         : document.querySelector("#movie-id"),
    	    movieTitle      : document.querySelector("#movie-title"),
    	    movieYear       : document.querySelector("#movie-year"),
    	    movieGenre      : document.querySelector("#movie-genre"),
@@ -23,6 +23,8 @@ var ipmdbModule = ( function () {
    	    coverPlaceholder: document.querySelector("#movie-cover-ph"),
    	    commentSection  : document.querySelector("#comment-section"),
    	    moreComments    : document.querySelector("#more-comments"),
+   	    newComment      : document.querySelector("#new-comment"),
+   	    sendComment     : document.querySelector("#send-comment"),
 	};
     
     function init() {
@@ -37,6 +39,7 @@ var ipmdbModule = ( function () {
         dom.favStatus.onclick = changeFavStatus;
         dom.movieCover.onload = displayCover;
         dom.moreComments.onclick = moreCommentsClicked;
+        dom.sendComment.onclick = sendCommentClicked;
     }
     
     function enableMoreCommentsButton(enable) {
@@ -77,7 +80,7 @@ var ipmdbModule = ( function () {
         var dateDiv = document.createElement("div");
         commentDiv.className = "comment";
         userDiv.className = "user";
-        textDiv.className = "text";
+        textDiv.className = "text fill-width";
         dateDiv.className = "date";
         userDiv.innerHTML = user;
         textDiv.innerHTML = text;
@@ -111,13 +114,12 @@ var ipmdbModule = ( function () {
     }
     
     function displayMovie(data) {
-        dom.movieId.innerHTML         = data.id
-        dom.movieTitle.innerHTML      = data.title
-        dom.movieYear.innerHTML       = data.year
-        dom.movieGenre.innerHTML      = data.category
-        dom.movieSynopsis.innerHTML   = data.synopsis
-        dom.movieUser.innerHTML       = data.username
-        dom.movieCover.src            = data.url_image
+        dom.movieTitle.innerHTML      = data.title;
+        dom.movieYear.innerHTML       = data.year;
+        dom.movieGenre.innerHTML      = data.category;
+        dom.movieSynopsis.innerHTML   = data.synopsis;
+        dom.movieUser.innerHTML       = data.username;
+        dom.movieCover.src            = data.url_image;
     }
     
     function logout() {
@@ -148,10 +150,11 @@ var ipmdbModule = ( function () {
     
     function moreCommentsClicked() {
         enableMoreCommentsButton(false);
-        loadCommentsPage(dom.movieId.innerHTML);
+        loadCommentsPage(currentMovie);
     }
     
     function loadMovie(id) {
+        currentMovie = id;
         enableMoreCommentsButton(false);
         clearComments();
         dom.movieCover.style.display = "none";
@@ -171,15 +174,20 @@ var ipmdbModule = ( function () {
     
     function changeFavStatus() {
         if(dom.favStatus.className == "fav-icon-true") {
-            app.setFav(dom.movieId.innerHTML, false, setFavCallback);
+            app.setFav(currentMovie, false, setFavCallback);
         } else {
-            app.setFav(dom.movieId.innerHTML, true, setFavCallback);
+            app.setFav(currentMovie, true, setFavCallback);
         }
     }
     
     function displayCover() {
         dom.movieCover.style.display = "inline";
         dom.coverPlaceholder.style.display = "none";
+    }
+    
+    function sendCommentClicked() {
+        var text = dom.newComment.value;
+        app.sendComment(currentMovie, text, sendCommentCallback);
     }
     
     ///////////////
@@ -205,12 +213,16 @@ var ipmdbModule = ( function () {
     
     function pageCallback(response) {
         var json = JSON.parse(response);
-        if( json['result'] == 'success' ) {
-            loadMovie(json['data'][0].id);
-            displayPage(json['data']);
-        } else {
-            // Chapuza
-            prevPage();
+        if( json.hasOwnProperty('error') ) {
+            displayError(json['error']);
+        } else if( json['request'].split('/')[3] == page ) {
+            if( json['result'] == 'success' ) {
+                loadMovie(json['data'][0].id);
+                displayPage(json['data']);
+            } else {
+                // Chapuza
+                prevPage();
+            }
         }
     }
     
@@ -219,7 +231,7 @@ var ipmdbModule = ( function () {
         
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
-        } else if( json['result'] == 'success' ) {
+        } else if( json['result'] == 'success' && json['data'].id == currentMovie ) {
             displayMovie(json['data']);
         }
     }
@@ -229,7 +241,7 @@ var ipmdbModule = ( function () {
         
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
-        } else if( json['result'] == 'success' ) {
+        } else if ( json['request'].split('/')[2] == currentMovie && json['result'] == 'success' ) {
             setFavIconStatus(json['data']);
         }
     }
@@ -239,8 +251,8 @@ var ipmdbModule = ( function () {
         
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
-        } else if( json['result'] == 'success' ) {
-            app.getFav(dom.movieId.innerHTML, getFavCallback);
+        } else if ( json['request'].split('/')[2] == currentMovie && json['result'] == 'success' ) {
+            app.getFav(currentMovie, getFavCallback);
         }
     }
     
@@ -249,11 +261,23 @@ var ipmdbModule = ( function () {
         
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
-        } else if( json['result'] == 'success' ) {
-            displayComments(json['data']);
-            enableMoreCommentsButton(true);
-        } else {
-            enableMoreCommentsButton(false);
+        } else if ( json['request'].split('/')[2] == currentMovie ) {
+            if( json['result'] == 'success' ) {
+                displayComments(json['data']);
+                enableMoreCommentsButton(true);
+            } else {
+                enableMoreCommentsButton(false);
+            }
+        }
+    }
+    
+    function sendCommentCallback(response) {
+        var json = JSON.parse(response);
+        
+        if( json.hasOwnProperty('error') ) {
+            displayError(json['error']);
+        } else if( json['request'].split('/')[2] == json['result'] == 'success' ) {
+            moreCommentsClicked();
         }
     }
     

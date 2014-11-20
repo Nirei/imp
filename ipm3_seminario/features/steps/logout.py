@@ -12,9 +12,3 @@ def step_impl(context):
     context.driver.implicitly_wait(20)
     context.disconnect.click()
 
-@then(u'Me lleva a la página de login')
-def step_impl(context):
-    time.sleep(1) # Espera 1 segundo mínimo para que cargue la página
-    print context.driver.current_url
-    assert "http://localhost:8080/login.html" in context.driver.current_url
-    context.driver.implicitly_wait(20) # espera 20 segundos

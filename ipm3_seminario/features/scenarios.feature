@@ -5,16 +5,20 @@ Feature: Login en la aplicación web
   en cuanto reciba la cookie después del login, y viceversa
   al hacer logout.
 
-  Scenario Outline: Login
+  Scenario: Login correcto
      Given Estoy en la página de login
-     When Introduzco credenciales <user> y <password>, que son <valor>
-     Then Me lleva a la página principal si eran <valor>
+     When Introduzco credenciales correctas
+     Then Me lleva a la página principal
+     
+  Scenario Outline: Login incorrecto
+     Given Estoy en la página de login
+     When Introduzco credenciales <user> y <password> incorrectas
+     Then Sigo en la página de login
      
      Examples:
-       | user         | password     | valor      |
-       | andreu.brao  | p5JFJBrt     | falsas     |
-       | andreu.barro | falso        | falsas     |
-       | andreu.barro | p5JFBJrt     | verdaderas |
+       | user         | password     |
+       | andreu.brao  | p5JFJBrt     |
+       | andreu.barro | falso        |
        
   Scenario: Logout
      Given Estoy en la página principal

@@ -39,6 +39,10 @@ var appModule = ( function () {
     function getComments(id, page, callback) {
         ajax.get(modelUrl + "?action=get_comments&movie_id=" + id + "&page=" + page, callback);
     }
+    
+    function sendComment(id, comment, callback) {
+        ajax.post(modelUrl + "?action=new_comment", "movie_id=" + id + "&comment=" + comment, callback);
+    }
 
     return {
         doLogin: doLogin,
@@ -49,6 +53,7 @@ var appModule = ( function () {
         getFav: getFav,
         setFav: setFav,
         getComments: getComments,
+        sendComment: sendComment,
     };
 
 })();

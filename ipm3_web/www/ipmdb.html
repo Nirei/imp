@@ -33,7 +33,7 @@
             <div class="hidden-xs col-sm-3 col-md-2 affix sidebar">
                 <ul class="nav nav-sidebar" id="movie-list">
                 </ul>
-                <div class="bottom">
+                <div class="bottom fill-width">
                     <a id="btn-backward" class="btn btn-default btn-lg btn-sm" role="button" href="#">&nbsp;<i class="fa fa-step-backward"></i>&nbsp;</a>
                     <span id="page-index">&nbsp;</span>
                     <a id="btn-forward" class="btn btn-default btn-lg btn-sm" role="button" href="#">&nbsp;<i class="fa fa-step-forward"></i>&nbsp;</a>
@@ -68,9 +68,23 @@
                     </div>
                     <div class="row" id="comment-footer">
                         <div class="col-md-12">
-                            <a href="#comment-footer" class="btn btn-default btn-sm" id="more-comments"><i class="fa fa-plus-square-o"></i>&nbsp;Cargar máis comentarios</a>
+                            <a href="#comment-footer" class="btn btn-default btn-md fill-width" id="more-comments"><i class="fa fa-plus-square-o"></i>&nbsp;Cargar máis comentarios</a>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form role="form" class="fill-width">
+                                <div class="form-group">
+                                  <label>Engadir comentario</label>
+                                  <textarea class="form-control fill-width" rows="3" id="new-comment"></textarea>
+                                </div>
+                                <div class="form-group">
+                                  <button type="submit" class="btn btn-default form-control" id="send-comment">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
