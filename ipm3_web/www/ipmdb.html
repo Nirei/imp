@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/generic.css">
     <link rel="stylesheet" href="css/ipmdb.css">
-    <!--- DOMINIO DE LA PÁGINA <link rel="canonical" href=""> --->
+    <!--- DOMINIO DE LA PÁGINA <link rel="canonical" href=""> -->
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,43 +44,43 @@
                     <div class="row">
                         <div class="col-md-8 movie-table">
                             <span id="movie-id"></span>
-                            <h1 class="page-header">
+                            <div class="page-header">
                                 <a href="#" class="fav-icon-false" id="fav-status"><i class="fa fa-star-o"></i><i class="fa fa-star"></i></a>
-                                <value id="movie-title"></value>
-                            </h1>
-                            <label>Ano</label><value id="movie-year"></value>
-                            <label>Categoría</label><value id="movie-genre"></value>
-                            <label>Descrición</label><value id="movie-synopsis"></value>
-                            <label>Editado</label><value id="movie-user"></value>
+                                <span class="value" id="movie-title">&nbsp;</span>
+                            </div>
+                            <label>Ano</label><span class="value" id="movie-year">&nbsp;</span>
+                            <label>Categoría</label><span class="value" id="movie-genre">&nbsp;</span>
+                            <label>Descrición</label><span class="value" id="movie-synopsis">&nbsp;</span>
+                            <label>Editado</label><span class="value" id="movie-user">&nbsp;</span>
                         </div>
                         <div class="col-md-4 movie-cover">
-                            <img id="movie-cover-img" src="" />
+                            <img id="movie-cover-img" src="#" alt="Carátula do filme" />
                             <i id="movie-cover-ph" class="fa fa-file-image-o"></i>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 comment-section">
                             <h3>Comentarios</h3>
-                            <comment>
-                                <user>Manolete</user>
-                                <text>Una mierda.</text>
-                                <date>01/01/2040</date>
-                            </comment>
-                            <comment>
-                                <user>Emmanuel</user>
-                                <text>No me va internet.</text>
-                                <date>11/11/2011</date>
-                            </comment>
-                            <comment>
-                                <user>Manu</user>
-                                <text>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                            <div class="comment">
+                                <div class="user">Manolete</div>
+                                <div class="text">Una mierda.</div>
+                                <div class="date">01/01/2040</div>
+                            </div>
+                            <div class="comment">
+                                <div class="user">Emmanuel</div>
+                                <div class="text">No me va internet.</div>
+                                <div class="date">11/11/2011</div>
+                            </div>
+                            <div class="comment">
+                                <div class="user">Manu</div>
+                                <div class="text">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                                 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                                 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
                                 SSSSSSSSDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
                                 DDDDDDDDDDDDDDDDDDDDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</text>
-                                <date>0x/ff/2e1d</date>
-                            </comment>
+                                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</div>
+                                <div class="date">0x/ff/2e1d</div>
+                            </div>
                         </div>
                     </div>
             </div>
