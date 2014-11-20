@@ -147,10 +147,12 @@ var ipmdbModule = ( function () {
     }
     
     function moreCommentsClicked() {
+        enableMoreCommentsButton(false);
         loadCommentsPage(dom.movieId.innerHTML);
     }
     
     function loadMovie(id) {
+        enableMoreCommentsButton(false);
         clearComments();
         dom.movieCover.style.display = "none";
         dom.coverPlaceholder.style.display = "inline";
