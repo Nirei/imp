@@ -19,7 +19,26 @@
 
 .bottom {
     position: absolute;
-    bottom: 5%;
+    bottom: 0px;
+    width: 100%;
+    left: 0px;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    padding-top: 0.5em;
+    background-color: inherit;
+    border-top-width: 3px;
+    border-top-style: double;
+    border-top-color: #555;
+    text-align: center;
+}
+
+.bottom > #btn-forward {
+    float: right;
+}
+
+.bottom > #btn-backward {
+    float: left;
 }
 
 .nav > li {
