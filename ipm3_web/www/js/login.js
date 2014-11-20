@@ -67,7 +67,7 @@ var loginModule = ( function () {
         
         if( json.hasOwnProperty('result') ) {
             if( json['result'] == 'success' ) {
-                console.log("Logged in");
+                $('#login-form').submit();
                 goToApp();
             } else if( json['result'] == 'failure' && json['reason'] == 'not found' ) {
                 displayError('O usuario especificado non se atopa na base de datos');

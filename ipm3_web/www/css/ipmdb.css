@@ -113,6 +113,8 @@ span#movie-id {
 
 #movie-cover-img {
     display: none;
+    max-width: 100%;
+    max-height: 400px;
 }
 
 .fav-icon-false, .fav-icon-true, .fav-icon-false:hover, .fav-icon-true:hover, .fav-icon-false:active, .fav-icon-true:active, .fav-icon-false:visited, .fav-icon-true:visited, .fav-icon-false:focus, .fav-icon-true:focus {
