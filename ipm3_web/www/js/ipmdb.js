@@ -2,6 +2,7 @@ var ipmdbModule = ( function () {
     
     var app = appModule;
     var page = 1;
+    var commentPage = 0;
 
     var loginUrl = "/login.html";
         
@@ -20,6 +21,8 @@ var ipmdbModule = ( function () {
    	    movieCover      : document.querySelector("#movie-cover-img"),
    	    favStatus       : document.querySelector("#fav-status"),
    	    coverPlaceholder: document.querySelector("#movie-cover-ph"),
+   	    commentSection  : document.querySelector("#comment-section"),
+   	    moreComments    : document.querySelector("#more-comments"),
 	};
     
     function init() {
@@ -33,6 +36,15 @@ var ipmdbModule = ( function () {
         dom.nextPage.onclick = nextPage;
         dom.favStatus.onclick = changeFavStatus;
         dom.movieCover.onload = displayCover;
+        dom.moreComments.onclick = moreCommentsClicked;
+    }
+    
+    function enableMoreCommentsButton(enable) {
+        if(enable) {
+            dom.moreComments.style.display = "inline-block";
+        } else {
+            dom.moreComments.style.display = "none";
+        }
     }
     
     function goToLogin() {
@@ -58,6 +70,46 @@ var ipmdbModule = ( function () {
         }
     }
     
+    function createCommentHtml(user, email, text, date) {
+        var commentDiv = document.createElement("div");
+        var userDiv = document.createElement("div");
+        var textDiv = document.createElement("div");
+        var dateDiv = document.createElement("div");
+        commentDiv.className = "comment";
+        userDiv.className = "user";
+        textDiv.className = "text";
+        dateDiv.className = "date";
+        userDiv.innerHTML = user;
+        textDiv.innerHTML = text;
+        dateDiv.innerHTML = date;
+        commentDiv.appendChild(userDiv);
+        commentDiv.appendChild(textDiv);
+        commentDiv.appendChild(dateDiv);
+        
+        return commentDiv;
+    }
+    
+    function displayComments(comments) {
+        for(var i in comments) {
+            var user = comments[i].username;
+            var mail = comments[i].email;
+            var text = comments[i].content;
+            var date = comments[i].comment_date;
+            
+            dom.commentSection.appendChild(createCommentHtml(user, mail, text, date));
+        }
+    }
+    
+    function loadCommentsPage(id) {
+        commentPage += 1;
+        app.getComments(id, commentPage, commentsCallback);
+    }
+    
+    function clearComments() {
+        commentPage = 0;
+        dom.commentSection.innerHTML = '';
+    }
+    
     function displayMovie(data) {
         dom.movieId.innerHTML         = data.id
         dom.movieTitle.innerHTML      = data.title
@@ -70,10 +122,6 @@ var ipmdbModule = ( function () {
     
     function logout() {
         app.doLogout(logoutCallback);
-    }
-    
-    function getFav(id) {
-        app.getFav(id, getFavCallback);
     }
     
     function loadPage() {
@@ -94,9 +142,21 @@ var ipmdbModule = ( function () {
     }
     
     function movieClicked() {
+        var id = this.id.substr(this.id.indexOf('-')+1);
+        loadMovie(id);
+    }
+    
+    function moreCommentsClicked() {
+        loadCommentsPage(dom.movieId.innerHTML);
+    }
+    
+    function loadMovie(id) {
+        clearComments();
         dom.movieCover.style.display = "none";
         dom.coverPlaceholder.style.display = "inline";
-        app.getMovie(this.id.substr(this.id.indexOf('-')+1), movieCallback);
+        app.getMovie(id, movieCallback);
+        app.getFav(id, getFavCallback);
+        loadCommentsPage(id);
     }
     
     function setFavIconStatus(status) {
@@ -144,13 +204,12 @@ var ipmdbModule = ( function () {
     function pageCallback(response) {
         var json = JSON.parse(response);
         if( json['result'] == 'success' ) {
-            app.getMovie(json['data'][0].id, movieCallback);
+            loadMovie(json['data'][0].id);
             displayPage(json['data']);
         } else {
             // Chapuza
             prevPage();
         }
-        
     }
     
     function movieCallback(response) {
@@ -159,7 +218,6 @@ var ipmdbModule = ( function () {
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
         } else if( json['result'] == 'success' ) {
-            getFav(json['data'].id);
             displayMovie(json['data']);
         }
     }
@@ -167,7 +225,6 @@ var ipmdbModule = ( function () {
     function getFavCallback(response) {
         var json = JSON.parse(response);
         
-        console.log(json);
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
         } else if( json['result'] == 'success' ) {
@@ -178,11 +235,23 @@ var ipmdbModule = ( function () {
     function setFavCallback(response) {
         var json = JSON.parse(response);
         
-        console.log(json);
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
         } else if( json['result'] == 'success' ) {
-            getFav(dom.movieId.innerHTML);
+            app.getFav(dom.movieId.innerHTML, getFavCallback);
+        }
+    }
+    
+    function commentsCallback(response) {
+        var json = JSON.parse(response);
+        
+        if( json.hasOwnProperty('error') ) {
+            displayError(json['error']);
+        } else if( json['result'] == 'success' ) {
+            displayComments(json['data']);
+            enableMoreCommentsButton(true);
+        } else {
+            enableMoreCommentsButton(false);
         }
     }
     

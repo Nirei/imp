@@ -95,7 +95,7 @@
     margin-left: 1em;
 }
 
-.comment-section {
+#comment-section {
     font-size: 10px;
 }
 
@@ -155,4 +155,9 @@ span#movie-id {
 
 .fav-icon-false > .fa-star-o, .fav-icon-true > .fa-star, .fav-icon-false:hover > .fa-star, .fav-icon-true:hover > .fa-star-o {
     display: inline;
+}
+
+#more-comments {
+    width: 100%;
+    display: none;
 }
