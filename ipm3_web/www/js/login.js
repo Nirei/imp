@@ -1,6 +1,5 @@
 var loginModule = ( function () {
 
-    var self = this;
     var app = appModule;
     
     var appUrl = "/ipmdb.html";

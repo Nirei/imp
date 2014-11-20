@@ -162,3 +162,7 @@ span#movie-id {
 #more-comments {
     display: none;
 }
+
+.comment-delete-btn {
+    float: right;
+}

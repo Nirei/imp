@@ -73,18 +73,24 @@ var ipmdbModule = ( function () {
         }
     }
     
-    function createCommentHtml(user, email, text, date) {
+    function createCommentHtml(id, user, email, text, date) {
         var commentDiv = document.createElement("div");
         var userDiv = document.createElement("div");
         var textDiv = document.createElement("div");
         var dateDiv = document.createElement("div");
+        var deleteBtn = document.createElement("a");
+        commentDiv.id = "comment-" + id;
         commentDiv.className = "comment";
         userDiv.className = "user";
         textDiv.className = "text fill-width";
         dateDiv.className = "date";
+        deleteBtn.className = "comment-delete-btn";
         userDiv.innerHTML = user;
         textDiv.innerHTML = text;
         dateDiv.innerHTML = date;
+        deleteBtn.innerHTML = "<i class=\"fa fa-times\"></i>"
+        deleteBtn.onclick = deleteCommentClicked;
+        textDiv.appendChild(deleteBtn);
         commentDiv.appendChild(userDiv);
         commentDiv.appendChild(textDiv);
         commentDiv.appendChild(dateDiv);
@@ -94,12 +100,13 @@ var ipmdbModule = ( function () {
     
     function displayComments(comments) {
         for(var i in comments) {
+            var id   = comments[i].id;
             var user = comments[i].username;
             var mail = comments[i].email;
             var text = comments[i].content;
             var date = comments[i].comment_date;
             
-            dom.commentSection.appendChild(createCommentHtml(user, mail, text, date));
+            dom.commentSection.appendChild(createCommentHtml(id, user, mail, text, date));
         }
     }
     
@@ -190,6 +197,20 @@ var ipmdbModule = ( function () {
         app.sendComment(currentMovie, text, sendCommentCallback);
     }
     
+    function reloadComments() {
+        clearComments();
+        loadCommentsPage(currentMovie);
+    }
+    
+    function deleteCommentClicked() {
+        commentId = this.parentNode.parentNode.id.split('-')[1];
+        deleteComment(currentMovie, commentId);
+    }
+    
+    function deleteComment(movieId, commentId) {
+        app.deleteComment(movieId, commentId, deleteCommentCallback);
+    }
+    
     ///////////////
     // CALLBACKS //
     ///////////////
@@ -276,8 +297,21 @@ var ipmdbModule = ( function () {
         
         if( json.hasOwnProperty('error') ) {
             displayError(json['error']);
-        } else if( json['request'].split('/')[2] == json['result'] == 'success' ) {
-            moreCommentsClicked();
+        } else if( json['request'].split('/')[2] == currentMovie && json['result'] == 'success' ) {
+            reloadComments();
+        }
+    }
+    
+    function deleteCommentCallback(response) {
+        var json = JSON.parse(response);
+        
+        console.log(json);
+        if( json.hasOwnProperty('error') ) {
+            displayError(json['error']);
+        } else if( json['request'].split('/')[2] == currentMovie && json['result'] == 'success' ) {
+            reloadComments();
+        } else {
+            displayError("Só podes eliminar os teus comentarios");
         }
     }
     

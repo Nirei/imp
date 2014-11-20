@@ -43,6 +43,11 @@ var appModule = ( function () {
     function sendComment(id, comment, callback) {
         ajax.post(modelUrl + "?action=new_comment", "movie_id=" + id + "&comment=" + comment, callback);
     }
+    
+    function deleteComment(movie, comment, callback) {
+        console.log(movie + " " + comment);
+        ajax.post(modelUrl + "?action=del_comment", "movie_id=" + movie + "&comment_id=" + comment, callback);
+    }
 
     return {
         doLogin: doLogin,
@@ -54,6 +59,7 @@ var appModule = ( function () {
         setFav: setFav,
         getComments: getComments,
         sendComment: sendComment,
+        deleteComment: deleteComment,
     };
 
 })();
