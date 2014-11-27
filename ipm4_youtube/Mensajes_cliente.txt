@@ -1,0 +1,13 @@
+Mensajes entre CLIENTE (móvil) y SERVIDOR (maestro):
+
+	http://localhost:8888/msg/MENSAJE?v=VIDEO
+	
+Donde MENSAJE puede ser cualquiera de los siguientes:
+
+	play -> Este mensaje sirve para AMBOS reproducir y detener la reproducción
+			del vídeo en pantalla. En principio, el nodo esclavo (el que muestra
+			el vídeo) hará una cosa u otra dependiendo de su estado actual.
+	video-> Reproduce el vídeo indicado por la variable v. Dicho vídeo se identifica
+			mediante su video_id de youtube, porque la lista sólo la tiene el móvil
+			y ni el nodo esclavo ni el servidor tendrán acceso a ella.
+	

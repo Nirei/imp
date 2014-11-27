@@ -1,0 +1,13 @@
+video_list = '''{
+"total" : 10,"data" : [
+{"num" : 1, "name" : "Video from example", "video" : "YD9SEtaVKgA"},
+{"num" : 2, "name" : "7-seconds video example", "video" : "DX_eeOZVS2o"},
+{"num" : 3, "name" : "30-minutes video example", "video" : "FQZuu8hAeeA"},
+{"num" : 4, "name" : "10 hours video example", "video" : "09m0B8RRiEE"},
+{"num" : 5, "name" : "Trololo", "video" : "oavMtUWDBTM"},
+{"num" : 6, "name" : "Just for Laughs", "video" : "rsMPlqQmvTQ"},
+{"num" : 7, "name" : "Game theorists", "video" : "LplSnXQMf38"},
+{"num" : 8, "name" : "Fiesta pagana", "video" : "XTO-toY3Wao"},
+{"num" : 9, "name" : "We are the champions", "video" : "Jmd4OLzhQw0"},
+{"num" : 10, "name" : "El protocolo TCP/IP", "video" : "rgRoR8ggn1w"}
+]}'''
