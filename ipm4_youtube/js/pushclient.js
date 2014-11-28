@@ -15,11 +15,11 @@ var PushClient = (function() {
 		var ws = new WebSocket(ws_server_uri);
     
         ws.onopen = function(e) {
-        	append_log("Websocket opened");
+        	console.log("Websocket opened");
         }
     
         ws.onclose = function(e) {
-        	append_log("Websocket closed");
+        	console.log("Websocket closed");
         }
     
         ws.onmessage = function(e) {
@@ -36,7 +36,9 @@ var PushClient = (function() {
             app.pause();
         } else if(action == "video") {
             app.load(args[1]);
-        } else
+        } else {
+            console.log("Received message: " + msg.data);
+        }
     }
     
     return {
