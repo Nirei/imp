@@ -6,6 +6,9 @@ import tornado.websocket
 opened_ws = []
 
 class WebSocketAction(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
     def open(self):
         print "WebSocket opened"
         opened_ws.append(self)

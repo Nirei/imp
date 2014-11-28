@@ -1,9 +1,9 @@
-
 body {
 	width: 800px;
 	margin: 0;
 	padding: 0;
 	font-size: 100%;
+	background: #000;
 }
 
 #wrapper {
@@ -12,23 +12,7 @@ body {
 
 #yt-player{
 	width: 640px;
-	height: 400px;
+	height: 390px;
 	margin: 0;
 	padding: 0;
-}
-
-#log {
-	font-size: 0.75em;
-	height: 120px;
-	overflow: auto;
-	clear: both;
-	width: 95%;
-	padding: 10px 2.5%;
-	background-color: #efefef;
-	color: #555;
-}
-
-#log p {
-	margin: 0;
-	padding: 0.05em 0;
 }

@@ -5,8 +5,8 @@ var PushPlayer = (function () {
 	function new_player() {
 		console.log("onYouTubeIframeAPIReady");
 		player = new YT.Player('yt-player', {
-    		height: '390',
-			width: '640',
+    		height: '640',
+			width: '390',
 			videoId: 'YD9SEtaVKgA',
 			events: {
 				'onReady': onPlayerReady
@@ -18,16 +18,25 @@ var PushPlayer = (function () {
 		console.log("onPlayerReady");
 	}
 	
-	
+    function play() {
+        player.playVideo();
+    }
+    
+    function pause() {
+        player.pauseVideo();
+    }
+    
+    function load(id) {
+        player.cueVideoById(id);
+    }
+
 	return {
-		new_player: new_player
+		new_player  : new_player,
+        play        : play,
+        pause       : pause,
+        load        : load,
 	}
-	
+
 })();
 
-
-
 window.onYouTubeIframeAPIReady = PushPlayer.new_player;
-
-
-
