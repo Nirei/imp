@@ -7,7 +7,7 @@ var PushPlayer = (function () {
 		player = new YT.Player('yt-player', {
     		height: '390',
 			width: '640',
-			videoId: 'YD9SEtaVKgA',
+			videoId: 'DX_eeOZVS2o',
 			events: {
 				'onReady': onPlayerReady
 			}

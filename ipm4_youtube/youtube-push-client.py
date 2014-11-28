@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from gi.repository import Gtk, GObject, WebKit
 import templates
 import os

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import tornado.ioloop
 import tornado.web
@@ -6,6 +9,13 @@ import tornado.websocket
 opened_ws = []
 
 class WebSocketAction(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
+    def on_message(self, message):
+        print message
+        self.write_message("Message: " + message)
+
     def open(self):
         print "WebSocket opened"
         opened_ws.append(self)
