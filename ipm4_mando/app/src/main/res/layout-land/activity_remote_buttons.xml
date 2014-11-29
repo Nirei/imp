@@ -62,13 +62,13 @@
                 android:layout_weight="1"
                 android:onClick="onAddVideoClick"/>
 
-            <Button
+            <ToggleButton
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/remove_video_text"
+                android:textOn="@string/select_remove"
+                android:textOff="@string/remove_video_text"
                 android:id="@+id/removeButton"
-                android:layout_weight="1"
-                android:onClick="onRemoveVideoClick"/>
+                android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
 

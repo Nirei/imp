@@ -22,7 +22,7 @@ public class VideoList {
         lista.add(elem);
         elem = new Video("30-minutes video example", "FQZuu8hAeeA");
         lista.add(elem);
-        elem = new Video("10-hours video example", "09m0B8RRiEE");
+        elem = new Video("10-hours video example", "imn3HoDZXrw");
         lista.add(elem);
         elem = new Video("Trololo", "oavMtUWDBTM");
         lista.add(elem);

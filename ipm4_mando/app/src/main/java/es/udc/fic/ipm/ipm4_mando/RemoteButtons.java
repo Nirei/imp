@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 public class RemoteButtons extends ListActivity {
 
     private String last_selected;
+    private ArrayAdapter ad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +23,7 @@ public class RemoteButtons extends ListActivity {
         list.setClickable(true);
 
         // Cargamos el adaptador con la lista inicial de vídeos
-        ArrayAdapter ad = new VideoListAdapter(this, VideoList.getVideoList());
+        ad = new VideoListAdapter(this, VideoList.getVideoList());
         list.setAdapter(ad);
 
         // Listener para cuando se pulsa un elemento de la lista
@@ -31,14 +33,40 @@ public class RemoteButtons extends ListActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 final int pos = i;
-                final String videoId = VideoList.getVideo(pos).getVideoId();
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Model.sendVideo(videoId);
-                    }
-                }).start();
+                final ToggleButton borrar = (ToggleButton) findViewById(R.id.removeButton);
+
+                // Se ha marcado para borrar
+                if(borrar.isChecked()) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            VideoList.removeVideo(pos);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    // Refresca la lista de videos
+                                    ad.notifyDataSetChanged();
+                                    // Desmarca el botón de borrado
+                                    borrar.setChecked(false);
+                                }
+                            });
+
+                        }
+                    }).start();
+                } else {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String videoId = VideoList.getVideo(pos).getVideoId();
+                            Model.sendVideo(videoId);
+                        }
+                    }).start();
+                }
+
 
                 return;
             }
@@ -67,10 +95,6 @@ public class RemoteButtons extends ListActivity {
     }
 
     public void onAddVideoClick(View v) {
-
-    }
-
-    public void onRemoveVideoClick(View v) {
 
     }
 
