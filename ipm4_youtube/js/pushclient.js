@@ -13,7 +13,7 @@ var PushClient = (function() {
 	
 	function bindWSActions() {
 		var ws = new WebSocket(ws_server_uri);
-    
+
         ws.onopen = function(e) {
         	console.log("Websocket opened");
         }
@@ -28,16 +28,16 @@ var PushClient = (function() {
 	}
 
     function handle_message(msg) {
+        console.log("Received message: " + msg.data);
+
         args = msg.data.split('=');
         action = args[0];
         if(action == "play") {
             app.play();
-        } else if(action == "pause") {
+        } else if(action == "pause" || action == "stop" ) {
             app.pause();
         } else if(action == "video") {
             app.load(args[1]);
-        } else {
-            console.log("Received message: " + msg.data);
         }
     }
     
