@@ -27,7 +27,13 @@ public class RemoteButtons extends ListActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Model.sendVideo(VideoList.getVideo(i).getVideoId());
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Model.sendVideo(VideoList.getVideo(i).getVideoId());
+                    }
+                }).start();
 
                 return;
             }
@@ -47,6 +53,12 @@ public class RemoteButtons extends ListActivity {
 
     public void onPauseButtonClick(View v) {
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Model.sendPause();
+            }
+        }).start();
     }
 
     public void onAddVideoClick(View v) {

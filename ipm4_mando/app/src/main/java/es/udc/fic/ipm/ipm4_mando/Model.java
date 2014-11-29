@@ -23,11 +23,21 @@ public class Model {
         } finally {
             client.close();
         }
-
     }
 
     public static void sendPause() {
 
+        String url = address + "msg/pause";
+        AndroidHttpClient client = AndroidHttpClient.newInstance("Mozilla/5.0");
+        HttpGet request = new HttpGet(url);
+
+        try {
+            client.execute(request);
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            client.close();
+        }
     }
 
     public static void sendVideo(String videoId) {
