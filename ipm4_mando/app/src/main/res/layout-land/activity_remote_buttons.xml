@@ -70,6 +70,43 @@
                 android:id="@+id/removeButton"
                 android:layout_weight="1"/>
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/formLayout"
+        android:layout_toRightOf="@+id/remoteLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/confirmLayout">
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/acceptButton"
+                android:id="@+id/acceptButton"
+                android:layout_weight="1"
+                android:onClick="onCancelFormClick"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancelButton"
+                android:id="@+id/cancelButton"
+                android:layout_weight="1"
+                android:onClick="onCancelFormClick"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </RelativeLayout>

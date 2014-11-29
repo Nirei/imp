@@ -7,5 +7,7 @@
     <string name="add_video">Añadir vídeo</string>
     <string name="remove_video_text">Borrar vídeo</string>
     <string name="select_remove">¿Borrar cuál?</string>
+    <string name="acceptButton">Aceptar</string>
+    <string name="cancelButton">Cancelar</string>
 
 </resources>

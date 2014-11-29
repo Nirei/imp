@@ -33,35 +33,69 @@
             android:onClick="onPauseButtonClick"/>
     </LinearLayout>
 
-    <ListView
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@android:id/list"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/remoteLayout"
-        android:layout_above="@+id/buttonLayout"/>
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/listLayout"
+        android:layout_below="@id/remoteLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:id="@android:id/list"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/buttonLayout">
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_video"
+                android:id="@+id/addButton"
+                android:layout_weight="1"
+                android:onClick="onAddVideoClick"/>
+
+            <ToggleButton
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textOn="@string/select_remove"
+                android:textOff="@string/remove_video_text"
+                android:id="@+id/removeButton"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/buttonLayout"
-        android:layout_alignParentBottom="true">
+        android:id="@+id/formLayout"
+        android:layout_below="@id/remoteLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone">
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_video"
-            android:id="@+id/addButton"
+            android:text="@string/acceptButton"
+            android:id="@+id/acceptButton"
             android:layout_weight="1"
-            android:onClick="onAddVideoClick"/>
+            android:onClick="onCancelFormClick"/>
 
-        <ToggleButton
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textOn="@string/select_remove"
-            android:textOff="@string/remove_video_text"
-            android:id="@+id/removeButton"
-            android:layout_weight="1"/>
+            android:text="@string/cancelButton"
+            android:id="@+id/cancelButton"
+            android:layout_weight="1"
+            android:onClick="onCancelFormClick"/>
     </LinearLayout>
 
 </RelativeLayout>
