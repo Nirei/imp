@@ -9,5 +9,7 @@
     <string name="select_remove">¿Borrar cuál?</string>
     <string name="acceptButton">Aceptar</string>
     <string name="cancelButton">Cancelar</string>
+    <string name="nameFormHint">Nombre</string>
+    <string name="videoIdFormHint">Identificador</string>
 
 </resources>

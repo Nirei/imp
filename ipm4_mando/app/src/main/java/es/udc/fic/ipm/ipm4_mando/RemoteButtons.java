@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ToggleButton;
@@ -109,21 +110,33 @@ public class RemoteButtons extends ListActivity {
 
         LinearLayout botones = (LinearLayout) findViewById(R.id.listLayout);
         LinearLayout formulario = (LinearLayout) findViewById(R.id.formLayout);
-        ListView lista = (ListView) findViewById(android.R.id.list);
 
-        lista.setVisibility(View.GONE);
         botones.setVisibility(View.GONE);
         formulario.setVisibility(View.VISIBLE);
+    }
+
+    public void onAcceptFormClick(View v) {
+        String name = ((EditText) findViewById(R.id.nameForm)).getText().toString();
+        String videoId = ((EditText) findViewById(R.id.videoIdForm)).getText().toString();
+
+        // ¡¡Valores válidos!!
+        if(!name.isEmpty() && !videoId.isEmpty()) {
+            Video elem = new Video(name, videoId);
+            VideoList.addVideo(elem);
+
+            ad.notifyDataSetChanged();
+        }
+
+        // Por último volvemos a la lista
+        this.onCancelFormClick(null);
     }
 
     public void onCancelFormClick(View v) {
 
         LinearLayout botones = (LinearLayout) findViewById(R.id.listLayout);
         LinearLayout formulario = (LinearLayout) findViewById(R.id.formLayout);
-        ListView lista = (ListView) findViewById(android.R.id.list);
 
         formulario.setVisibility(View.GONE);
-        lista.setVisibility(View.VISIBLE);
         botones.setVisibility(View.VISIBLE);
     }
 

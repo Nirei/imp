@@ -73,28 +73,41 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
         android:id="@+id/formLayout"
         android:layout_below="@id/remoteLayout"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:visibility="gone">
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameForm"
+            android:hint="@string/nameFormHint"
+            android:layout_weight="1"
+            android:inputType="text"/>
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/videoIdForm"
+            android:hint="@string/videoIdFormHint"
+            android:layout_weight="1"
+            android:inputType="text"/>
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/acceptButton"
             android:id="@+id/acceptButton"
-            android:layout_weight="1"
-            android:onClick="onCancelFormClick"/>
+            android:onClick="onAcceptFormClick"/>
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/cancelButton"
             android:id="@+id/cancelButton"
-            android:layout_weight="1"
             android:onClick="onCancelFormClick"/>
     </LinearLayout>
 
