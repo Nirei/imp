@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ipm4_mando</string>
+    <string name="stop_desc">stop</string>
+    <string name="play_desc">play</string>
+    <string name="add_video">Añadir vídeo</string>
+    <string name="remove_video_text">Borrar vídeo</string>
+
+</resources>
