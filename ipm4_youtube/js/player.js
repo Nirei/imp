@@ -28,6 +28,7 @@ var PushPlayer = (function () {
     
     function load(id) {
         player.cueVideoById(id);
+	player.playVideo()
     }
 
 	return {
