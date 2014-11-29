@@ -1,8 +1,6 @@
 package es.udc.fic.ipm.ipm4_mando;
 
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,11 +36,17 @@ public class RemoteButtons extends ListActivity {
     }
 
     public void onPlayButtonClick(View v) {
-        Model.sendPlay();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Model.sendPlay();
+            }
+        }).start();
     }
 
     public void onPauseButtonClick(View v) {
-        Model.sendPause();
+
     }
 
     public void onAddVideoClick(View v) {
