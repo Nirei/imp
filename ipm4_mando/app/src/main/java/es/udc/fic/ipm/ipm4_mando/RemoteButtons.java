@@ -9,6 +9,8 @@ import android.widget.ListView;
 
 public class RemoteButtons extends ListActivity {
 
+    private String last_selected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,10 +30,13 @@ public class RemoteButtons extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                final int pos = i;
+                final String videoId = VideoList.getVideo(pos).getVideoId();
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Model.sendVideo(VideoList.getVideo(i).getVideoId());
+                        Model.sendVideo(videoId);
                     }
                 }).start();
 
