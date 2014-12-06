@@ -35,6 +35,9 @@ public class RemoteButtons extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                // Marca el elemento pulsado
+                view.setSelected(true);
+
                 final int pos = i;
 
                 final ToggleButton borrar = (ToggleButton) findViewById(R.id.removeButton);
